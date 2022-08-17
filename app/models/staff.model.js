@@ -1,4 +1,4 @@
-module.exports = mongoose => {
+module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
       udid: String,
@@ -55,7 +55,7 @@ module.exports = mongoose => {
     object.id = _id;
     return object;
   });
-
+  schema.plugin(mongoosePaginate);
   const Staff = mongoose.model("staff", schema);
   return Staff;
 };

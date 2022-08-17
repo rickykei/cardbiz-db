@@ -1,6 +1,14 @@
 const db = require("../models");
+const bcrypt = require("bcryptjs");
 const User = db.users;
-var bcrypt = require("bcryptjs");
+const getPagination = (page, size) => {
+  const limit = size ? +size : 8;
+  page=page-1;
+  const offset = page ? page* limit : 0;
+  return { limit, offset };
+};
+
+
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
@@ -18,21 +26,28 @@ exports.moderatorBoard = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  const name = req.query.name;
-  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
-
-  User.find(condition)
+  const { currentPage, pageSize, search, orderBy } = req.query;
+  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  const { limit, offset } = getPagination(currentPage, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{};
+  User.paginate(condition, { offset, limit , sort})
     .then(data => {
-      res.send(data);
+      res.send({
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+        currentPage: limit*1,
+        pageSize: pageSize*1,
+        data: data.docs,
+      });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving companies."
+          err.message || "Some error occurred while retrieving staffs."
       });
     });
 };
-
 // Find a single company with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;

@@ -1,7 +1,12 @@
 const db = require("../models");
 const crypto = require('crypto');
 const Staff = db.staffs;
-
+const getPagination = (page, size) => {
+  const limit = size ? +size : 8;
+  page=page-1;
+  const offset = page ? page* limit : 0;
+  return { limit, offset };
+};
 // Create and Save a new Staff
 exports.create = (req, res) => {
   // Validate request
@@ -35,12 +40,20 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const code = req.query.company_code;
-  var condition = code ? { code: { $regex: new RegExp(code), $options: "i" } } : {};
-
-  Staff.find(condition)
+  const { currentPage, pageSize, search, orderBy } = req.query;
+  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  const { limit, offset } = getPagination(currentPage, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{};
+  Staff.paginate(condition, { offset, limit , sort})
     .then(data => {
-      res.send(data);
+      res.send({
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+        currentPage: limit*1,
+        pageSize: pageSize*1,
+        data: data.docs,
+      });
     })
     .catch(err => {
       res.status(500).send({

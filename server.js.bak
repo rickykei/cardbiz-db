@@ -5,7 +5,7 @@ const app = express();
 const initRoutes = require("./src/routes");
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://cardbiz.rossfoundry.com:8080"
 };
 
 app.use(cors(corsOptions));
@@ -42,9 +42,10 @@ app.get("/", (req, res) => {
 
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/company.routes")(app);
 require("./app/routes/turorial.routes")(app);
 require("./app/routes/staff.routes")(app);
-require("./app/routes/company.routes")(app);
+
 initRoutes(app);
 
 // set port, listen for requests

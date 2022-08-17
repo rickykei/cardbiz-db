@@ -1,9 +1,8 @@
-const mongoose = require("mongoose");
+module.exports = (mongoose, mongoosePaginate) => {
 
-const User = mongoose.model(
-  "User",
-  new mongoose.Schema({
-	company_id: 
+  var schema = mongoose.Schema(
+    {
+	  company_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company"
@@ -20,7 +19,15 @@ const User = mongoose.model(
     ],
     status: Boolean
   },
-  { timestamps: true })
-);
+  { timestamps: true }
+  );
 
-module.exports = User;
+  schema.method("toJSON", function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+  });
+  schema.plugin(mongoosePaginate);
+  const User = mongoose.model("user", schema);
+  return User;
+};

@@ -1,6 +1,11 @@
 const db = require("../models");
 const Company = db.companies;
-
+const getPagination = (page, size) => {
+  const limit = size ? +size : 8;
+  page=page-1;
+  const offset = page ? page* limit : 0;
+  return { limit, offset };
+};
 // Create and Save a new company
 exports.create = (req, res) => {
   // Validate request
@@ -34,12 +39,20 @@ exports.create = (req, res) => {
 
 // Retrieve all company from the database.
 exports.findAll = (req, res) => {
-  const name = req.query.name;
-  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
-
-  Company.find(condition)
-    .then(data => {
-      res.send(data);
+  const { currentPage, pageSize, search, orderBy } = req.query;
+  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  const { limit, offset } = getPagination(currentPage, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{};
+  Company.paginate(condition, { offset, limit , sort})
+    .then((data) => {
+      res.send({
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+        currentPage: limit*1,
+        pageSize: pageSize*1,
+        data: data.docs,
+      });
     })
     .catch(err => {
       res.status(500).send({

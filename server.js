@@ -5,7 +5,7 @@ const app = express();
 const initRoutes = require("./src/routes");
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://cardbiz.rossfoundry.com:3000"
 };
 
 app.use(cors(corsOptions));
