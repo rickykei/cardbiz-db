@@ -1,8 +1,7 @@
 const db = require("../models");
 const Company = db.companies;
 const getPagination = (page, size) => {
-  const limit = size ? +size : 8;
-  page=page-1;
+  const limit = size ? +size : 5;
   const offset = page ? page* limit : 0;
   return { limit, offset };
 };
@@ -41,7 +40,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
-  const { limit, offset } = getPagination(currentPage, pageSize);
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
   Company.paginate(condition, { offset, limit , sort})
     .then((data) => {
@@ -49,7 +48,7 @@ exports.findAll = (req, res) => {
         status: data.status,
         totalItem: data.totalDocs,
         totalPage: data.totalPages,
-        currentPage: limit*1,
+        currentPage: data.page,
         pageSize: pageSize*1,
         data: data.docs,
       });
@@ -65,7 +64,7 @@ exports.findAll = (req, res) => {
 // Find a single company with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-
+  console.log("find"+id);
   Company.findById(id)
     .then(data => {
       if (!data)
@@ -107,7 +106,7 @@ exports.update = (req, res) => {
 // Delete a company with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-
+console.log("del="+id);
   Company.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {

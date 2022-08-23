@@ -2,8 +2,8 @@ const db = require("../models");
 const bcrypt = require("bcryptjs");
 const User = db.users;
 const getPagination = (page, size) => {
-  const limit = size ? +size : 8;
-  page=page-1;
+  const limit = size ? +size : 5;
+  
   const offset = page ? page* limit : 0;
   return { limit, offset };
 };
@@ -28,7 +28,7 @@ exports.moderatorBoard = (req, res) => {
 exports.findAll = (req, res) => {
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
-  const { limit, offset } = getPagination(currentPage, pageSize);
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
   User.paginate(condition, { offset, limit , sort})
     .then(data => {
@@ -36,7 +36,7 @@ exports.findAll = (req, res) => {
         status: data.status,
         totalItem: data.totalDocs,
         totalPage: data.totalPages,
-        currentPage: limit*1,
+      currentPage: data.page,
         pageSize: pageSize*1,
         data: data.docs,
       });
