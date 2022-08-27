@@ -2,10 +2,10 @@ module.exports = (mongoose, mongoosePaginate) => {
 
   var schema = mongoose.Schema(
    {
-	   company_id: [
+	company_id: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Company"
+        ref: "company"
       }]
     ,
     username: String,
@@ -14,7 +14,7 @@ module.exports = (mongoose, mongoosePaginate) => {
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Role"
+        ref: "role"
       }
     ],
     status: Boolean
