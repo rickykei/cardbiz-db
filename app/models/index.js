@@ -12,6 +12,5 @@ db.companies = require("./company.model.js")(mongoose, mongoosePaginate);
 db.staffs = require("./staff.model.js")(mongoose, mongoosePaginate);
 db.users = require("./user.model")(mongoose, mongoosePaginate);
 db.roles = require("./role.model")(mongoose, mongoosePaginate);
-db.ROLES = ["user", "admin", "moderator"];
-
+ 
 module.exports = db;

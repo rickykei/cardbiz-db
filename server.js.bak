@@ -5,7 +5,7 @@ const app = express();
 const initRoutes = require("./src/routes");
 
 var corsOptions = {
-  origin: "http://cardbiz.rossfoundry.com:8080"
+  origin: ["http://cardbiz.rossfoundry.com:3000","http://localhost:3000"]
 };
 
 app.use(cors(corsOptions));
@@ -18,8 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 
-const Role = db.role;
-
+ 
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,

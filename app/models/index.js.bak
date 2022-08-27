@@ -1,16 +1,16 @@
 const dbConfig = require("../config/db.config.js");
 
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2');
 mongoose.Promise = global.Promise;
 
 const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
-db.tutorials = require("./tutorial.model.js")(mongoose);
-db.staffs = require("./staff.model.js")(mongoose);
-db.user = require("./user.model");
-db.role = require("./role.model");
-
-db.ROLES = ["user", "admin", "moderator"];
-
+db.tutorials = require("./tutorial.model.js")(mongoose, mongoosePaginate);
+db.companies = require("./company.model.js")(mongoose, mongoosePaginate);
+db.staffs = require("./staff.model.js")(mongoose, mongoosePaginate);
+db.users = require("./user.model")(mongoose, mongoosePaginate);
+db.roles = require("./role.model")(mongoose, mongoosePaginate);
+ 
 module.exports = db;
