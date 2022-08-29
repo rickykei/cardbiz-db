@@ -155,3 +155,27 @@ exports.findAllActive = (req, res) => {
       });
     });
 };
+
+// Find companyies code list
+exports.findCodeList = (req, res) => {
+  Company.aggregate([
+	{
+	  $group:{
+		  _id: {code : "$code"},
+		  label: {$first: "$name"},
+		  code: {$first: "$code"},
+		  value:{$first: "$_id"},
+		  
+		  }
+	  }
+  ])
+    .then((data) => {
+      res.send({data: data,});
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving companyies."
+      });
+    });
+};

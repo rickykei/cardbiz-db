@@ -30,7 +30,7 @@ const populate=['company_id', 'roles'];
 
 exports.findAll = (req, res) => {
   const { currentPage, pageSize, search, orderBy } = req.query;
-  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  var condition = search ? { username: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
   User.paginate(condition, { populate,offset, limit , sort})
