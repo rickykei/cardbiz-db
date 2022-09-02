@@ -1,13 +1,17 @@
-module.exports = mongoose => {
+module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
       udid: String,
-      company_id: Number,
-      company_code: String,
-	  fname: String,
+      company_id: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "company"
+      }]
+    ,
+      fname: String,
 	  lname: String,
+	
 	  headshot: String,
-	  company_name: String,
 	  work_email: String,
 	  home_email: String,
 	  other_email: String,
@@ -43,9 +47,17 @@ module.exports = mongoose => {
 	  bizcard_option: Boolean,
 	  profile_counter: Number,
 	  vcf_counter: Number,
-	  status: String, 
-	  updatedBy: Integer
-	   
+	  status: Boolean, 
+	  updated_by: 
+      [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }],
+	  createdBy:   
+      [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }],
     },
     { timestamps: true }
   );
@@ -55,7 +67,7 @@ module.exports = mongoose => {
     object.id = _id;
     return object;
   });
-
+  schema.plugin(mongoosePaginate);
   const Staff = mongoose.model("staff", schema);
   return Staff;
 };
