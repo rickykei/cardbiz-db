@@ -1,12 +1,15 @@
 const db = require("../models");
+const upload = require("../middlewares/upload");
 const crypto = require('crypto');
 const Staff = db.staffs;
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
-
   const offset = page ? page* limit : 0;
   return { limit, offset };
+    
 };
+
+let uploadFiles="";
 // Create and Save a new Staff
 exports.create = (req, res) => {
   // Validate request
@@ -66,6 +69,42 @@ exports.create = (req, res) => {
   staff
     .save(staff)
     .then(data => {
+		//upload head shot after content uploaded
+		
+				uploadFiles = async (req, res) => {
+				  try {
+					await upload(req, res);
+					console.log(req.files);
+
+					if (req.files.length <= 0) {
+					  return res
+						.status(400)
+						.send({ message: "You must select at least 1 file." });
+					}
+
+					return res.status(200).send({
+					  message: "Files have been uploaded.",
+					});
+
+					
+				  } catch (error) {
+					console.log(error);
+
+					if (error.code === "LIMIT_UNEXPECTED_FILE") {
+					  return res.status(400).send({
+						message: "Too many files to upload.",
+					  });
+					}
+					return res.status(500).send({
+					  message: `Error when trying upload many files: ${error}`,
+					});
+
+					// return res.send({
+					//   message: "Error when trying upload image: ${error}",
+					// });
+				  }
+				};
+		//upload head shot after content uploaded
       res.send(data);
     })
     .catch(err => {

@@ -59,7 +59,10 @@ exports.findOne = (req, res) => {
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found company with id " + id });
-      else res.send(data);
+	  else {
+		  data.password="";
+		  res.send(data);
+	  }
     })
     .catch(err => {
       res
@@ -76,8 +79,15 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  req.body.password=bcrypt.hashSync(req.body.password, 8);
-  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  
+  //clean up empty field
+ Object.keys(req.body).forEach((k) => req.body[k] == '' && delete req.body[k]);
+  
+  console.log(req.body);
+  if (req.body.password!==undefined)
+	req.body.password=bcrypt.hashSync(req.body.password, 8);
+  
+  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false , omitUndefined: true})
     .then(data => {
       if (!data) {
         res.status(404).send({

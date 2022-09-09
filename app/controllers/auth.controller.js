@@ -7,11 +7,13 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
+	 
   const user = new User({
     company_id: req.body.company_id,
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
+	role: Role.find({name: "user"}), 
     status: req.body.status ? req.body.status : false
   });
 
@@ -102,6 +104,7 @@ exports.signin = (req, res) => {
       }
       res.status(200).send({
         id: user._id,
+		company_id:	user.company_id,
         username: user.username,
         email: user.email,
         roles: authorities,

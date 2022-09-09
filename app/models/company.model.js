@@ -5,6 +5,7 @@ module.exports = (mongoose, mongoosePaginate) => {
       code: String,
       no_of_license: Number,
       no_of_admin: Number,
+	  smartcard_uid: String,
       status: Boolean
     },
     { timestamps: true }

@@ -1,5 +1,6 @@
 const db = require("../models");
 const Company = db.companies;
+const Smartcard = db.smartcards;
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
   const offset = page ? page* limit : 0;
@@ -19,13 +20,29 @@ exports.create = (req, res) => {
     code: req.body.code,
     no_of_license: req.body.no_of_license,
     no_of_admin: req.body.no_of_admin,
+	smartcard_uid: req.body.smartcard_uid,
     status: req.body.status ? req.body.status : false
   });
-
+  
+  const smart_arr = req.body.smartcard_uid.split(',')?   req.body.smartcard_uid.split(','): req.body.smartcard_uid ;
+  console.log("smart_arr"+smart_arr);
+	let smartcard=null;
+	
   // Save company in the database
   company
     .save(company)
     .then(data => {
+			smart_arr.forEach((e)=>{
+				smartcard = new Smartcard({
+				uid: e,
+				company_id: company.id,
+				status: true,
+			});
+			 console.log("smartcard"+smartcard);
+			smartcard.save(smartcard);
+			})
+			
+	
       res.send(data);
     })
     .catch(err => {
@@ -87,14 +104,39 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-
+  	let smart_arr = [];
+	let smartcard=null;
+	
+  if(req.body.smartcard_uid.indexOf(',') != -1)
+  {
+	  smart_arr = req.body.smartcard_uid.split(',')?   req.body.smartcard_uid.split(','): req.body.smartcard_uid ;
+    console.log("smart_arr"+smart_arr);
+  }else
+	  smart_arr[0]=req.body.smartcard_uid;
+	
+	
   Company.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
           message: `Cannot update company with id=${id}. Maybe company was not found!`
         });
-      } else res.send({ message: "company was updated successfully." });
+      } else {
+		  Smartcard.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+			 console.log(id);
+		});
+		console.log("--before forEach");
+			smart_arr.forEach((e)=>{
+				smartcard = new Smartcard({
+				uid: e,
+				company_id: data.id,
+				status: true,
+			});
+			 console.log("smartcard"+smartcard);
+			smartcard.save(smartcard);
+			});
+		  res.send({ message: "company was updated successfully." });
+	  }
     })
     .catch(err => {
       res.status(500).send({
@@ -114,6 +156,11 @@ console.log("del="+id);
           message: `Cannot delete company with id=${id}. Maybe company was not found!`
         });
       } else {
+		  console.log(id);
+		Smartcard.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+			 console.log(id);
+		}
+		);
         res.send({
           message: "company was deleted successfully!"
         });
