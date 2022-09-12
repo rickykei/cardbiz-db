@@ -5,11 +5,11 @@ module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
    {
    uid: String,
-   company_id: [
+   company_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "company"
-      }]
+      }
     ,
    status: Boolean,
   },

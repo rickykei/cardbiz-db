@@ -2,15 +2,13 @@ module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
       udid: String,
-      company_id: [
+      company_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "company"
-      }]
-    ,
+      },
       fname: String,
 	  lname: String,
-	
 	  headshot: String,
 	  work_email: String,
 	  home_email: String,
@@ -30,7 +28,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  web_link6: String,
 	  address: String,
 	  address2: String,
-	  dividion: String,
+	  division: String,
 	  department: String,
 	  country: String,
 	  bio: String,
@@ -49,15 +47,15 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  vcf_counter: Number,
 	  status: Boolean, 
 	  updated_by: 
-      [{
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
-      }],
+      },
 	  created_by:   
-      [{
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
-      }],
+      },
     },
     { timestamps: true }
   );

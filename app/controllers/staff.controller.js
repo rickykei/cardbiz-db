@@ -1,5 +1,5 @@
 const db = require("../models");
-const upload = require("../middlewares/upload");
+
 const crypto = require('crypto');
 const Staff = db.staffs;
 const getPagination = (page, size) => {

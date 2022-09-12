@@ -1,3 +1,5 @@
+var ObjectId = require('mongodb').ObjectId; 
+
 const db = require("../models");
 const Smartcard = db.smartcards;
 const getPagination = (page, size) => {
@@ -33,8 +35,31 @@ exports.create = (req, res) => {
     });
 };
 
+// find all smartcard by company_id
+exports.findByCompanyID = (req, res) => {
+  const id = req.query.company_id;
+  var o_id = new ObjectId(id);
+
+  console.log("find company_ID = "+o_id);
+  Smartcard.find({ company_id: id})
+    .then((data) => {
+      res.send({
+        
+        data: data,
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving smartcard."
+      });
+    });
+};
+
+
 // Retrieve all smartcard from the database.
 exports.findAll = (req, res) => {
+	
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
