@@ -223,10 +223,7 @@ exports.findCodeList = (req, res) => {
   ])
     .then((data) => {
 		 
-		data.forEach(element => {
-			delete element._id;
-		  
-		});
+		 
       res.send(data);
     })
     .catch(err => {

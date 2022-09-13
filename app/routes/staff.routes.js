@@ -17,7 +17,10 @@ module.exports = app => {
 
   // Update a Tutorial with id
   router.put("/:id", staffs.update);
-
+  
+  // update staff with id with image file
+  router.post("/:id", staffs.update);
+ 
   // Delete a Tutorial with id
   router.delete("/:id", staffs.delete);
 

@@ -56,15 +56,16 @@ exports.findByCompanyID = (req, res) => {
     });
 };
 
-
+const populate=['company_id'];
+ 
 // Retrieve all smartcard from the database.
 exports.findAll = (req, res) => {
 	
   const { currentPage, pageSize, search, orderBy } = req.query;
-  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }} } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
-  Smartcard.paginate(condition, { offset, limit , sort})
+  Smartcard.paginate(condition, {populate, offset, limit , sort})
     .then((data) => {
       res.send({
         status: data.status,
@@ -133,7 +134,7 @@ console.log("del="+id);
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete company with id=${id}. Maybe company was not found!`
+          message: `Cannot delete card with id=${id}. Maybe card was not found!`
         });
       } else {
         res.send({

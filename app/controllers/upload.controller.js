@@ -1,5 +1,5 @@
 const upload = require("../middleware/upload");
-const dbConfig = require("../config/db");
+const dbConfig = require("../config/db.config");
 
 const MongoClient = require("mongodb").MongoClient;
 const GridFSBucket = require("mongodb").GridFSBucket;
@@ -88,6 +88,7 @@ const getListFiles = async (req, res) => {
 
 const download = async (req, res) => {
   try {
+	  console.log("download");
     await mongoClient.connect();
 
     const database = mongoClient.db(dbConfig.database);

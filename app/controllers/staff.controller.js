@@ -1,3 +1,6 @@
+const upload = require("../middleware/upload");
+const GridFSBucket = require("mongodb").GridFSBucket;
+ 
 const db = require("../models");
 
 const crypto = require('crypto');
@@ -160,15 +163,29 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Staff by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
+	
+	await upload(req, res);
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty!"
     });
   }
-
+  
   const id = req.params.id;
+  if (req.file!== undefined){
+  req.body.headshot=req.file.filename;
+    console.log("fileObjID");
+  console.log(req.file.id);
+  }
+ 
+console.log("update id");
+  console.log(id);
+ console.log("body.udid");
+  console.log(req.body.udid);
 
+  
+  
   Staff.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
@@ -178,6 +195,7 @@ exports.update = (req, res) => {
       } else res.send({ message: "Staff was updated successfully." });
     })
     .catch(err => {
+		console.log(err);
       res.status(500).send({
         message: "Error updating Staff with id=" + id
       });
