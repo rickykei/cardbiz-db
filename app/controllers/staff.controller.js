@@ -1,26 +1,29 @@
 const upload = require("../middleware/upload");
 const GridFSBucket = require("mongodb").GridFSBucket;
- 
 const db = require("../models");
-
 const crypto = require('crypto');
 const Staff = db.staffs;
 const getPagination = (page, size) => {
-  const limit = size ? +size : 5;
-  const offset = page ? page* limit : 0;
-  return { limit, offset };
-    
+	const limit = size ? +size : 5;
+	const offset = page ? page* limit : 0;
+	return { limit, offset };
 };
 
 let uploadFiles="";
 // Create and Save a new Staff
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
-  if (!req.body.company_id) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
+  console.log("entered Staff.create");
+   
+	//upload head shot 
+	
+  await upload(req, res);
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
   }
-
+ console.log(req.body);
   // Create a Staff
   const staff = new Staff({
     udid: crypto.randomUUID(),
@@ -67,16 +70,9 @@ exports.create = (req, res) => {
 	created_by: req.body.created_by,
 	updated_by: req.body.updated_by
   });
-
-	//upload head shot 
-	
-  await upload(req, res);
-  if (!req.body) {
-    return res.status(400).send({
-      message: "Data to update can not be empty!"
-    });
-  }
-  
+    console.log("staff");
+	staff.company_id=req.body.company_id;
+    console.log(staff);
   const id = req.params.id;
 	  if (req.file!== undefined){
 	  staff.headshot=req.file.filename;
@@ -88,42 +84,7 @@ exports.create = (req, res) => {
   staff
     .save(staff)
     .then(data => {
-		//upload head shot after content uploaded
-		
-				uploadFiles = async (req, res) => {
-				  try {
-					await upload(req, res);
-					console.log(req.files);
-
-					if (req.files.length <= 0) {
-					  return res
-						.status(400)
-						.send({ message: "You must select at least 1 file." });
-					}
-
-					return res.status(200).send({
-					  message: "Files have been uploaded.",
-					});
-
-					
-				  } catch (error) {
-					console.log(error);
-
-					if (error.code === "LIMIT_UNEXPECTED_FILE") {
-					  return res.status(400).send({
-						message: "Too many files to upload.",
-					  });
-					}
-					return res.status(500).send({
-					  message: `Error when trying upload many files: ${error}`,
-					});
-
-					// return res.send({
-					//   message: "Error when trying upload image: ${error}",
-					// });
-				  }
-				};
-		//upload head shot after content uploaded
+		 
       res.send(data);
     })
     .catch(err => {
@@ -134,10 +95,11 @@ exports.create = (req, res) => {
     });
 };
 
-const populate=['company_id','created_by','updated_by'];
  
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
+  console.log("entered Staff.findall");
+  const populate=['company_id','created_by','updated_by'];
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);

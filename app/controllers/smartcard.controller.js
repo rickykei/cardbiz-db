@@ -10,6 +10,8 @@ const getPagination = (page, size) => {
 // Create and Save a new smartcards
 exports.create = (req, res) => {
   // Validate request
+  console.log("smartcards.create");
+   console.log(req.body);
   if (!req.body.uid) {
     res.status(400).send({ message: "uid can not be empty!" });
     return;
@@ -18,6 +20,7 @@ exports.create = (req, res) => {
   // Create a smartcard
   const smartcard = new Smartcard({
     uid: req.body.uid,
+	company_id: req.body.company_id,
      status: req.body.status ? req.body.status : false
   });
 
