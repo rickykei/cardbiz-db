@@ -68,6 +68,22 @@ exports.create = (req, res) => {
 	updated_by: req.body.updated_by
   });
 
+	//upload head shot 
+	
+  await upload(req, res);
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
+  }
+  
+  const id = req.params.id;
+	  if (req.file!== undefined){
+	  staff.headshot=req.file.filename;
+	  console.log("fileObjID");
+	  console.log(req.file.id);
+	  }
+
   // Save Staff in the database
   staff
     .save(staff)
@@ -165,7 +181,7 @@ exports.findOne = (req, res) => {
 // Update a Staff by the id in the request
 exports.update = async (req, res) => {
 	
-	await upload(req, res);
+ await upload(req, res);
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty!"

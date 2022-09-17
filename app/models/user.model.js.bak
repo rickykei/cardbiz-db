@@ -14,7 +14,7 @@ module.exports = (mongoose, mongoosePaginate) => {
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Role"
+        ref: "role"
       }
     ],
     status: Boolean

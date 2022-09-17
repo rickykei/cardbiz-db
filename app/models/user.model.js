@@ -2,11 +2,11 @@ module.exports = (mongoose, mongoosePaginate) => {
 
   var schema = mongoose.Schema(
    {
-	company_id: [
+	company_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "company"
-      }]
+      }
     ,
     username: String,
     email: String,
