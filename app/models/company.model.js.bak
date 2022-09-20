@@ -3,8 +3,20 @@ module.exports = (mongoose, mongoosePaginate) => {
     {
       name: String,
       code: String,
+	  company_name: String,
+	  work_mail: String,
+	  country_cd: String,
+	  website: String,
+	  position: String,
+	  work_tel: String,
+	  address: String,
+	  sub_division : String,
+	  department: String,
+	  banner: String,
+	  logo: String,
       no_of_license: Number,
       no_of_admin: Number,
+	  smartcard_uid: String,
       status: Boolean
     },
     { timestamps: true }

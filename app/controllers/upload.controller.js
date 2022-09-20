@@ -12,8 +12,7 @@ const mongoClient = new MongoClient(url);
 
 const uploadFiles = async (req, res) => {
   try {
-	   console.log(req.files);
-
+	 
     await upload(req, res);
     console.log(req.files);
     if (req.files.length <= 0) {

@@ -1,6 +1,11 @@
 const db = require("../models");
+const uploadBanner = require("../middleware/uploadBanner");
+
+//const upload = require("../middleware/upload");
+const GridFSBucket = require("mongodb").GridFSBucket;
 const Company = db.companies;
 const Smartcard = db.smartcards;
+
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
   const offset = page ? page* limit : 0;
@@ -21,6 +26,19 @@ exports.create = (req, res) => {
     no_of_license: req.body.no_of_license,
     no_of_admin: req.body.no_of_admin,
 	smartcard_uid: req.body.smartcard_uid,
+	fname: req.body.fname,
+	lname: req.body.lname,
+	 company_name: req.body.company_name,
+	  work_mail: req.body.work_mail,
+	  country_cd: req.body.country_cd,
+	  website: req.body.website,
+	  position: req.body.position,
+	  work_tel: req.body.work_tel,
+	  address: req.body.address,
+	  sub_division : req.body.sub_division,
+	  department: req.body.department,
+	  banner: req.body.banner,
+	  logo: req.body.logo,
     status: req.body.status ? req.body.status : false
   });
   
@@ -102,6 +120,9 @@ exports.findOne = (req, res) => {
 
 // Update a company by the id in the request
 exports.update = (req, res) => {
+	
+	
+	
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty!"
@@ -109,16 +130,22 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  	let smart_arr = [];
+  	//let smart_arr = []; 
 	let smartcard=null;
 	
-  if(req.body.smartcard_uid.indexOf(',') != -1)
+	console.log('req.body.smartcard_uid');
+	console.log(req.body.smartcard_uid);
+/*   if(req.body.smartcard_uid.indexOf(',') != -1)
   {
 	  smart_arr = req.body.smartcard_uid.split(',')?   req.body.smartcard_uid.split(','): req.body.smartcard_uid ;
     console.log("smart_arr"+smart_arr);
   }else
 	  smart_arr[0]=req.body.smartcard_uid;
-	
+	 */
+	  let smart_arr=null;
+  if (typeof req.body.smartcard_uid !== 'undefined') {
+	smart_arr = req.body.smartcard_uid.split(',')?   req.body.smartcard_uid.split(','): req.body.smartcard_uid ;
+  }
 	
   Company.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
@@ -140,6 +167,61 @@ exports.update = (req, res) => {
 			 console.log("smartcard"+smartcard);
 			smartcard.save(smartcard);
 			});
+		  res.send({ message: "company was updated successfully." });
+	  }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating company with id=" + id
+      });
+    });
+};
+
+  // update company by hr admin
+exports.updateByHRAdmin = async (req, res) => {
+	
+	console.log("update Company by hr admin");
+	
+	await uploadBanner(req, res);
+	 
+	 const id = req.params.id;
+	 //update company docid
+	 //console.log("company Docid");
+	 //console.log(id);
+	 console.log("req.body");
+	 console.log(req.body);
+	 console.log("req.files.banner");
+	 console.log(req.files.banner);
+	
+ 
+ 
+	   if (req.files!== undefined){
+		    console.log("bannerFilesObjID");
+			console.log(req.files.banner[0].filename);
+ 
+		if(req.files.banner!==undefined)
+			req.body.banner=req.files.banner[0].filename;
+	  	if(req.files.logo!==undefined)
+		  req.body.logo=req.files.logo[0].filename;
+    
+	   }
+ 
+  
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
+  }
+  
+ 
+  Company.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update company with id=${id}. Maybe company was not found!`
+        });
+      } else {
+		   
 		  res.send({ message: "company was updated successfully." });
 	  }
     })

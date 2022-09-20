@@ -19,6 +19,10 @@ module.exports = app => {
 
   // Update a Tutorial with id
   router.put("/:id", companies.update);
+  
+  // update company by hr admin
+  router.post("/:id", companies.updateByHRAdmin);
+
 
   // Delete a Tutorial with id
   router.delete("/:id", companies.delete);

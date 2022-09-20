@@ -12,11 +12,17 @@ module.exports = app => {
   // Retrieve all published Tutorials
   router.get("/active", companies.findAllActive);
 
+  router.get("/codelist", companies.findCodeList);
+  
   // Retrieve a single Tutorial with id
   router.get("/:id", companies.findOne);
 
   // Update a Tutorial with id
   router.put("/:id", companies.update);
+  
+  // update company by hr admin
+  router.post("/:id", companies.update);
+
 
   // Delete a Tutorial with id
   router.delete("/:id", companies.delete);

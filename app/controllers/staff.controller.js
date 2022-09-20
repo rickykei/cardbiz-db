@@ -127,7 +127,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Staff.findById(id)
+  Staff.findById(id).populate('company_id')
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Staff with id " + id });
