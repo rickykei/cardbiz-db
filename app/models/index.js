@@ -12,6 +12,7 @@ db.companies = require("./company.model.js")(mongoose, mongoosePaginate);
 db.staffs = require("./staff.model.js")(mongoose, mongoosePaginate);
 db.users = require("./user.model")(mongoose, mongoosePaginate);
 db.roles = require("./role.model")(mongoose, mongoosePaginate);
- db.smartcards = require("./smartcard.model")(mongoose, mongoosePaginate);
- 
+db.smartcards = require("./smartcard.model")(mongoose, mongoosePaginate);
+db.vcf_counter = require("./vcf_counter.model")(mongoose, mongoosePaginate);
+
 module.exports = db;

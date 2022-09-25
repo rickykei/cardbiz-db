@@ -41,7 +41,7 @@ require("./app/routes/company.routes")(app);
 require("./app/routes/turorial.routes")(app);
 require("./app/routes/staff.routes")(app);
 require("./app/routes/smartcard.routes")(app);
-require("./app/routes/smartcard.routes")(app);
+require("./app/routes/upload.routes")(app);
 
 initRoutes(app);
 

@@ -196,8 +196,8 @@ exports.updateByHRAdmin = async (req, res) => {
  
  
 	   if (req.files!== undefined){
-		    console.log("bannerFilesObjID");
-			console.log(req.files.banner[0].filename);
+		    //console.log("bannerFilesObjID");
+			//console.log(req.files.banner[0].filename);
  
 		if(req.files.banner!==undefined)
 			req.body.banner=req.files.banner[0].filename;
