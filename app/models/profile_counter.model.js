@@ -17,7 +17,7 @@ module.exports = (mongoose, mongoosePaginate) => {
     return object;
   });
   schema.plugin(mongoosePaginate);
-  const Vcf_counter = mongoose.model("vcf_counters", schema, "vcf_counters");
-  return Vcf_counter;
+  const Profile_counter = mongoose.model("profile_counters", schema, "profile_counters");
+  return Profile_counter;
 };
 

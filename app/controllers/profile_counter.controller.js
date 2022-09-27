@@ -1,5 +1,5 @@
 const db = require("../models");
-const Vcf_counter = db.vcf_counter;
+const Profile_counter = db.profile_counter;
 var ObjectId = require('mongodb').ObjectId; 
 
 const getPagination = (page, size) => {
@@ -9,14 +9,14 @@ const getPagination = (page, size) => {
 };
 
 // Find vcfCounter code list
-exports.getVcfCountByStaffId =  (req, res) => {
-  console.log("getVcfCounter Start");
+exports.getProfileCountByStaffId =  (req, res) => {
+  console.log("getProfileCountByStaffId Start");
 
   const id = req.query.staff_id;
    
   console.log("find staff_id = "+ObjectId(id));
   
-  Vcf_counter.aggregate([
+  Profile_counter.aggregate([
 	{
     $match: {staff_id: ObjectId(id)}
   },
@@ -44,11 +44,11 @@ exports.getVcfCountByStaffId =  (req, res) => {
       });
       
 		  res.send({labels,count});
-      console.log("getVcfCounter by staff_id success");
+      console.log("getProfileCountByStaffId by staff_id success");
   }).catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving vcfCounter."
+          err.message || "Some error occurred while retrieving getProfileCountByStaffId."
       });
   });
 };
@@ -59,7 +59,7 @@ exports.findAll = (req, res) => {
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
-  Vcf_counter.paginate(condition, { offset, limit , sort})
+  Profile_counter.paginate(condition, { offset, limit , sort})
     .then((data) => {
       res.send({
         status: data.status,
@@ -73,7 +73,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving vcfCounter."
+          err.message || "Some error occurred while retrieving getProfileCountByStaffId."
       });
     });
 };

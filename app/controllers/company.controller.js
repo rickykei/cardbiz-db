@@ -298,17 +298,11 @@ exports.findCodeList = (req, res) => {
 		  _id: {code : "$code"},
 		  label: {$first: "$code"},
 		  value:{$first: "$_id"},
-		  
 		  }
-	  }
-	  
-  ])
-    .then((data) => {
-		 
-		 
+	}
+  ]).then((data) => {
       res.send(data);
-    })
-    .catch(err => {
+  }).catch(err => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving companyies."

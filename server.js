@@ -43,6 +43,7 @@ require("./app/routes/staff.routes")(app);
 require("./app/routes/smartcard.routes")(app);
 require("./app/routes/upload.routes")(app);
 require("./app/routes/vcf_counter.routes")(app);
+require("./app/routes/profile_counter.routes")(app);
 
 
 initRoutes(app);

@@ -13,7 +13,7 @@ exports.signup = (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-	role: Role.find({name: "user"}), 
+	 
     status: req.body.status ? req.body.status : false
   });
 
@@ -80,7 +80,7 @@ exports.signin = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
-
+ 
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -98,9 +98,13 @@ exports.signin = (req, res) => {
       });
 
       var authorities = [];
-
+	  var role=0;
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+		if(user.roles[i].name==='admin')
+			role=0;
+		else
+			role=1;
       }
       res.status(200).send({
         id: user._id,
@@ -108,6 +112,7 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
+		role: role,
         accessToken: token
       });
     });
