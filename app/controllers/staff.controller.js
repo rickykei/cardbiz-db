@@ -2,6 +2,10 @@ const upload = require("../middleware/upload");
 const GridFSBucket = require("mongodb").GridFSBucket;
 const db = require("../models");
 const crypto = require('crypto');
+var ObjectId = require('mongodb').ObjectId; 
+
+
+
 const Staff = db.staffs;
 const getPagination = (page, size) => {
 	const limit = size ? +size : 5;
@@ -102,6 +106,32 @@ exports.findAll = (req, res) => {
   const populate=['company_id','created_by','updated_by'];
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
+  Staff.paginate(condition, { populate,offset, limit , sort})
+    .then(data => {
+      res.send({
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+    currentPage: data.page,
+        pageSize: pageSize*1,
+        data: data.docs,
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving staffs."
+      });
+    });
+};
+
+exports.findByCompanyId = (req, res) => {
+  console.log("entered Staff.findByCompanyId");
+  const populate=['company_id','created_by','updated_by'];
+  const { currentPage, pageSize, search, orderBy , companyId} = req.query;
+  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" }, { company_id: ObjectId(companyId) } } : { company_id: ObjectId(companyId) };
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
   Staff.paginate(condition, { populate,offset, limit , sort})

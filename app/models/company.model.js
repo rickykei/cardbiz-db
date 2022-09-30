@@ -1,3 +1,4 @@
+ 
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {

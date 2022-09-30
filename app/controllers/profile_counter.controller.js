@@ -1,14 +1,45 @@
+ 
 const db = require("../models");
 const Profile_counter = db.profile_counter;
 var ObjectId = require('mongodb').ObjectId; 
+ 
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
   const offset = page ? page* limit : 0;
   return { limit, offset };
 };
-
-// Find vcfCounter code list
+ 
+exports.create = (req, res) => {
+	console.log("profile count create fname");
+	 
+	if (!req.body.fname) {
+			res.status(400).send({ message: "Content can not be empty!" });
+    return;
+	}
+  // Validate request
+  const profileCounter = new Profile_counter({
+    staff_id: "6325ebcb74abae59f154dc7f",
+    ip: "16.16.1.2",
+	user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+	 
+  });
+  
+  
+ profileCounter
+    .save(profileCounter)
+    .then(data => {
+		  res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Profile_counter."
+      });
+    });
+  
+};
+ 
 exports.getProfileCountByStaffId =  (req, res) => {
   console.log("getProfileCountByStaffId Start");
 
@@ -22,10 +53,8 @@ exports.getProfileCountByStaffId =  (req, res) => {
   },
   {
 	  $group:{
-			_id: {staff_id: "$staff_id",
-			      year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
-            day: { $dayOfMonth: "$createdAt" }
+			_id: { staff_id: "$staff_id",
+			labels: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" ,timezone: "Asia/Hong_Kong"} },
 				},
         count:{$sum:1}
 			}
@@ -34,13 +63,11 @@ exports.getProfileCountByStaffId =  (req, res) => {
 	  
   ]).then((data) => {
     console.log(data);
-  
     var labels=[];
     var count=[];
       data.forEach(a => {
-        labels.push(a._id.year+'/'+a._id.month+'/'+a._id.day);
+        labels.push(a._id.labels);
        count.push(a.count);
-
       });
       
 		  res.send({labels,count});
@@ -55,12 +82,15 @@ exports.getProfileCountByStaffId =  (req, res) => {
 
 
 exports.findAll = (req, res) => {
+	 console.log("findAll Start");
+	  
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{};
   Profile_counter.paginate(condition, { offset, limit , sort})
     .then((data) => {
+		 
       res.send({
         status: data.status,
         totalItem: data.totalDocs,

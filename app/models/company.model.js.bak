@@ -1,3 +1,6 @@
+const moment = require('moment-timezone');
+const dateHK = moment.tz(Date.now(), "Asia/Hong_Kong");
+
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
@@ -7,7 +10,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  lname: String,
 	  company_name: String,
 	  work_mail: String,
-	  country_cd: String,
+	  country: String,
 	  website: String,
 	  position: String,
 	  work_tel: String,

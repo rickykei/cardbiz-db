@@ -2,6 +2,7 @@ var ObjectId = require('mongodb').ObjectId;
 
 const db = require("../models");
 const Smartcard = db.smartcards;
+const populate=['company_id'];
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
   const offset = page ? page* limit : 0;
@@ -39,27 +40,36 @@ exports.create = (req, res) => {
 };
 
 // find all smartcard by company_id
-exports.findByCompanyID = (req, res) => {
-  const id = req.query.company_id;
-  var o_id = new ObjectId(id);
-
-  console.log("find company_ID = "+o_id);
-  Smartcard.find({ company_id: id})
+exports.findByCompanyId = (req, res) => {
+	console.log("--start findByCompanyId");
+  const { currentPage, pageSize, search, orderBy , companyId } = req.query;
+  var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }}, company_id: ObjectId(companyId) } : {company_id: ObjectId(companyId)};
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{};
+  
+  console.log("CompanyId="+companyId);
+  
+  Smartcard.paginate(condition, {populate, offset, limit , sort})
     .then((data) => {
       res.send({
-        
-        data: data,
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+        currentPage: data.page,
+        pageSize: pageSize*1,
+        data: data.docs,
       });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving smartcard."
+          err.message || "Some error occurred while retrieving companies."
       });
     });
 };
 
-const populate=['company_id'];
+
+
  
 // Retrieve all smartcard from the database.
 exports.findAll = (req, res) => {

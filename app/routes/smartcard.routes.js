@@ -14,7 +14,7 @@ module.exports = function(app) {
   app.post("/api/smartcards/", controller.create);
   app.get("/api/smartcards", controller.findAll);
   app.get("/api/smartcards/active", controller.findAllActive);
-  app.get("/api/smartcards/findByCompanyID", controller.findByCompanyID);
+  app.get("/api/smartcards/findByCompanyId", controller.findByCompanyId);
   app.get("/api/smartcards/:id", controller.findOne);
   app.put("/api/smartcards/:id", controller.update);
   app.delete("/api/smartcards/:id", controller.delete);
