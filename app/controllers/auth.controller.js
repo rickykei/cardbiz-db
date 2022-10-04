@@ -117,3 +117,32 @@ exports.signin = (req, res) => {
       });
     });
 };
+
+
+exports.changePassword = (req, res) => {
+	
+  console.log("--change password");
+  console.log(req.body.id);
+   if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
+  }
+  
+	 
+   var user_id=req.body.id;
+   var password={ password: bcrypt.hashSync(req.body.password, 8)};
+ 
+
+   User.findByIdAndUpdate(user_id, password, { useFindAndModify: false , omitUndefined: true})
+    .then(data => {
+		res.send({ message: "user password was updated successfully." });
+	})
+	.catch(err => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving company with id=" + req.body.id +err});
+    });
+	
+	
+};

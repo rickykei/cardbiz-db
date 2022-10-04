@@ -131,10 +131,19 @@ exports.findByCompanyId = (req, res) => {
   console.log("entered Staff.findByCompanyId");
   const populate=['company_id','created_by','updated_by'];
   const { currentPage, pageSize, search, orderBy , companyId} = req.query;
-  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" }, { company_id: ObjectId(companyId) } } : { company_id: ObjectId(companyId) };
+  let query={};
+    
+		
+	if (search)
+	query.fname = {  $regex: new RegExp(search), $options: "i" } ;
+	if (companyId!="")
+    query.company_id =  ObjectId(companyId);
+	else
+	query.company_id =  ObjectId(0);	
+	
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
-  Staff.paginate(condition, { populate,offset, limit , sort})
+  Staff.paginate(query, { populate,offset, limit , sort})
     .then(data => {
       res.send({
         status: data.status,

@@ -60,8 +60,7 @@ exports.findOne = (req, res) => {
       if (!data)
         res.status(404).send({ message: "Not found company with id " + id });
 	  else {
-		  data.password="";
-		  res.send(data);
+		    res.send(data);
 	  }
     })
     .catch(err => {

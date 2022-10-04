@@ -1,12 +1,12 @@
 var ObjectId = require('mongodb').ObjectId; 
-
 const db = require("../models");
 const Smartcard = db.smartcards;
 const populate=['company_id'];
+
 const getPagination = (page, size) => {
-  const limit = size ? +size : 5;
-  const offset = page ? page* limit : 0;
-  return { limit, offset };
+const limit = size ? +size : 5;
+const offset = page ? page* limit : 0;
+return { limit, offset };
 };
 // Create and Save a new smartcards
 exports.create = (req, res) => {
@@ -41,13 +41,18 @@ exports.create = (req, res) => {
 
 // find all smartcard by company_id
 exports.findByCompanyId = (req, res) => {
-	console.log("--start findByCompanyId");
+  console.log("--start smartcard.findByCompanyId--");
   const { currentPage, pageSize, search, orderBy , companyId } = req.query;
-  var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }}, company_id: ObjectId(companyId) } : {company_id: ObjectId(companyId)};
-  const { limit, offset } = getPagination(currentPage-1, pageSize);
-  var  sort = orderBy? {[orderBy] : 1 }:{};
-  
   console.log("CompanyId="+companyId);
+  if (companyId!="")
+    var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }}, company_id: ObjectId(companyId) } : {company_id: ObjectId(companyId)};
+  else
+	var condition =  { company_id: ObjectId(1)};
+console.log("condition="+condition);
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
+  var  sort = orderBy? {[orderBy] : -1 }:{};
+  
+  
   
   Smartcard.paginate(condition, {populate, offset, limit , sort})
     .then((data) => {
@@ -73,12 +78,14 @@ exports.findByCompanyId = (req, res) => {
  
 // Retrieve all smartcard from the database.
 exports.findAll = (req, res) => {
-	
+	console.log("---start smartcard.findall()---");
   const { currentPage, pageSize, search, orderBy } = req.query;
-  var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }} } : {};
+  let query={};
+    if (search)
+	query.uid = {  $regex: new RegExp(search), $options: "i" } ;
   const { limit, offset } = getPagination(currentPage-1, pageSize);
-  var  sort = orderBy? {[orderBy] : 1 }:{};
-  Smartcard.paginate(condition, {populate, offset, limit , sort})
+  var  sort = orderBy? {createdAt : -1 }:{};
+  Smartcard.paginate(query, {populate, offset, limit , sort})
     .then((data) => {
       res.send({
         status: data.status,
