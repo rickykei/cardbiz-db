@@ -4,8 +4,119 @@ const readXlsxFile = require('read-excel-file/node')
  var ObjectId = require('mongodb').ObjectId; 
 const excel = require("exceljs");
 
+exports.uploadStaffExcel =  async (req, res) => {
+	try {
+		let path =  __basedir + "/uploads/" + req.file.filename;
+ 	 
+		if (req.file == undefined) {
+		  return res.status(400).send("Please upload an excel file!");
+		}
+	let company_id=req.body.company_id;
+	 var staffs = [];
+	 var xls_staffs = [];
+      var new_staffs = [];
+	  var old_staffs = [];
+	  
+	  
+   xls_staffs=await readXlsxFile(path).then((rows) => {
+		 
+      // skip header
+      rows.shift();
+ 
+     for(row of rows){
+        var staff = {
+          fname: row[0],
+		  company_id: company_id,
+		  company_name:row[1],
+          work_email: row[2],
+          home_email: row[3],
+          other_email: row[4],
+		  position:row[5],
+		  work_tel:row[6],
+		  work_tel2:row[7],
+		  mobile:row[8],
+		  mobile2:row[9],
+		  home_tel:row[10],
+		  fax:row[11],
+		  web_link:row[12],
+		  web_link2:row[13],
+		  web_link3:row[14],
+		  web_link4:row[15],
+		  web_link5:row[16],
+		  web_link6:row[17],
+		  address:row[18],
+		  address2:row[19],
+		  division :row[20],
+		  department:row[21],
+		  country:row[22],
+		  bio:row[23],
+		  company_website_url:row[24],
+		  more_info_tab_url:row[25],
+		  facebook_url:row[26],
+		  instagram_url:row[27],
+		  whatsapp_url:row[28],
+		  linkedin_url:row[29],
+		  youtube_url:row[30],
+		  twitter_url:row[31],
+		  wechat_id:row[32],
+		  smartcard_uid:row[33],
+		  bizcard_option: row[34],
+		  status:row[35],
+        };
 
-exports.uploadStaffExcel =  (req, res) => {
+        staffs.push(staff);
+		
+      };
+	  
+	  
+	   return staffs;
+	   }
+	);  
+	 
+	  for (var s of xls_staffs){
+		  var query ={};
+		   query.company_id =  ObjectId(company_id);
+		   query.work_email =  s.work_email;
+		let mongoDocument =  await Staffs.findOne(query).exec();
+		
+		if (mongoDocument!=undefined)
+		{
+			s.company_id=company_id;
+			
+			old_staffs.push(s);
+			console.log("old doc id"+mongoDocument.id);
+			await Staffs.findByIdAndUpdate(mongoDocument.id, s, { useFindAndModify: true });
+		}else{
+			s.company_id=company_id;
+			new_staffs.push(s);
+			
+		}
+	  }
+	
+	console.log("new"+new_staffs.length);
+	console.log("old"+old_staffs.length);
+	  	 
+		  
+	 Staffs.insertMany(new_staffs).then(function(){
+			console.log("Data inserted")  // Success
+			res.send({message: "done"});
+		}).catch(function(error){
+			console.log(error)      // Failure
+		});
+			 
+	 res.send({message: "done",old_staffs,new_staffs});
+  
+	  
+   
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Could not upload the file: " + req.file.originalname,
+    });
+  }
+};
+ 
+exports.uploadStaffExcelAddOnly =  (req, res) => {
 	let path =  __basedir + "/uploads/" + req.file.filename;
  	
     try {

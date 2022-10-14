@@ -3,10 +3,11 @@ const GridFSBucket = require("mongodb").GridFSBucket;
 const db = require("../models");
 const crypto = require('crypto');
 var ObjectId = require('mongodb').ObjectId; 
-
-
-
 const Staff = db.staffs;
+const Action_log = db.action_log;
+
+
+
 const getPagination = (page, size) => {
 	const limit = size ? +size : 5;
 	const offset = page ? page* limit : 0;
@@ -71,8 +72,8 @@ exports.create = async (req, res) => {
 	profile_counter: 0,
 	vcf_counter: 0,
 	 status: req.body.status ? req.body.status : false,
-	created_by: req.body.created_by,
-	updated_by: req.body.updated_by
+	createdBy: req.body.createdBy,
+	updatedBy: req.body.updatedBy
   });
     console.log("staff");
 	staff.company_id=req.body.company_id;
@@ -88,7 +89,18 @@ exports.create = async (req, res) => {
   staff
     .save(staff)
     .then(data => {
-		 
+		 //white action log before send successfully
+		 const actionLog = new Action_log({
+			action: "Create Staff",
+			log: data.fname,
+			company_id: data.company_id,
+			staff_id: data.id,
+			createdBy: data.createdBy,
+			color: "border-theme-1",
+		});
+		
+		actionLog.save(actionLog);
+		 //white action log before send successfully
       res.send(data);
     })
     .catch(err => {
@@ -103,7 +115,7 @@ exports.create = async (req, res) => {
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   console.log("entered Staff.findall");
-  const populate=['company_id','created_by','updated_by'];
+  const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
@@ -129,7 +141,7 @@ exports.findAll = (req, res) => {
 
 exports.findByCompanyId = (req, res) => {
   console.log("entered Staff.findByCompanyId");
-  const populate=['company_id','created_by','updated_by'];
+  const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy , companyId} = req.query;
   let query={};
     
@@ -209,7 +221,24 @@ console.log("update id");
         res.status(404).send({
           message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
         });
-      } else res.send({ message: "Staff was updated successfully." });
+      } else 
+	  {
+		  
+		   //white action log before send successfully
+		 const actionLog = new Action_log({
+			action: "Update Staff Record",
+			log: data.fname,
+			company_id: data.company_id,
+			staff_id: data.id,
+			createdBy: data.createdBy,
+			color: "border-theme-1",
+		});
+		
+		actionLog.save(actionLog);
+		 //white action log before send successfully
+		 
+		  res.send({ message: "Staff was updated successfully." });
+	  }
     })
     .catch(err => {
 		console.log(err);

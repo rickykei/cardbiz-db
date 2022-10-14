@@ -2,7 +2,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.users;
 const Role = db.roles;
-
+ 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
@@ -70,7 +70,8 @@ exports.signin = (req, res) => {
   User.findOne({
     username: req.body.username
   })
-    .populate("roles", "-__v")
+    .populate('roles')
+	.populate('company_id')
     .exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -108,7 +109,8 @@ exports.signin = (req, res) => {
       }
       res.status(200).send({
         id: user._id,
-		company_id:	user.company_id,
+		company_id:	user.company_id.id,
+		logo:user.company_id.logo,
         username: user.username,
         email: user.email,
         roles: authorities,

@@ -23,10 +23,8 @@ exports.getVcfCountByStaffId =  (req, res) => {
   {
 	  $group:{
 			_id: {staff_id: "$staff_id",
-			      year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
-            day: { $dayOfMonth: "$createdAt" }
-				},
+			labels: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" ,timezone: "Asia/Hong_Kong"} },
+			},
         count:{$sum:1}
 			}
 	},
@@ -38,7 +36,7 @@ exports.getVcfCountByStaffId =  (req, res) => {
     var labels=[];
     var count=[];
       data.forEach(a => {
-        labels.push(a._id.year+'/'+a._id.month+'/'+a._id.day);
+        labels.push(a._id.labels);
        count.push(a.count);
 
       });

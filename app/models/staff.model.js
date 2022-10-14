@@ -61,12 +61,12 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  profile_counter: Number,
 	  vcf_counter: Number,
 	  status: Boolean, 
-	  updated_by: 
+	  updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
       },
-	  created_by:   
+	  createdBy:   
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"

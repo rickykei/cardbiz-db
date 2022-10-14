@@ -38,13 +38,13 @@ db.mongoose
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/company.routes")(app);
- 
 require("./app/routes/staff.routes")(app);
 require("./app/routes/smartcard.routes")(app);
 require("./app/routes/upload.routes")(app);
 require("./app/routes/vcf_counter.routes")(app);
 require("./app/routes/profile_counter.routes")(app);
 require("./app/routes/batch_upload.routes")(app);
+require("./app/routes/action_log.routes")(app);
 
 initRoutes(app);
 
