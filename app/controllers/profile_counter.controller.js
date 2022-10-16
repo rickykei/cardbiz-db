@@ -60,6 +60,8 @@ exports.getProfileCountByStaffId =  (req, res) => {
 			}
 	},
 	{$sort:{"_id":1}}
+	,
+	{ $limit : 7 }
 	  
   ]).then((data) => {
     console.log(data);
@@ -80,6 +82,47 @@ exports.getProfileCountByStaffId =  (req, res) => {
   });
 };
 
+exports.getProfileCountMonthlyByStaffId =  (req, res) => {
+  console.log("getProfileCountMonthlyByStaffId Start");
+
+  const id = req.query.staff_id;
+   
+  console.log("find staff_id = "+ObjectId(id));
+  
+  Profile_counter.aggregate([
+	{
+    $match: {staff_id: ObjectId(id)}
+  },
+  {
+	  $group:{
+			_id: { staff_id: "$staff_id",
+			labels: { $dateToString: { format: "%Y-%m", date: "$createdAt" ,timezone: "Asia/Hong_Kong"} },
+				},
+        count:{$sum:1}
+			}
+	},
+	{$sort:{"_id":1}}
+	,
+	{ $limit : 12 }
+	  
+  ]).then((data) => {
+    console.log(data);
+    var labels=[];
+    var count=[];
+      data.forEach(a => {
+        labels.push(a._id.labels);
+       count.push(a.count);
+      });
+      
+		  res.send({labels,count});
+      console.log("getProfileCountMonthlyByStaffId by staff_id success");
+  }).catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving getProfileCountMonthlyByStaffId."
+      });
+  });
+};
 
 exports.findAll = (req, res) => {
 	 console.log("findAll Start");
