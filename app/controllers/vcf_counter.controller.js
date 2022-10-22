@@ -28,9 +28,9 @@ exports.getVcfCountByStaffId =  (req, res) => {
         count:{$sum:1}
 			}
 	},
-	{$sort:{"_id":1}	}
-		,
-	{ $limit : 7 }
+	{$sort:{"_id":-1}	},
+	{ $limit : 7 },
+	{$sort:{"_id":1}	},
 	  
   ]).then((data) => {
     console.log(data);
@@ -72,9 +72,10 @@ exports.getVcfCountMonthlyByStaffId =  (req, res) => {
         count:{$sum:1}
 			}
 	},
-	{$sort:{"_id":1}	}
+	{$sort:{"_id":-1}	}
 		,
-	{ $limit : 7 }
+	{ $limit : 7 },
+	{$sort:{"_id":1}}	,
 	  
   ]).then((data) => {
     console.log(data);

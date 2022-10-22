@@ -59,9 +59,9 @@ exports.getProfileCountByStaffId =  (req, res) => {
         count:{$sum:1}
 			}
 	},
-	{$sort:{"_id":1}}
-	,
-	{ $limit : 7 }
+	{$sort:{"_id":-1}}	,
+	{ $limit : 7 },
+	{$sort:{"_id":1}}	,
 	  
   ]).then((data) => {
     console.log(data);
@@ -101,9 +101,9 @@ exports.getProfileCountMonthlyByStaffId =  (req, res) => {
         count:{$sum:1}
 			}
 	},
-	{$sort:{"_id":1}}
-	,
-	{ $limit : 12 }
+	{$sort:{"_id":-1}}	,
+	{ $limit : 12 },
+	{$sort:{"_id":1}	},
 	  
   ]).then((data) => {
     console.log(data);

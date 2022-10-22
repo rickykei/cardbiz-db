@@ -24,6 +24,10 @@ exports.uploadStaffExcel =  async (req, res) => {
       rows.shift();
  
      for(row of rows){
+		for (let i = 0; i < 36; i++) {
+			  if (row[i]==null || row[i]==undefined)
+				  row[i]="";
+			} 
         var staff = {
           fname: row[0],
 		  company_id: company_id,
