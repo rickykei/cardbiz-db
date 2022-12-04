@@ -3,6 +3,8 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+ router.post("/sendNotification",staffs.sendNotificationByStaffDocId);
+ 
   // Create a new Staff
   router.post("/", staffs.create);
 
@@ -14,19 +16,21 @@ module.exports = app => {
   // Retrieve all published Tutorials
   router.get("/published", staffs.findAllPublished);
 
-  // Retrieve a single Tutorial with id
+  // Retrieve a single Staff with id
   router.get("/:id", staffs.findOne);
 
-  // Update a Tutorial with id
+  // Update a Staff with id
   router.put("/:id", staffs.update);
   
   // update staff with id with image file
   router.post("/:id", staffs.update);
  
-  // Delete a Tutorial with id
+ 
+ 
+  // Delete a Staff with id
   router.delete("/:id", staffs.delete);
 
-  // Create a new Tutorial
+  
   router.delete("/", staffs.deleteAll);
 
   app.use("/api/staffs", router);
