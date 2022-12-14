@@ -7,14 +7,13 @@ const Staff = db.staffs;
 const Action_log = db.action_log;
 var nodemailer = require('nodemailer');
 var mailTransport = nodemailer.createTransport( {
+
 	host: "smtpout.secureserver.net",  
-  port: 587,
-	secure: false,
-	secureConnecton: false,
-	tls: {
-                ciphers: 'SSLv3',
-                  rejectUnauthorized: false
-    },
+     debug: true,
+	 secure: true,
+  secureConnection: true,
+  port: 465,
+       tls: {rejectUnauthorized: false},  
   auth: {
     user: "admin@whospets.com",
     pass: "soso2016~",
@@ -192,6 +191,7 @@ exports.findByCompanyId = (req, res) => {
 
 // Find a single Staff with an id
 exports.findOne = (req, res) => {
+	console.log("staff.findOne");
   const id = req.params.id;
 
   Staff.findById(id).populate('company_id')
@@ -266,27 +266,36 @@ console.log("update id");
 
 // send staff email notification
 exports.sendNotificationByStaffDocId = async (req, res) => {
+  console.log("staff.sendNotificationByStaffDocId");
   if (!req.body.staffDocId) {
     return res.status(400).send({
       message: "Data to update can not be empty!"
     });
   }else{
+	  let staffIdArray=req.body.staffDocId;
 	console.log(req.body.staffDocId);
 	console.log(req.body.uid);
 	console.log(req.body.companyId);
-		mailTransport.sendMail(
-	  {
-		from: 'staff notification <admin@whospets.com>',
-		to: 'rickykei@gmail.com',
-		subject: 'Hi :)',
-		html: '<h1>Hello</h1><p>Nice to meet you.</p>',
-	  },
-	  function(err) {
-		if (err) {
-		  console.log('Unable to send email: ' + err);
-		}
-	  },
+	staffIdArray.forEach(e=>{
+		Staff.findById(ObjectId(e)).
+		then(doc=>{
+				mailTransport.sendMail(
+			  {
+				from: 'staff notification <admin@whospets.com>',
+				to: 'rickykei@gmail.com',
+				subject: 'Hi :)'+doc.id,
+				html: '<p>Hi '+doc.fname+' '+doc.lname+'</p><p>Welcome onboard, please find your digital business card from the QR Code below:</p><img width="350" src="https://whospets.com/Touchless/genvcf2png.php?sig='+doc.id+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. I would recommend you to save this http link as a shortcut on your phone for future use.  </p> <p> Please let me know if you have any questions with regards or if you need any help with your digital business card. </p> <p>Best regards,</p> <p>Stephen Fung</p><p>Admin Manager</p>',
+			  },
+			  function(err) {
+				if (err) {
+				  console.log('Unable to send email: ' + err);
+				}
+			  },
+			);
+		})
+	}
 	);
+	 
 
   }
    res.send({ message: "notification was sent successfully." });

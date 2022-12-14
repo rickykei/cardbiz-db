@@ -24,9 +24,7 @@ module.exports = app => {
   
   // update staff with id with image file
   router.post("/:id", staffs.update);
- 
- 
- 
+  
   // Delete a Staff with id
   router.delete("/:id", staffs.delete);
 
