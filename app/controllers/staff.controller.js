@@ -15,7 +15,7 @@ var mailTransport = nodemailer.createTransport( {
   port: 465,
        tls: {rejectUnauthorized: false},  
   auth: {
-    user: "admin@whospets.com",
+    user: "admin@e-profile.digital",
     pass: "soso2016~",
 	
   
@@ -47,42 +47,32 @@ exports.create = async (req, res) => {
   // Create a Staff
   const staff = new Staff({
     udid: crypto.randomUUID(),
-    fname: req.body.fname,
-	lname: req.body.lname,
+	rc_no: req.body.rc_no,
+	staff_no: req.body.staff_no,
+    name_eng: req.body.name_eng,
+	name_chi: req.body.name_chi,
+	title_eng: req.body.title_eng,
+	title_chi: req.body.title_chi,
 	company_id: req.body.company_id,
 	headshot: req.body.headshot,
-	work_email: req.body.work_email,
-	home_email: req.body.home_email,
-	other_email: req.body.other_email,
-	position: req.body.position,
+	pro_title: req.body.pro_title,
+	subsidiary_eng: req.body.subsidiary_eng,
+	subsidiary_chi: req.body.subsidiary_chi,
+	address_eng: req.body.address_eng,
+	address_chi: req.body.address_chi,
 	work_tel: req.body.work_tel,
-	work_tel2: req.body.work_tel2,
-	mobile: req.body.mobile,
-	mobile2: req.body.mobile2,
-	home_tel: req.body.home_tel,
-	fax: req.body.fax,
-	web_link: req.body.web_link,
-	web_link2: req.body.web_link2,
-	web_link3: req.body.web_link3,
-	web_link4: req.body.web_link4,
-	web_link5: req.body.web_link5,
-	web_link6: req.body.web_link6,
-	address: req.body.address,
-	address2: req.body.address2,
-	division: req.body.division,
-	department: req.body.department,
-	country: req.body.country,
-	bio : req.body.bio,
-	company_website_url : req.body.company_website_url,
-	more_info_tab_url : req.body.more_info_tab_url,
-	facebook_url: req.body.facebook_url,
-	instagram_url : req.body.instagram_url,
-	whatsapp_url : req.body.whatsapp_url,
-	linkedin_url : req.body.linkedin_url,
-	youtube_url : req.body.youtube_url,
-	twitter_url : req.body.twitter_url,
-	wechat_url : req.body.wechat_url,
-	smartcard_uid : req.body.smartcard_uid,
+	direct_tel: req.body.direct_tel,
+	mobile_tel: req.body.mobile_tel,
+	fax_no: req.body.fax_no,
+	reuters: req.body.reuters,
+	work_email: req.body.work_email,
+	agent_no: req.body.agent_no,
+	broker_no: req.body.broker_no,
+	mpf_no: req.body.mpf_no,
+	hkma_no: req.body.hkma_no,
+	hkma_eng: req.body.hkma_eng,
+	hkma_chi: req.body.hkma_chi,
+ 	smartcard_uid : req.body.smartcard_uid,
 	bizcard_option: req.body.bizcard_option,
 	profile_counter: 0,
 	vcf_counter: 0,
@@ -132,7 +122,7 @@ exports.findAll = (req, res) => {
   console.log("entered Staff.findall");
   const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy } = req.query;
-  var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
+  var condition = search ? { name_chi: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
   Staff.paginate(condition, { populate,offset, limit , sort})
@@ -281,10 +271,11 @@ exports.sendNotificationByStaffDocId = async (req, res) => {
 		then(doc=>{
 				mailTransport.sendMail(
 			  {
-				from: 'staff notification <admin@whospets.com>',
-				to: 'rickykei@gmail.com',
+				from: 'staff notification <admin@e-profile.digital>',
+				bcc: 'ricky.kei@gmail.com',
+				to: 'stephen@nfctouch.com.hk',
 				subject: 'Hi :)'+doc.id,
-				html: '<p>Hi '+doc.fname+' '+doc.lname+'</p><p>Welcome onboard, please find your digital business card from the QR Code below:</p><img width="350" src="https://whospets.com/Touchless/genvcf2png.php?sig='+doc.id+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. I would recommend you to save this http link as a shortcut on your phone for future use.  </p> <p> Please let me know if you have any questions with regards or if you need any help with your digital business card. </p> <p>Best regards,</p> <p>Stephen Fung</p><p>Admin Manager</p>',
+				html: '<p>Hi '+doc.name_eng+' '+doc.name_chi+'</p><p>Welcome onboard, please find your digital business card from the QR Code below:</p><img width="350" src="http://whospets.com/Touchless/genvcf2png.php?sig='+doc.id+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. I would recommend you to save this http link as a shortcut on your phone for future use.  </p> <p> Please let me know if you have any questions with regards or if you need any help with your digital business card. </p> <p>Best regards,</p> <p>Stephen Fung</p><p>Admin Manager</p>',
 			  },
 			  function(err) {
 				if (err) {
