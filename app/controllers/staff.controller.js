@@ -122,9 +122,21 @@ exports.findAll = (req, res) => {
   console.log("entered Staff.findall");
   const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy } = req.query;
-  var condition = search ? { name_chi: { $regex: new RegExp(search), $options: "i" } } : {};
+  var condition = search ? { name_eng: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
-  var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
+  var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt:-1,_id:1  };
+ 
+  
+  console.log("entered Staff.findall offset");
+  console.log(offset);
+  console.log("entered Staff.findall limit");
+  console.log(limit);
+  console.log("entered Staff.findall condition");
+  console.log(condition);
+  console.log("entered Staff.findall sort");
+  console.log(sort);
+  
+  
   Staff.paginate(condition, { populate,offset, limit , sort})
     .then(data => {
       res.send({
