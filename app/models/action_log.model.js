@@ -7,8 +7,7 @@
   var schema = mongoose.Schema(
     {
      
-	  company_id:
-	  {
+	  company_id:{
 		  type: mongoose.Schema.Types.ObjectId,
 		  ref: "company"
 	  },
@@ -18,6 +17,10 @@
 	  staff_id:{
 		  type: mongoose.Schema.Types.ObjectId,
 		  ref: "staff"
+	  },
+	  staff_log_id:{
+		  type: mongoose.Schema.Types.ObjectId,
+		  ref: "staff_log"
 	  },
       updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
 	  createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },

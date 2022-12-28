@@ -77,6 +77,6 @@ module.exports = (mongoose, mongoosePaginate) => {
     return object;
   });
   schema.plugin(mongoosePaginate);
-  const Staff = mongoose.model("staff", schema);
-  return Staff;
+  const Staff_log = mongoose.model("staff_logs", schema, "staff_logs");
+  return Staff_log;
 };

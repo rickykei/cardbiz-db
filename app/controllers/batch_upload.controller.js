@@ -1,5 +1,6 @@
 const db = require("../models");
 const Staffs = db.staffs;
+ const Action_log = db.action_log;
 const readXlsxFile = require('read-excel-file/node')
  var ObjectId = require('mongodb').ObjectId; 
 const excel = require("exceljs");
@@ -11,12 +12,18 @@ exports.uploadStaffExcel =  async (req, res) => {
 		if (req.file == undefined) {
 		  return res.status(400).send("Please upload an excel file!");
 		}
-	let company_id=req.body.company_id;
+	let company_id=req.body.company_id; // company doc id
+	let uid=req.body.uid;  //citic.hr admin staff doc id
 	 var staffs = [];
 	 var xls_staffs = [];
       var new_staffs = [];
 	  var old_staffs = [];
+	   var actionLog=[];
+	   var actionLogs=[];
 	  
+	  console.log("upload staff excel");
+	  console.log("company_id="+company_id);
+	  console.log("uid="+uid);
 	  
    xls_staffs=await readXlsxFile(path).then((rows) => {
 		 
@@ -30,32 +37,37 @@ exports.uploadStaffExcel =  async (req, res) => {
 			} 
         var staff = {
 		  company_id: company_id,
-		  name_eng: row[0],
-		  name_chi: row[1],
-		  rc_no: row[2],
-		  staff_no: row[3],
-          title_eng: row[4],
-          title_chi: row[5],
-          pro_title: row[6],
-		  subsidiary_eng:row[7],
-		  subsidiary_chi:row[8],
-		  address_eng:row[9],
-		  address_chi:row[10],
-		  work_tel:row[11],
-		  direct_tel:row[12],
-		  mobile_tel:row[13],
-		  fax_no:row[14],
-		  reuters:row[15],
-		  work_email:row[16],
-		  agent_no:row[17],
-		  broker_no:row[18],
-		  mpf_no:row[19],
-		  hkma_no:row[20],
-		  hkma_eng:row[21],
-		  hkma_chi :row[22],
-		  smartcard_uid:row[23],
-		  bizcard_option: row[24],
-		  status:row[25],
+		  createdBy: uid,
+		  company_name_eng: row[0],
+		  company_name_chi: row[1],
+		  name_eng: row[2],
+		  name_chi: row[3],
+		  rc_no: row[4],
+		  staff_no: row[5],
+          title_eng: row[6],
+          title_chi: row[7],
+          pro_title: row[8],
+		  subsidiary_eng:row[9],
+		  subsidiary_chi:row[10],
+		  address_eng:row[11],
+		  address_chi:row[12],
+		  work_tel:row[13],
+		  direct_tel:row[14],
+		  mobile_tel:row[15],
+		  mobile_tel2:row[16],
+		  fax_no:row[17],
+		  fax_no2:row[18],
+		  reuters:row[19],
+		  work_email:row[20],
+		  agent_no:row[21],
+		  broker_no:row[22],
+		  mpf_no:row[23],
+		  hkma_no:row[24],
+		  hkma_eng:row[25],
+		  hkma_chi :row[26],
+		  smartcard_uid:row[27],
+		  bizcard_option: row[28],
+		  status:row[29],
         };
 
         staffs.push(staff);
@@ -69,35 +81,95 @@ exports.uploadStaffExcel =  async (req, res) => {
 	 
 	  for (var s of xls_staffs){
 		  var query ={};
+		 
 		   query.company_id =  ObjectId(company_id);
 		   query.staff_no =  s.staff_no;
-		let mongoDocument =  await Staffs.findOne(query).exec();
+		let oldStaffDoc =  await Staffs.findOne(query).exec();
 		
-		if (mongoDocument!=undefined)
+		if (oldStaffDoc!=undefined)
 		{
-			s.company_id=company_id;
 			
 			old_staffs.push(s);
-			console.log("old doc id"+mongoDocument.id);
-			await Staffs.findByIdAndUpdate(mongoDocument.id, s, { useFindAndModify: true });
+			s.company_id=company_id;
+			s.updatedAt=Date.now();
+			
+			console.log("old doc id"+oldStaffDoc.id);
+			/////////////////////////
+			//update old staff no. record
+			////////////////////////////
+			Staffs.findByIdAndUpdate(oldStaffDoc.id, s, { useFindAndModify: true })
+			.then(data => {
+				  if (!data) {
+					res.status(404).send({
+					  message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+					});
+				  } else {
+						console.log("batch upload staff update");
+						//white action log before send successfully
+							actionLog = new Action_log({
+							action: "Update Staff Record by Batch Upload",
+							log: "batch excel",
+							company_id: company_id,
+							staff_id: oldStaffDoc.id,
+							createdBy: uid,
+							color: "border-theme-1",
+						});
+						
+						actionLog.save(actionLog);
+						 //white action log before send successful
+				  }
+				   })
+			.catch(err => {
+				console.log(err);
+			  res.status(500).send({message: "Error updating Staff by batch with id=" + id  });
+			});
 		}else{
 			s.company_id=company_id;
 			new_staffs.push(s);
 			
 		}
+		
+		
 	  }
 	
 	console.log("new"+new_staffs.length);
 	console.log("old"+old_staffs.length);
-	  	 
-		  
-	 Staffs.insertMany(new_staffs).then(function(){
-			console.log("Data inserted")  // Success
-			res.send({message: "done"});
-		}).catch(function(error){
-			console.log(error)      // Failure
-		});
+	
+	if (new_staffs.length>0){
+		///////////////////////////
+		//insert new staffs records
+		///////////////////////////
+		Staffs.insertMany(new_staffs,(err,data)=>{  
+				if(err){  
+					res.status(404).send({
+						  message: `Cannot update Staff with id=. Maybe Staff was not found!`
+						});
+				}else{  
+					 for (var d of data){
+							console.log("batch upload staff create");
+							console.log("insertedstaffDocId="+d.id);
+							
+							//white action log before send successfully
+								actionLog = new Action_log({
+								action: "Create Staff Record by Batch Upload",
+								log: "batch excel",
+								company_id: company_id,
+								staff_id: d.id,
+								createdBy: uid,
+								color: "border-theme-1",
+							});
+							
+							actionLog.save(actionLog);
+							 
+							 //white action log before send successful
+					 }
+				}
+					   
+		})
+	
 			 
+	}
+		
 	 res.send({message: "done",old_staffs,new_staffs});
   
 	  
@@ -129,32 +201,36 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
       rows.forEach((row) => {
         var staff = {
           company_id: company_id,
-		  name_eng: row[0],
-		  name_chi: row[1],
-		  rc_no: row[2],
-		  staff_no: row[3],
-          title_eng: row[4],
-          title_chi: row[5],
-          pro_title: row[6],
-		  subsidiary_eng:row[7],
-		  subsidiary_chi:row[8],
-		  address_eng:row[9],
-		  address_chi:row[10],
-		  work_tel:row[11],
-		  direct_tel:row[12],
-		  mobile_tel:row[13],
-		  fax_no:row[14],
-		  reuters:row[15],
-		  work_email:row[16],
-		  agent_no:row[17],
-		  broker_no:row[18],
-		  mpf_no:row[19],
-		  hkma_no:row[20],
-		  hkma_eng:row[21],
-		  hkma_chi :row[22],
-		  smartcard_uid:row[23],
-		  bizcard_option: row[24],
-		  status:row[25],
+		  company_name_eng: row[0],
+		  company_name_chi: row[1],
+		  name_eng: row[2],
+		  name_chi: row[3],
+		  rc_no: row[4],
+		  staff_no: row[5],
+          title_eng: row[6],
+          title_chi: row[7],
+          pro_title: row[8],
+		  subsidiary_eng:row[9],
+		  subsidiary_chi:row[10],
+		  address_eng:row[11],
+		  address_chi:row[12],
+		  work_tel:row[13],
+		  direct_tel:row[14],
+		  mobile_tel:row[15],
+		  mobile_tel2:row[16],
+		  fax_no:row[17],
+		  fax_no2:row[18],
+		  reuters:row[19],
+		  work_email:row[20],
+		  agent_no:row[21],
+		  broker_no:row[22],
+		  mpf_no:row[23],
+		  hkma_no:row[24],
+		  hkma_eng:row[25],
+		  hkma_chi :row[26],
+		  smartcard_uid:row[27],
+		  bizcard_option: row[28],
+		  status:row[29],
         };
 
         staffs.push(staff);
@@ -191,6 +267,8 @@ exports.downloadStaffExcel =  (req, res) => {
 
     objs.forEach((obj) => {
       staffs.push({
+		  company_name_eng: obj.company_name_eng,
+		  company_name_chi: obj.company_name_chi,
 		  name_eng: obj.name_eng,
 		  name_chi: obj.name_chi,
 		  rc_no:obj.rc_no,
@@ -205,7 +283,9 @@ exports.downloadStaffExcel =  (req, res) => {
 		  work_tel: obj.work_tel,
 		  direct_tel: obj.direct_tel,
 		  mobile_tel: obj.mobile_tel,
+		  mobile_tel2: obj.mobile_tel2,
 		  fax_no: obj.fax_no,
+		  fax_no2: obj.fax_no2,
 		  reuters:obj.reuters,
           work_email: obj.work_email,
           agent_no: obj.agent_no,
@@ -227,6 +307,8 @@ exports.downloadStaffExcel =  (req, res) => {
     let worksheet = workbook.addWorksheet("Staffs");
 
     worksheet.columns = [
+		{ header: "company_name_eng", key: "company_name_eng", width: 25 },
+      { header: "company_name_chi", key: "company_name_chi", width: 25 },
       { header: "name_eng", key: "name_eng", width: 25 },
       { header: "name_chi", key: "name_chi", width: 25 },
       { header: "rc_no", key: "rc_no", width: 25 },
@@ -241,7 +323,9 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "work_tel", key: "work_tel", width: 25 },
 	  { header: "direct_tel", key: "direct_tel", width: 25 },
 	  { header: "mobile_tel", key: "mobile_tel", width: 25 },
+	  { header: "mobile_tel2", key: "mobile_tel2", width: 25 },
 	  { header: "fax_no", key: "fax_no", width: 25 },
+	  { header: "fax_no2", key: "fax_no2", width: 25 },
 	  { header: "reuters", key: "reuters", width: 25 },
 	  { header: "work_email", key: "work_email", width: 25 },
 	  { header: "agent_no", key: "agent_no", width: 25 },

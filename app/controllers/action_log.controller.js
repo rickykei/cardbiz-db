@@ -8,6 +8,38 @@ const getPagination = (page, size) => {
   return { limit, offset };
 }; 
 
+// Retrieve all Tutorials from the database.
+exports.findAll = (req, res) => {
+  console.log("entered actionlog.findall");
+  const populate=['company_id','createdBy'];
+  const { currentPage, pageSize, search, orderBy } = req.query;
+  var condition = search ? { action: { $regex: new RegExp(search), $options: "i" } } : {};
+  const { limit, offset } = getPagination(currentPage-1, pageSize);
+  var  sort = orderBy? {[orderBy] : 1 }:{ createdAt:-1,_id:1  };
+ 
+  let queryArray=[];
+  let query={};  
+		 
+  
+  Action_log.paginate(query, { populate,offset, limit , sort})
+    .then(data => {
+      res.send({
+        status: data.status,
+        totalItem: data.totalDocs,
+        totalPage: data.totalPages,
+		currentPage: data.page,
+        pageSize: pageSize*1,
+        data: data.docs,
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving action log."
+      });
+    });
+};
+
 exports.setLog = async (req, res) => {
 	console.log("entered action_log.setLog");
 	if (!req.body) {
@@ -78,12 +110,12 @@ exports.getByAdminId =  (req, res) => {
 exports.getByStaffId =  (req, res) => {
   console.log("action_log.getByStaffId Start");
   let query={};
-     const populate="";
+  const populate="";
   const id = req.query.staffId;
-   const { currentPage, pageSize, search, orderBy , companyId} = req.query;
+  const { currentPage, pageSize, search, orderBy , staffId} = req.query;
   console.log("find staff id = "+ObjectId(id));
    
-	query.staff_id =  ObjectId(id);	
+  query.staff_id =  ObjectId(id);	
 	
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };

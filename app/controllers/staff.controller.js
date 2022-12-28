@@ -51,6 +51,8 @@ exports.create = async (req, res) => {
 	staff_no: req.body.staff_no,
     name_eng: req.body.name_eng,
 	name_chi: req.body.name_chi,
+	company_name_eng: req.body.company_name_eng,
+	company_name_chi: req.body.company_name_chi,
 	title_eng: req.body.title_eng,
 	title_chi: req.body.title_chi,
 	company_id: req.body.company_id,
@@ -63,7 +65,9 @@ exports.create = async (req, res) => {
 	work_tel: req.body.work_tel,
 	direct_tel: req.body.direct_tel,
 	mobile_tel: req.body.mobile_tel,
+	mobile_tel2: req.body.mobile_tel2,
 	fax_no: req.body.fax_no,
+	fax_no2: req.body.fax_no2,
 	reuters: req.body.reuters,
 	work_email: req.body.work_email,
 	agent_no: req.body.agent_no,
@@ -126,7 +130,15 @@ exports.findAll = (req, res) => {
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt:-1,_id:1  };
  
-  
+    let queryArray=[];
+  let query={};  
+		
+	if (search){
+		queryArray.push({"name_eng" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"staff_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"rc_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		query['$or'] = queryArray;
+	}
   console.log("entered Staff.findall offset");
   console.log(offset);
   console.log("entered Staff.findall limit");
@@ -137,7 +149,7 @@ exports.findAll = (req, res) => {
   console.log(sort);
   
   
-  Staff.paginate(condition, { populate,offset, limit , sort})
+  Staff.paginate(query, { populate,offset, limit , sort})
     .then(data => {
       res.send({
         status: data.status,
@@ -160,18 +172,23 @@ exports.findByCompanyId = (req, res) => {
   console.log("entered Staff.findByCompanyId");
   const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy , companyId} = req.query;
-  let query={};
-    
+  let queryArray=[];
+  let query={};  
 		
-	if (search)
-	query.fname = {  $regex: new RegExp(search), $options: "i" } ;
+	if (search){
+		queryArray.push({"name_eng" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"staff_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"rc_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		query['$or'] = queryArray;
+	}
+	
 	if (companyId!="")
-    query.company_id =  ObjectId(companyId);
+		query.company_id =  ObjectId(companyId);
 	else
-	query.company_id =  ObjectId(0);	
+		query.company_id =  ObjectId(0);	
 	
   const { limit, offset } = getPagination(currentPage-1, pageSize);
-  var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
+  var  sort = orderBy? {[orderBy] : 1 }:{  updatedAt:-1,_id:1};
   Staff.paginate(query, { populate,offset, limit , sort})
     .then(data => {
       res.send({

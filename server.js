@@ -45,6 +45,8 @@ require("./app/routes/vcf_counter.routes")(app);
 require("./app/routes/profile_counter.routes")(app);
 require("./app/routes/batch_upload.routes")(app);
 require("./app/routes/action_log.routes")(app);
+require("./app/routes/staff_log.routes")(app);
+
 
 initRoutes(app);
 
