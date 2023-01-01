@@ -11,7 +11,7 @@ const getPagination = (page, size) => {
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   console.log("entered actionlog.findall");
-  const populate=['company_id','createdBy'];
+  const populate=['company_id','createdBy','staff_id'];
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { action: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
@@ -164,3 +164,4 @@ exports.getByCompanyId = (req, res) => {
     });
 };
 
+ 

@@ -8,6 +8,6 @@ module.exports = app => {
   router.get("/getByAdminId", action_logs.getByAdminId);
   router.get("/getByCompanyId", action_logs.getByCompanyId);
   router.get("/getByStaffId", action_logs.getByStaffId);
-   
+ 
   app.use("/api/action_logs", router);
 };

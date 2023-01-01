@@ -6,5 +6,8 @@ module.exports = app => {
   router.get("/getVcfCountByStaffId", vcf_counter.getVcfCountByStaffId);
   router.get("/getVcfCountMonthlyByStaffId", vcf_counter.getVcfCountMonthlyByStaffId);
   router.get("/", vcf_counter.findAll);
+  router.get("/downloadStaffLogExcel", vcf_counter.downloadStaffLogExcel);
+   
+  
   app.use("/api/vcf_counter", router);
 };

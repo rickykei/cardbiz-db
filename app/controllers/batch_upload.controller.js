@@ -1,8 +1,9 @@
 const db = require("../models");
 const Staffs = db.staffs;
- const Action_log = db.action_log;
+const Staff_log = db.staff_log;
+const Action_log = db.action_log;
 const readXlsxFile = require('read-excel-file/node')
- var ObjectId = require('mongodb').ObjectId; 
+var ObjectId = require('mongodb').ObjectId; 
 const excel = require("exceljs");
 
 exports.uploadStaffExcel =  async (req, res) => {
@@ -19,66 +20,79 @@ exports.uploadStaffExcel =  async (req, res) => {
       var new_staffs = [];
 	  var old_staffs = [];
 	   var actionLog=[];
-	   var actionLogs=[];
 	  
-	  console.log("upload staff excel");
+	  var staffLog=[];
+	  console.log("＝＝＝＝＝＝＝＝＝＝＝＝＝");
+	  console.log("ENTER upload staff excel");
 	  console.log("company_id="+company_id);
 	  console.log("uid="+uid);
-	  
-   xls_staffs=await readXlsxFile(path).then((rows) => {
+
+
+   // convert excel to staff array	  
+    xls_staffs=await readXlsxFile(path).then((rows) => {
 		 
       // skip header
       rows.shift();
  
-     for(row of rows){
-		for (let i = 0; i < 26; i++) {
-			  if (row[i]==null || row[i]==undefined)
-				  row[i]="";
-			} 
-        var staff = {
-		  company_id: company_id,
-		  createdBy: uid,
-		  company_name_eng: row[0],
-		  company_name_chi: row[1],
-		  name_eng: row[2],
-		  name_chi: row[3],
-		  rc_no: row[4],
-		  staff_no: row[5],
-          title_eng: row[6],
-          title_chi: row[7],
-          pro_title: row[8],
-		  subsidiary_eng:row[9],
-		  subsidiary_chi:row[10],
-		  address_eng:row[11],
-		  address_chi:row[12],
-		  work_tel:row[13],
-		  direct_tel:row[14],
-		  mobile_tel:row[15],
-		  mobile_tel2:row[16],
-		  fax_no:row[17],
-		  fax_no2:row[18],
-		  reuters:row[19],
-		  work_email:row[20],
-		  agent_no:row[21],
-		  broker_no:row[22],
-		  mpf_no:row[23],
-		  hkma_no:row[24],
-		  hkma_eng:row[25],
-		  hkma_chi :row[26],
-		  smartcard_uid:row[27],
-		  bizcard_option: row[28],
-		  status:row[29],
-        };
+			for(row of rows){
+			for (let i = 0; i < 26; i++) {
+				  if (row[i]==null || row[i]==undefined)
+					  row[i]="";
+				} 
+			var staff = {
+			  company_id: company_id,
+			  createdBy: uid,
+			  company_name_eng: row[0],
+			  company_name_chi: row[1],
+			  name_eng: row[2],
+			  name_chi: row[3],
+			  rc_no: row[4],
+			  staff_no: row[5],
+			  title_eng: row[6],
+			  title_chi: row[7],
+			  pro_title: row[8],
+			  subsidiary_eng:row[9],
+			  subsidiary_chi:row[10],
+			  address_eng:row[11],
+			  address_chi:row[12],
+			  work_tel:row[13],
+			  work_tel2:row[14],
+			  work_tel3:row[15],
+			  direct_tel:row[16],
+			  direct_tel2:row[17],
+			  direct_tel3:row[18],
+			  mobile_tel:row[19],
+			  mobile_tel2:row[20],
+			  mobile_tel3:row[21],
+			  mobile_tel4:row[22],
+			  mobile_tel5:row[23],
+			  fax_no:row[24],
+			  fax_no2:row[25],
+			  fax_no3:row[26],
+			  fax_no4:row[27],
+			  fax_no5:row[28],
+			  reuters:row[29],
+			  work_email:row[30],
+			  agent_no:row[31],
+			  broker_no:row[32],
+			  mpf_no:row[33],
+			  hkma_no:row[34],
+			  hkma_eng:row[35],
+			  hkma_chi :row[36],
+			  smartcard_uid:row[37],
+			  bizcard_option: row[38],
+			  status:row[39],
+			};
 
-        staffs.push(staff);
-		
-      };
-	  
-	  
+			staffs.push(staff);
+			
+		  };
+	
 	   return staffs;
 	   }
 	);  
-	 
+	    // convert excel to staff array
+	  
 	  for (var s of xls_staffs){
 		  var query ={};
 		 
@@ -89,15 +103,18 @@ exports.uploadStaffExcel =  async (req, res) => {
 		if (oldStaffDoc!=undefined)
 		{
 			
+			
 			old_staffs.push(s);
 			s.company_id=company_id;
 			s.updatedAt=Date.now();
 			
 			console.log("old doc id"+oldStaffDoc.id);
+			console.log(oldStaffDoc);
+			
 			/////////////////////////
 			//update old staff no. record
 			////////////////////////////
-			Staffs.findByIdAndUpdate(oldStaffDoc.id, s, { useFindAndModify: true })
+			 Staffs.findByIdAndUpdate(oldStaffDoc.id, s, { useFindAndModify: true })
 			.then(data => {
 				  if (!data) {
 					res.status(404).send({
@@ -111,12 +128,84 @@ exports.uploadStaffExcel =  async (req, res) => {
 							log: "batch excel",
 							company_id: company_id,
 							staff_id: oldStaffDoc.id,
-							createdBy: uid,
+							updatedBy: ObjectId(uid), 
+							createdBy: ObjectId(uid), 
+							 
 							color: "border-theme-1",
 						});
 						
-						actionLog.save(actionLog);
+						 actionLog.save(actionLog).then(data2 => {
+							if (!data2){
+								res.status(404).send({
+									message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+									});
+							}else{
+								//backup old staff records to table staff_logs
+								console.log("actionLog save for edit");
+								 
+								console.log(oldStaffDoc);
+								staff_log = new Staff_log({
+									action_log_id: ObjectId(data2.id),
+									staff_id: ObjectId(oldStaffDoc._id),
+									udid:oldStaffDoc.udid,
+									company_id: oldStaffDoc.company_id,
+									rc_no: oldStaffDoc.rc_no,
+									staff_no: oldStaffDoc.staff_no,
+									name_eng: oldStaffDoc.name_eng,
+									name_chi: oldStaffDoc.name_chi,
+									company_name_eng: oldStaffDoc.company_name_eng,
+									company_name_chi: oldStaffDoc.company_name_chi,
+									title_eng: oldStaffDoc.title_eng,
+									title_chi: oldStaffDoc.title_chi,
+									  pro_title: oldStaffDoc.pro_title,
+									  subsidiary_eng: oldStaffDoc.subsidiary_eng,
+									  subsidiary_chi: oldStaffDoc.subsidiary_chi,
+									  address_eng: oldStaffDoc.address_eng,
+									  address_chi: oldStaffDoc.address_chi,
+									  headshot: oldStaffDoc.headshot,
+									  work_tel: oldStaffDoc.work_tel,
+									  work_tel2: oldStaffDoc.work_tel2,
+									  work_tel3: oldStaffDoc.work_tel3,
+									  direct_tel: oldStaffDoc.direct_tel,
+									  direct_tel2: oldStaffDoc.direct_tel2,
+									  direct_tel3: oldStaffDoc.direct_tel3,
+									  mobile_tel: oldStaffDoc.mobile_tel,
+									  mobile_tel2: oldStaffDoc.mobile_tel2,
+									  mobile_tel3: oldStaffDoc.mobile_tel3,
+									  mobile_tel4: oldStaffDoc.mobile_tel4,
+									  mobile_tel5: oldStaffDoc.mobile_tel5,
+									  fax_no: oldStaffDoc.fax_no,
+									  fax_no2: oldStaffDoc.fax_no2,
+									  fax_no3: oldStaffDoc.fax_no3,
+									  fax_no4: oldStaffDoc.fax_no4,
+									  fax_no5: oldStaffDoc.fax_no5,
+									  reuters: oldStaffDoc.reuters,
+									  work_email: oldStaffDoc.work_email,
+									  agent_no: oldStaffDoc.agent_no,
+									  broker_no: oldStaffDoc.broker_no,
+									  mpf_no: oldStaffDoc.mpf_no,
+									  hkma_no: oldStaffDoc.hkma_no,
+									  hkma_eng: oldStaffDoc.hkma_eng,
+									  hkma_chi: oldStaffDoc.hkma_chi,
+									  smartcard_uid: oldStaffDoc.smartcard_uid,
+									  bizcard_option: oldStaffDoc.bizcard_option,
+									  profile_counter: oldStaffDoc.profile_counter,
+									  vcf_counter: oldStaffDoc.vcf_counter,
+									  status: oldStaffDoc.status, 
+									  updatedBy: ObjectId(uid), 
+									  createdBy: oldStaffDoc.createdBy, 
+									  createdAt: oldStaffDoc.createdAt, 
+									  updatedAt: Date.now(),
+								});
+								  
+								staff_log.save(staff_log);
+							//backup old staff records to table staff_logs
+							}
+						});
 						 //white action log before send successful
+						 
+						
+			
 				  }
 				   })
 			.catch(err => {
@@ -132,8 +221,6 @@ exports.uploadStaffExcel =  async (req, res) => {
 		
 	  }
 	
-	console.log("new"+new_staffs.length);
-	console.log("old"+old_staffs.length);
 	
 	if (new_staffs.length>0){
 		///////////////////////////
@@ -169,8 +256,10 @@ exports.uploadStaffExcel =  async (req, res) => {
 	
 			 
 	}
-		
-	 res.send({message: "done",old_staffs,new_staffs});
+	console.log("new"+new_staffs.length);
+	console.log("old"+old_staffs.length);
+	console.log("＝＝＝＝＝＝＝＝＝＝＝＝＝");
+	res.send({message: "done",old_staffs,new_staffs});
   
 	  
    
@@ -215,22 +304,32 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 		  address_eng:row[11],
 		  address_chi:row[12],
 		  work_tel:row[13],
-		  direct_tel:row[14],
-		  mobile_tel:row[15],
-		  mobile_tel2:row[16],
-		  fax_no:row[17],
-		  fax_no2:row[18],
-		  reuters:row[19],
-		  work_email:row[20],
-		  agent_no:row[21],
-		  broker_no:row[22],
-		  mpf_no:row[23],
-		  hkma_no:row[24],
-		  hkma_eng:row[25],
-		  hkma_chi :row[26],
-		  smartcard_uid:row[27],
-		  bizcard_option: row[28],
-		  status:row[29],
+		   work_tel2:row[14],
+			  work_tel3:row[15],
+			  direct_tel:row[16],
+			  direct_tel2:row[17],
+			  direct_tel3:row[18],
+			  mobile_tel:row[19],
+			  mobile_tel2:row[20],
+			  mobile_tel3:row[21],
+			  mobile_tel4:row[22],
+			  mobile_tel5:row[23],
+			  fax_no:row[24],
+			  fax_no2:row[25],
+			  fax_no3:row[26],
+			  fax_no4:row[27],
+			  fax_no5:row[28],
+			  reuters:row[29],
+			  work_email:row[30],
+			  agent_no:row[31],
+			  broker_no:row[32],
+			  mpf_no:row[33],
+			  hkma_no:row[34],
+			  hkma_eng:row[35],
+			  hkma_chi :row[36],
+			  smartcard_uid:row[37],
+			  bizcard_option: row[38],
+			  status:row[39],
         };
 
         staffs.push(staff);
@@ -280,12 +379,22 @@ exports.downloadStaffExcel =  (req, res) => {
 		  subsidiary_chi: obj.subsidiary_chi,
 		  address_eng: obj.address_eng,
 		  address_chi: obj.address_chi,
-		  work_tel: obj.work_tel,
-		  direct_tel: obj.direct_tel,
-		  mobile_tel: obj.mobile_tel,
-		  mobile_tel2: obj.mobile_tel2,
-		  fax_no: obj.fax_no,
-		  fax_no2: obj.fax_no2,
+		    work_tel: obj.work_tel,
+		  work_tel2: obj.work_tel2,
+          work_tel3: obj.work_tel3,
+			direct_tel: obj.direct_tel,
+			direct_tel2: obj.direct_tel2,
+			direct_tel3: obj.direct_tel3,
+			mobile_tel: obj.mobile_tel,
+			mobile_tel2: obj.mobile_tel2,
+			mobile_tel3: obj.mobile_tel3,
+			mobile_tel4: obj.mobile_tel4,
+			mobile_tel5: obj.mobile_tel5,
+			fax_no: obj.fax_no,
+			fax_no2: obj.fax_no2,
+			fax_no3: obj.fax_no3,
+			fax_no4: obj.fax_no4,
+			fax_no5: obj.fax_no5,
 		  reuters:obj.reuters,
           work_email: obj.work_email,
           agent_no: obj.agent_no,
@@ -321,11 +430,21 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "address_eng", key: "address_eng", width: 25 },
 	  { header: "address_chi", key: "address_chi", width: 25 },
 	  { header: "work_tel", key: "work_tel", width: 25 },
+	  { header: "work_tel2", key: "work_tel2", width: 25 },
+	  { header: "work_tel3", key: "work_tel3", width: 25 },
 	  { header: "direct_tel", key: "direct_tel", width: 25 },
+	  { header: "direct_tel2", key: "direct_tel2", width: 25 },
+	  { header: "direct_tel3", key: "direct_tel3", width: 25 },
 	  { header: "mobile_tel", key: "mobile_tel", width: 25 },
 	  { header: "mobile_tel2", key: "mobile_tel2", width: 25 },
+	  { header: "mobile_tel3", key: "mobile_tel3", width: 25 },
+	  { header: "mobile_tel4", key: "mobile_tel4", width: 25 },
+	  { header: "mobile_tel5", key: "mobile_tel5", width: 25 },
 	  { header: "fax_no", key: "fax_no", width: 25 },
 	  { header: "fax_no2", key: "fax_no2", width: 25 },
+	  { header: "fax_no3", key: "fax_no3", width: 25 },
+	  { header: "fax_no5", key: "fax_no4", width: 25 },
+	  { header: "fax_no5", key: "fax_no5", width: 25 },
 	  { header: "reuters", key: "reuters", width: 25 },
 	  { header: "work_email", key: "work_email", width: 25 },
 	  { header: "agent_no", key: "agent_no", width: 25 },

@@ -6,7 +6,7 @@ module.exports = app => {
  
   // Retrieve all Tutorials
   router.get("/", staff_logs.findAll);
-  
+  router.get("/downloadStaffLogExcel", staff_logs.downloadStaffLogExcel);
   
   app.use("/api/staff_logs", router);
 };

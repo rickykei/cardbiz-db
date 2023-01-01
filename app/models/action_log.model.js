@@ -18,13 +18,14 @@
 		  type: mongoose.Schema.Types.ObjectId,
 		  ref: "staff"
 	  },
-	  staff_log_id:{
-		  type: mongoose.Schema.Types.ObjectId,
-		  ref: "staff_log"
-	  },
-      updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
+	  updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
 	  createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
 	  createdBy: 
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      },
+	   updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
