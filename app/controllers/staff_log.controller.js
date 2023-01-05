@@ -76,9 +76,10 @@ exports.downloadStaffLogExcel =  (req, res) => {
 			obj.updatedBy.username='No username';
 			
 		}
-		 
+		 	let updateDate=obj.updatedAt.split(' ');
       staffs.push({
-		  updatedAt: obj.updatedAt,
+		  updatedAtDate: updateDate[0],
+		  updatedAtTime: updateDate[1],
 		  updatedBy: obj.updatedBy.username,
 		  company_name_eng: obj.company_name_eng,
 		  company_name_chi: obj.company_name_chi,
@@ -133,7 +134,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 
     worksheet.columns = [
 	 
-		  { header: "updatedAt", key: "updatedAt", width: 25 },
+		{ header: "updatedAtDate", key: "updatedAtDate", width: 25 },
+		  { header: "updatedAtTime", key: "updatedAtTime", width: 25 },
       { header: "updatedBy", key: "updatedBy", width: 25 },
 		{ header: "company_name_eng", key: "company_name_eng", width: 25 },
       { header: "company_name_chi", key: "company_name_chi", width: 25 },

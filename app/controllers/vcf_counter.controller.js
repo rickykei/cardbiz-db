@@ -137,10 +137,13 @@ exports.downloadStaffLogExcel =  (req, res) => {
    
 	//prepare excel Array
 	let vcfCnts = [];
+	
 
 		objs.forEach((obj) => {
+			let updateDate=obj.updatedAt.split(' ');
 			vcfCnts.push({
-			  updatedAt: obj.updatedAt,
+			  updatedAtDate: updateDate[0],
+			  updatedAtTime: updateDate[1],
 			  company_name_eng: obj.staff_id.company_name_eng,
 			  company_name_chi: obj.staff_id.company_name_chi,
 			  name_eng: obj.staff_id.name_eng,
@@ -165,7 +168,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 
 		worksheet.columns = [
 		 
-		  { header: "updatedAt", key: "updatedAt", width: 25 },
+		  { header: "updatedAtDate", key: "updatedAtDate", width: 25 },
+		  { header: "updatedAtTime", key: "updatedAtTime", width: 25 },
 		  { header: "company_name_eng", key: "company_name_eng", width: 25 },
 		  { header: "company_name_chi", key: "company_name_chi", width: 25 },
 		  { header: "name_eng", key: "name_eng", width: 25 },
