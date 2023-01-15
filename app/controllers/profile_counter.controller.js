@@ -175,21 +175,6 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		
 			let updateDate=obj.updatedAt.split(' ');
   
-			//filter empty staff field
-			if (!obj.hasOwnProperty('staff_id.company_name_eng'))	{ obj.staff_id.company_name_eng="";} 
-			if (!obj.hasOwnProperty('staff_id.company_name_chi'))	{ obj.staff_id.company_name_chi="";}
-			if (!obj.hasOwnProperty('staff_id.name_eng')) { obj.staff_id.name_eng="";}
-			if (!obj.hasOwnProperty('staff_id.name_chi')) {  obj.staff_id.name_chi="";}
-			if (!obj.hasOwnProperty('staff_id.rc_no')){  obj.staff_id.rc_no="";}
-			if (!obj.hasOwnProperty('staff_id.staff_no')){  obj.staff_id.staff_no="";}
-			if (!obj.hasOwnProperty('staff_id.title_eng')){  obj.staff_id.title_eng="";}
-			if  (!obj.hasOwnProperty('staff_id.title_chi')){  obj.staff_id.title_chi="";}
-			if  (!obj.hasOwnProperty('staff_id.pro_title')){  obj.staff_id.pro_title="";}
-			if  (!obj.hasOwnProperty('staff_id.address_eng')){  obj.staff_id.address_eng="";}
-			if  (!obj.hasOwnProperty('staff_id.address_chi')){  obj.staff_id.address_chi="";}
-			if  (!obj.hasOwnProperty('staff_id.subsidiary_eng')) {  obj.staff_id.address_eng="";} 
-			if  (!obj.hasOwnProperty('staff_id.subsidiary_chi')) {  obj.staff_id.address_chi="";} 
-			
 			
 			
 			
@@ -200,7 +185,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 			  company_name_chi: obj.staff_id.company_name_chi,
 			  name_eng: obj.staff_id.name_eng,
 			  name_chi: obj.staff_id.name_chi,
-			  rc_no: obj.rc_no,
+			  rc_no: obj.staff_id.rc_no,
 			  staff_no: obj.staff_id.staff_no,
 			  title_eng: obj.staff_id.title_eng,
 			  title_chi: obj.staff_id.title_chi,
