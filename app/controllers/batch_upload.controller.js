@@ -226,6 +226,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		///////////////////////////
 		//insert new staffs records
 		///////////////////////////
+		
 		Staffs.insertMany(new_staffs,(err,data)=>{  
 				if(err){  
 					res.status(404).send({
@@ -253,7 +254,38 @@ exports.uploadStaffExcel =  async (req, res) => {
 				}
 					   
 		})
-	
+		/*
+		/////////////////////////////
+		// insert record one by one//
+		/////////////////////////////
+		
+		for (var ns of new_staffs){
+			
+			console.log(ns);
+			 Staffs
+			.create(ns)
+			.then(data => {
+				console.log("batch upload staff create");
+				console.log("insertedstaffDocId="+data.id);
+				 //white action log before send successfully
+				 const actionLog = new Action_log({
+					action: "Record by Batch Upload",
+					log: "batch excel",
+					company_id: data.company_id,
+					staff_id: data.id,
+					createdBy: data.createdBy,
+					color: "border-theme-1",
+				});
+				
+				actionLog.save(actionLog);
+				 //white action log before send successfully
+			 
+			})
+		}
+		/////////////////////////////
+		//END insert record one by one//
+		/////////////////////////////
+		*/
 			 
 	}
 	console.log("new"+new_staffs.length);
@@ -408,6 +440,7 @@ exports.downloadStaffExcel =  (req, res) => {
 		  smartcard_uid:obj.smartcard_uid,
 		  bizcard_option: obj.bizcard_option,
 		  status:obj.status,
+		 
          
       });
     });
@@ -457,6 +490,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
+	  
     ];
 
     // Add Array Rows

@@ -7,6 +7,10 @@ const Staff = db.staffs;
 const Staff_log = db.staff_log;
 const Action_log = db.action_log;
 var nodemailer = require('nodemailer');
+const CryptoJS = require('crypto-js');
+ 
+
+
 var mailTransport = nodemailer.createTransport( {
 
 	host: "smtpout.secureserver.net",  
@@ -384,13 +388,19 @@ exports.sendNotificationByStaffDocId = async (req, res) => {
 	staffIdArray.forEach(e=>{
 		Staff.findById(ObjectId(e)).
 		then(doc=>{
+			
+			// Encrypt
+				var ciphertext = encodeURIComponent(CryptoJS.AES.encrypt(doc.id, "12345678123456781234567812345678",{mode: CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7}).toString());
+			console.log("criphertext=");
+			console.log(ciphertext);
+			
 				mailTransport.sendMail(
 			  {
 				from: 'staff notification <admin@e-profile.digital>',
-				bcc: 'ricky.kei@gmail.com,stephen@nfctouch.com.hk',
+				cc: 'ricky.kei@gmail.com',
 				to: 'Namecard_Application@cncbinternational.com',
 				subject: 'E-Name card (QR Code) '+doc.work_email,
-				html: '<p>Dear Colleague,</p><p>Please find below your e-name card retrievable from the QR Code:</p><img width="350" src="http://whospets.com/Touchless/genvcf2png.php?sig='+doc.id+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. We would recommend you to save this http link as a shortcut on your phone for future use.</p> <p>Please contact us if you have any queries or need further assistance regarding the e-name card.</p> <p>Best regards,</p> <p>Corporate Services</p>',
+				html: '<p>Dear Colleague,</p><p>Please find below your e-name card retrievable from the QR Code:</p><img width="350" src="http://whospets.com/profile/Touchless/genvcf2png.php?key='+ciphertext+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. We would recommend you to save this http link as a shortcut on your phone for future uase.</p><p>The user manual is now available at the EIP document library and please click the link  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/listform.aspx?PageType=4&amp;ListId=%7B1E0637EC%2DD6B0%2D43B6%2DA597%2D6707517C8714%7D&amp;ID=6557&amp;ContentTypeID=0x01006370EF457A75334BA00991EB61622412"><span>HERE</span></a><span>]  to access. </span></p><p> FYI, CS shall update the new office address from system before your office relocation to TTP.  No change / update on your QR code is required.</p><p> If you have any enquiries or need further assistance regarding the e-name card, please feel free to contact CS-Aggie Yeung (x 2063) / Gigi Wong (x 2065).</p><p>Best regards,</p> <p>Corporate Services</p>',
 			  },
 			  function(err) {
 				if (err) {
