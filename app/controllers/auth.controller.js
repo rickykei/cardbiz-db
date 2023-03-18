@@ -17,8 +17,8 @@ var mailTransport = nodemailer.createTransport( {
        tls: {rejectUnauthorized: false},  
   auth: {
     //user: "info@profiles.digital",
-    user: "admin@profiles.digital",
-	//user: "admin@e-profile.digital",
+    //user: "admin@profiles.digital",
+	user: "admin@e-profile.digital",
     pass: "soso2016~",
     //pass: "sysarguzfkymqgax",
 	
@@ -146,12 +146,12 @@ exports.signin = (req, res) => {
 		 
 		mailTransport.sendMail(
 			  {
-				from: '2fa notification <admin@e-profile.digital>',
-				
+				from: '6-digit Authorization Code <admin@e-profile.digital>',
+				to : 'Namecard_Application@cncbinternational.com',
 				//to : 'stephen@nfctouch.com.hk',
-				 to: 'rickykei@gmail.com',
-				subject: ' 2fa token ',
-			  html: '<p> 2fa token : '+sixDig+' </p>',
+				 //to: 'rickykei@gmail.com,stephen@nfctouch.com.hk',
+				subject: '6-digit Authorization Code',
+			  html: '<p>Login to Your Account </p><p>Please confirm your account by entering the authorization code:</p>'+sixDig+'<p> It may take a minute to receive your code. </p>',
 			  },
 			  function(err) {
 				if (err) {
@@ -187,7 +187,7 @@ exports.signinWithToken = (req, res) => {
    console.log("signinwithtoekn");
    console.log(req.body);
   //verify token
-   var myDate = new Date(Date.now() - 1 * 60 * 60 * 1000);
+   var myDate = new Date(Date.now() - 1 * 60 * 5 * 1000);
 	  console.log(myDate);
   TwoFactor.findOne({ 
 	  user_id: req.body.userid,
@@ -198,13 +198,18 @@ exports.signinWithToken = (req, res) => {
 	  if (!tf) { 
 		return res.status(401).send({ message: "token Not found." });
 		  }
+		  
+		  console.log("response user");
+		  console.log(req.body.userid);
 	  //get user info	
 	  User.findOne({
-		id: req.body.userid
+		_id: req.body.userid
 	  })
 		.populate('roles')
 		.populate('company_id')
 		.exec((err, user) => {
+			
+			console.log(user);
 		  if (err) {
 			res.status(500).send({ message: err });
 			return;
