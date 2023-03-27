@@ -5,7 +5,9 @@ module.exports = app => {
   
   router.get("/getProfileCountByStaffId", profile_counter.getProfileCountByStaffId);
   router.get("/getProfileCountMonthlyByStaffId", profile_counter.getProfileCountMonthlyByStaffId);
+    router.get("/downloadStaffLogExcel", profile_counter.downloadStaffLogExcel);
   router.get("/", profile_counter.findAll);
   router.post("/",profile_counter.create);
+  
   app.use("/api/profile_counter", router);
 };

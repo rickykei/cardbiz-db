@@ -5,24 +5,8 @@ const crypto = require('crypto');
 var ObjectId = require('mongodb').ObjectId; 
 const Staff = db.staffs;
 const Action_log = db.action_log;
-var nodemailer = require('nodemailer');
-var mailTransport = nodemailer.createTransport( {
-	host: "smtpout.secureserver.net",  
-  port: 587,
-	secure: false,
-	secureConnecton: false,
-	tls: {
-                ciphers: 'SSLv3',
-                  rejectUnauthorized: false
-    },
-  auth: {
-    user: "admin@whospets.com",
-    pass: "soso2016~",
-	
-  
-  },
-  logger: true,
-});
+
+
 
 const getPagination = (page, size) => {
 	const limit = size ? +size : 5;
@@ -48,18 +32,27 @@ exports.create = async (req, res) => {
   // Create a Staff
   const staff = new Staff({
     udid: crypto.randomUUID(),
+	company_id: req.body.company_id,
+	company_name_eng: req.body.company_name_eng,
+	company_name_chi: req.body.company_name_chi,
     fname: req.body.fname,
 	lname: req.body.lname,
-	company_id: req.body.company_id,
+	staff_no: req.body.staff_no,
 	headshot: req.body.headshot,
 	work_email: req.body.work_email,
+	work_email2: req.body.work_email2,
+	work_email3: req.body.work_email3,
 	home_email: req.body.home_email,
 	other_email: req.body.other_email,
 	position: req.body.position,
 	work_tel: req.body.work_tel,
 	work_tel2: req.body.work_tel2,
+	work_tel3: req.body.work_tel3,
+	work_tel4: req.body.work_tel4,
 	mobile: req.body.mobile,
 	mobile2: req.body.mobile2,
+	mobile3: req.body.mobile3,
+	mobile4: req.body.mobile4,
 	home_tel: req.body.home_tel,
 	fax: req.body.fax,
 	web_link: req.body.web_link,
@@ -68,8 +61,16 @@ exports.create = async (req, res) => {
 	web_link4: req.body.web_link4,
 	web_link5: req.body.web_link5,
 	web_link6: req.body.web_link6,
+	web_link_label: req.body.web_link_label,
+	web_link_label2: req.body.web_link_label2,
+	web_link_label3: req.body.web_link_label3,
+	web_link_label4: req.body.web_link_label4,
+	web_link_label5: req.body.web_link_label5,
+	web_link_label6: req.body.web_link_label6,
 	address: req.body.address,
 	address2: req.body.address2,
+	address3: req.body.address3,
+	address4: req.body.address4,
 	division: req.body.division,
 	department: req.body.department,
 	country: req.body.country,
@@ -83,6 +84,22 @@ exports.create = async (req, res) => {
 	youtube_url : req.body.youtube_url,
 	twitter_url : req.body.twitter_url,
 	wechat_url : req.body.wechat_url,
+	wechatpage_url: req.body.wechatpage_url,
+	douyin_url: req.body.douyin_url,
+	tiktok_url: req.body.tiktok_url,
+	kuaishou_url: req.body.kuaishou_url,
+	line_url: req.body.line_url,
+	facebook_messenger_url: req.body.facebookmessenger_url,
+	weibo_url: req.body.weibo_url,
+	bilibili_url: req.body.bilibili_url,
+	qq_url: req.body.qq_url,
+	zhihu_url: req.body.zhihu_url,
+	app_store_url: req.body.appsstore_url,
+	google_play_url: req.body.googleplay_url,
+	snapchat_url: req.body.snapchat_url,
+	telegram_url: req.body.telegram_url,
+	xiaohongshu_url: req.body.xiaohongshu_url,
+	note: req.body.xiaohongshu_url,
 	smartcard_uid : req.body.smartcard_uid,
 	bizcard_option: req.body.bizcard_option,
 	profile_counter: 0,
@@ -135,7 +152,7 @@ exports.findAll = (req, res) => {
   const { currentPage, pageSize, search, orderBy } = req.query;
   var condition = search ? { name: { $regex: new RegExp(search), $options: "i" } } : {};
   const { limit, offset } = getPagination(currentPage-1, pageSize);
-  var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
+  var  sort = orderBy? {[orderBy] : 1 }:{updatedAt:-1,_id:1 };
   Staff.paginate(condition, { populate,offset, limit , sort})
     .then(data => {
       res.send({
@@ -229,9 +246,12 @@ console.log("update id");
  console.log("body.udid");
   console.log(req.body.udid);
 
+  if (req.body.smartcard_uid=="")
+	  req.body.smartcard_uid=null;
   
-  
-  Staff.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  const updatedoc=req.body;
+   console.log(updatedoc);
+  Staff.findByIdAndUpdate(id, updatedoc, { useFindAndModify: false ,omitUndefined: false,})
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -239,7 +259,7 @@ console.log("update id");
         });
       } else 
 	  {
-		  
+	 
 		   //white action log before send successfully
 		 const actionLog = new Action_log({
 			action: "Update Staff Record",
@@ -264,33 +284,6 @@ console.log("update id");
     });
 };
 
-// send staff email notification
-exports.sendNotificationByStaffDocId = async (req, res) => {
-  if (!req.body.staffDocId) {
-    return res.status(400).send({
-      message: "Data to update can not be empty!"
-    });
-  }else{
-	console.log(req.body.staffDocId);
-	console.log(req.body.uid);
-	console.log(req.body.companyId);
-		mailTransport.sendMail(
-	  {
-		from: 'staff notification <admin@whospets.com>',
-		to: 'rickykei@gmail.com',
-		subject: 'Hi :)',
-		html: '<h1>Hello</h1><p>Nice to meet you.</p>',
-	  },
-	  function(err) {
-		if (err) {
-		  console.log('Unable to send email: ' + err);
-		}
-	  },
-	);
-
-  }
-   res.send({ message: "notification was sent successfully." });
-}
 // Delete a Staff with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;

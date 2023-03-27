@@ -18,7 +18,12 @@
       staff_id: 
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "staffs"
+        ref: "staff"
+      },
+	  company_id: 
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "company"
       },
       ip: String,
 	  user_agent: String,

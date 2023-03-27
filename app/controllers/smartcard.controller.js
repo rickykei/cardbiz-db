@@ -73,6 +73,60 @@ console.log("condition="+condition);
     });
 };
 
+// find all smartcard by company_id
+exports.findByCompanyIdPullDown = (req, res) => {
+  console.log("--start smartcard.findByCompanyIdPullDown--");
+  const { companyId ,staffId} = req.query;
+  console.log("CompanyId="+companyId);
+  console.log("StaffId="+staffId);
+  if (companyId!="" && staffId!="")
+  var condition =  [
+  {
+    '$match': {
+      'company_id': ObjectId(companyId), status:true
+    }
+  }, {
+    '$lookup': {
+      'from': 'staffs', 
+      'localField': '_id', 
+      'foreignField': 'smartcard_uid', 
+      'as': 'aa'
+    }
+  }, {
+    '$match': {
+     $or: [
+     { aa: [] },
+    { 
+      
+      aa:  {$elemMatch:{_id: ObjectId(staffId)}}
+      
+    }
+  ]  
+    }
+  }
+];
+  var i =1;
+  Smartcard.aggregate(condition)
+    .then((data) => {
+    var i=1;
+    var exportdata=[];
+	var obj={ label: 'N/A', value: '', key: 0};
+	  exportdata.push(obj);
+	for ( d of data){
+      obj={ label: d.uid, value: d._id, key: i};
+	  exportdata.push(obj);
+	  i++;
+	};
+      
+		  res.send(exportdata);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving companies."
+      });
+    });
+};
 
 
  

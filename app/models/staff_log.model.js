@@ -16,6 +16,16 @@ const moment = require('moment-timezone');
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
+	  action_log_id:
+	  {
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "action_log"
+	  },
+	  staff_id:
+	  {
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "staff"
+	  },
       udid: String,
       company_id: 
       {
@@ -122,6 +132,6 @@ module.exports = (mongoose, mongoosePaginate) => {
     return object;
   });
   schema.plugin(mongoosePaginate);
-  const Staff = mongoose.model("staff", schema);
-  return Staff;
+  const Staff_log = mongoose.model("staff_logs", schema, "staff_logs");
+  return Staff_log;
 };

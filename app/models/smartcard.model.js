@@ -21,8 +21,8 @@ module.exports = (mongoose, mongoosePaginate) => {
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "company"
-      }
-    ,
+      },
+ 
    status: Boolean,  
    updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
    createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') } 

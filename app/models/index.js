@@ -16,5 +16,6 @@ db.smartcards = require("./smartcard.model")(mongoose, mongoosePaginate);
 db.vcf_counter = require("./vcf_counter.model")(mongoose, mongoosePaginate);
 db.profile_counter = require("./profile_counter.model")(mongoose, mongoosePaginate);
 db.action_log = require("./action_log.model")(mongoose, mongoosePaginate);
+db.staff_log = require("./staff_log.model")(mongoose, mongoosePaginate);
 
 module.exports = db;

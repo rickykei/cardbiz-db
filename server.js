@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -6,7 +7,7 @@ const initRoutes = require("./src/routes");
 global.__basedir = __dirname + "/";
 
 var corsOptions = {
-  origin: ["http://localhost:8080","https://admin.e-profile.digital","http://cardbiz.rossfoundry.com:3000","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://e-profile.digital:3000"]
+  origin: [ process.env.CLIENT_ORIGIN ,"http://localhost:8080","https://admin_uat.profiles.digital","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://uat.profiles.digital:3000"]
 };
 
 app.use(cors(corsOptions));
@@ -45,11 +46,12 @@ require("./app/routes/vcf_counter.routes")(app);
 require("./app/routes/profile_counter.routes")(app);
 require("./app/routes/batch_upload.routes")(app);
 require("./app/routes/action_log.routes")(app);
+require("./app/routes/staff_log.routes")(app);
 
 initRoutes(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.NODE_DOCKER_PORT  || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
