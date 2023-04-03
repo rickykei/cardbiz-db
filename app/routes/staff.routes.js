@@ -11,9 +11,7 @@ module.exports = app => {
   
   router.get("/findByCompanyId", staffs.findByCompanyId);
 
-  // Retrieve all published Tutorials
-  router.get("/published", staffs.findAllPublished);
-
+ 
   // Retrieve a single Tutorial with id
   router.get("/:id", staffs.findOne);
 

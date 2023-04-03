@@ -74,9 +74,9 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  twitter_url: String,
 	  wechat_id: String,
 	  wechatpage_url: String,
-	  douyin_url: String,
+	  
 	  tiktok_url: String,
-	  kuaishou_url: String,
+	  
 	  line_url: String,
 	  facebook_messenger_url: String,
 	  weibo_url:String,
@@ -87,7 +87,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  google_play_url: String,
 	  snapchat_url: String,
 	  telegram_url: String,
-	  xiaohongshu_url: String,
+	  
 	  note: String,
 	  note_timestamp: Boolean,
 	  smartcard_uid: {
@@ -95,6 +95,7 @@ module.exports = (mongoose, mongoosePaginate) => {
         ref: "smartcard"
       },
 	  bizcard_option: Boolean,
+	  qrcode_option: Number,
 	  profile_counter: Number,
 	  vcf_counter: Number,
 	  note: String,

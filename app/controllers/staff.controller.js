@@ -85,9 +85,7 @@ exports.create = async (req, res) => {
 	twitter_url : req.body.twitter_url,
 	wechat_url : req.body.wechat_url,
 	wechatpage_url: req.body.wechatpage_url,
-	douyin_url: req.body.douyin_url,
 	tiktok_url: req.body.tiktok_url,
-	kuaishou_url: req.body.kuaishou_url,
 	line_url: req.body.line_url,
 	facebook_messenger_url: req.body.facebookmessenger_url,
 	weibo_url: req.body.weibo_url,
@@ -97,8 +95,7 @@ exports.create = async (req, res) => {
 	app_store_url: req.body.appsstore_url,
 	google_play_url: req.body.googleplay_url,
 	snapchat_url: req.body.snapchat_url,
-	telegram_url: req.body.telegram_url,
-	xiaohongshu_url: req.body.xiaohongshu_url,
+	telegram_url: req.body.telegram_url, 
 	note: req.body.xiaohongshu_url,
 	smartcard_uid : req.body.smartcard_uid,
 	bizcard_option: req.body.bizcard_option,
@@ -322,17 +319,4 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-
-// Find all published Staff
-exports.findAllPublished = (req, res) => {
-  Tutorial.find({ published: true })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
-    });
-};
+ 
