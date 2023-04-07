@@ -31,9 +31,10 @@
         ref: "role"
       }
     ],
-    status: Boolean
-  },
-  { timestamps: true }
+    status: Boolean,
+      updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
+		createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') } 
+    },schemaOptions
   );
 
   schema.method("toJSON", function() {

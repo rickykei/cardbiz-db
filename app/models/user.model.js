@@ -25,6 +25,7 @@
     username: String,
     email: String,
     password: String,
+	two_factor: Boolean,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

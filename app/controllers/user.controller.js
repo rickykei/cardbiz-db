@@ -80,7 +80,7 @@ exports.update = (req, res) => {
   const id = req.params.id;
   
   //clean up empty field
- Object.keys(req.body).forEach((k) => req.body[k] == '' && delete req.body[k]);
+ //Object.keys(req.body).forEach((k) => req.body[k] == '' && delete req.body[k]);
   
   console.log(req.body);
   if (req.body.password!==undefined)
