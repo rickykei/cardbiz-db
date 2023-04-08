@@ -31,6 +31,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  banner: String,
 	  mobile: String,
 	  logo: String,
+	  profile_theme: String,
       no_of_license: Number,
       no_of_admin: Number,
 	  smartcard_uid: String,

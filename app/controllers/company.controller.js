@@ -39,6 +39,7 @@ exports.create = (req, res) => {
 	  department: req.body.department,
 	  banner: req.body.banner,
 	  logo: req.body.logo,
+	  profile_theme: req.body.profile_theme,
     status: req.body.status ? req.body.status : false
   });
   
@@ -192,17 +193,21 @@ exports.updateByHRAdmin = async (req, res) => {
 	 console.log(req.body);
 	 console.log("req.files.banner");
 	 console.log(req.files.banner);
+	 console.log("req.files.logo");
+	 console.log(req.files.logo);
+	 console.log("req.files.profile_theme");
+	 console.log(req.files.profile_theme);
 	
  
  
 	   if (req.files!== undefined){
-		    //console.log("bannerFilesObjID");
-			//console.log(req.files.banner[0].filename);
- 
-		if(req.files.banner!==undefined)
-			req.body.banner=req.files.banner[0].filename;
-	  	if(req.files.logo!==undefined)
-		  req.body.logo=req.files.logo[0].filename;
+		  
+			if(req.files.banner!==undefined)
+				req.body.banner=req.files.banner[0].filename;
+			if(req.files.logo!==undefined)
+			  req.body.logo=req.files.logo[0].filename;
+			if(req.files.profile_theme!==undefined)
+			  req.body.profile_theme=req.files.profile_theme[0].filename;
     
 	   }
  
