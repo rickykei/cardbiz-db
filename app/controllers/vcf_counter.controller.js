@@ -142,21 +142,21 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		objs.forEach((obj) => {
 			let updateDate=obj.updatedAt.split(' ');
 			vcfCnts.push({
-			  updatedAtDate: updateDate[0],
+						  updatedAtDate: updateDate[0],
 			  updatedAtTime: updateDate[1],
 			  company_name_eng: obj.staff_id.company_name_eng,
 			  company_name_chi: obj.staff_id.company_name_chi,
-			  name_eng: obj.staff_id.name_eng,
-			  name_chi: obj.staff_id.name_chi,
-			  rc_no:obj.staff_id.rc_no,
+			  fname: obj.staff_id.fname,
+			  lname: obj.staff_id.lname,
+			  position: obj.staff_id.position,
+			  address: obj.staff_id.address,
+			  address2: obj.staff_id.address2,
+			  address3: obj.staff_id.address3,
+			  address4: obj.staff_id.address4,
 			  staff_no: obj.staff_id.staff_no,
-			  title_eng:obj.staff_id.title_eng,
-			  title_chi:obj.staff_id.title_chi,
-			  pro_title:obj.staff_id.pro_title,
-			  subsidiary_eng: obj.staff_id.subsidiary_eng,
-			  subsidiary_chi: obj.staff_id.subsidiary_chi,
-			  address_eng: obj.staff_id.address_eng,
-			  address_chi: obj.staff_id.address_chi,
+			  division : obj.staff_id.division ,
+			  department: obj.staff_id.department,
+			  country: obj.staff_id.country,
 			  
 		  });
 		});
@@ -168,21 +168,21 @@ exports.downloadStaffLogExcel =  (req, res) => {
 
 		worksheet.columns = [
 		 
-		  { header: "updatedAtDate", key: "updatedAtDate", width: 25 },
+		 	  { header: "updatedAtDate", key: "updatedAtDate", width: 25 },
 		  { header: "updatedAtTime", key: "updatedAtTime", width: 25 },
 		  { header: "company_name_eng", key: "company_name_eng", width: 25 },
 		  { header: "company_name_chi", key: "company_name_chi", width: 25 },
-		  { header: "name_eng", key: "name_eng", width: 25 },
-		  { header: "name_chi", key: "name_chi", width: 25 },
-		  { header: "rc_no", key: "rc_no", width: 25 },
+		  { header: "english_name", key: "name_eng", width: 25 },
+		  { header: "chinese_name", key: "name_chi", width: 25 },
+		  { header: "position", key: "position", width: 25 },
+		  { header: "address", key: "address", width: 25 },
+		  { header: "address2", key: "address2", width: 25 },
+		  { header: "address3", key: "address3", width: 25 },
+		  { header: "address4", key: "address4", width: 25 },
 		  { header: "staff_no", key: "staff_no", width: 25 },
-		  { header: "title_eng", key: "title_eng", width: 25 },
-		  { header: "title_chi", key: "title_chi", width: 25 },
-		  { header: "pro_title", key: "pro_title", width: 25 },
-		  { header: "subsidiary_eng", key: "subsidiary_eng", width: 25 },
-		  { header: "subsidiary_chi", key: "subsidiary_chi", width: 25 },
-		  { header: "address_eng", key: "address_eng", width: 25 },
-		  { header: "address_chi", key: "address_chi", width: 25 },
+		  { header: "division ", key: "division", width: 25 },
+		  { header: "department", key: "department", width: 25 },
+		  { header: "country", key: "country", width: 25 },
 	 
 		];
 

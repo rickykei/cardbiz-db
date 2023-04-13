@@ -97,7 +97,8 @@ exports.create = async (req, res) => {
 	snapchat_url: req.body.snapchat_url,
 	telegram_url: req.body.telegram_url, 
 	note: req.body.xiaohongshu_url,
-	smartcard_uid : req.body.smartcard_uid,
+	qrcode_option: req.body.qrcode_option,
+	smartcard_uid: req.body.smartcard_uid,
 	bizcard_option: req.body.bizcard_option,
 	profile_counter: 0,
 	vcf_counter: 0,
@@ -107,6 +108,7 @@ exports.create = async (req, res) => {
   });
     console.log("staff");
 	staff.company_id=req.body.company_id;
+ 
     console.log(staff);
   const id = req.params.id;
 	  if (req.file!== undefined){
@@ -115,6 +117,9 @@ exports.create = async (req, res) => {
 	  console.log(req.file.id);
 	  }
 
+
+ 
+  
   // Save Staff in the database
   staff
     .save(staff)
