@@ -243,6 +243,12 @@ exports.downloadStaffExcel =  (req, res) => {
     let staffs = [];
 
     objs.forEach((obj) => {
+		
+		var str_smartcard_uid=undefined;
+		 str_smartcard_uid= JSON.stringify(obj.smartcard_uid);
+		str_smartcard_uid=(str_smartcard_uid||'').replaceAll('"','');;
+		 
+		
       staffs.push({
 		  
 		  company_name_eng:obj.company_name_eng,
@@ -309,7 +315,7 @@ exports.downloadStaffExcel =  (req, res) => {
 		  telegram_url: obj.telegram_url,
 		  note: obj.note,
 		  note_timestamp: obj.note_timestamp,
-		  smartcard_uid: obj.smartcard_uid,
+		  smartcard_uid: str_smartcard_uid,
 		  qrcode_option: obj.qrcode_option,
 		  
 		  bizcard_option: obj.bizcard_option,
@@ -318,6 +324,8 @@ exports.downloadStaffExcel =  (req, res) => {
       });
     });
 
+ 
+ 
     let workbook = new excel.Workbook();
     let worksheet = workbook.addWorksheet("Staffs");
 

@@ -92,13 +92,13 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  note_timestamp: Boolean,
 	  smartcard_uid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "smartcard"
+        ref: "smartcard", default: ""
       },
 	  bizcard_option: Boolean,
 	  qrcode_option: Number,
 	  profile_counter: Number,
 	  vcf_counter: Number,
-	  note: String,
+	   
 	  status: Boolean, 
 	  updatedBy: 
       {

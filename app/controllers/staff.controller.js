@@ -228,11 +228,14 @@ exports.findByCompanyId = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Staff.findById(id).populate('company_id')
+  Staff.findById(id).populate('company_id').populate('smartcard_uid')
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Staff with id " + id });
-      else res.send(data);
+	  else{
+ 
+		  res.send(data);
+	  }
     })
     .catch(err => {
       res
@@ -274,6 +277,9 @@ console.log("update id");
     if (req.body.qrcode_option=="" || req.body.qrcode_option=='null')
 	  req.body.qrcode_option=undefined;
 
+   if (req.body.bizcard_option=="" || req.body.qrcode_option=='null')
+	  req.body.qrcode_option=undefined;
+  
   const updatedoc=req.body;
    console.log(updatedoc);
   Staff.findByIdAndUpdate(id, updatedoc, { useFindAndModify: false ,omitUndefined: false,})

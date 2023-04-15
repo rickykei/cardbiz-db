@@ -60,6 +60,7 @@ exports.findOne = (req, res) => {
       if (!data)
         res.status(404).send({ message: "Not found company with id " + id });
 	  else {
+		  data.password=undefined;
 		    res.send(data);
 	  }
     })
@@ -70,13 +71,13 @@ exports.findOne = (req, res) => {
     });
 };
 // Update a company by the id in the request
-exports.update = (req, res) => {
+exports.update =  (req, res) => {
+ 
   if (!req.body) {
     return res.status(400).send({
       message: "Data to update can not be empty!"
     });
   }
-
   const id = req.params.id;
   
   //clean up empty field
