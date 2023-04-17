@@ -141,24 +141,30 @@ exports.downloadStaffLogExcel =  (req, res) => {
 
 		objs.forEach((obj) => {
 			let updateDate=obj.updatedAt.split(' ');
+			
+			 
+			if (obj.staff_id?.staff_no!=undefined){
+				 
+			
 			vcfCnts.push({
 			  updatedAtDate: updateDate[0],
 			  updatedAtTime: updateDate[1],
-			  company_name_eng: obj.staff_id.company_name_eng,
-			  company_name_chi: obj.staff_id.company_name_chi,
-			  name_eng: obj.staff_id.name_eng,
-			  name_chi: obj.staff_id.name_chi,
-			  rc_no:obj.staff_id.rc_no,
-			  staff_no: obj.staff_id.staff_no,
-			  title_eng:obj.staff_id.title_eng,
-			  title_chi:obj.staff_id.title_chi,
-			  pro_title:obj.staff_id.pro_title,
-			  subsidiary_eng: obj.staff_id.subsidiary_eng,
-			  subsidiary_chi: obj.staff_id.subsidiary_chi,
-			  address_eng: obj.staff_id.address_eng,
-			  address_chi: obj.staff_id.address_chi,
+			  company_name_eng: obj.staff_id?.company_name_eng==undefined?"":obj.staff_id.company_name_eng,
+			  company_name_chi: obj.staff_id?.company_name_chi==undefined?"":obj.staff_id.company_name_chi,
+			  name_eng: obj.staff_id?.name_eng==undefined?"":obj.staff_id.name_eng,
+			  name_chi: obj.staff_id?.name_chi==undefined?"":obj.staff_id.name_chi,
+			  rc_no:obj.staff_id?.rc_no==undefined?"":obj.staff_id.rc_no,
+			  staff_no: obj.staff_id?.staff_no==undefined?"":obj.staff_id.staff_no,
+			  title_eng:obj.staff_id?.title_eng==undefined?"":obj.staff_id.title_eng,
+			  title_chi:obj.staff_id?.title_chi==undefined?"":obj.staff_id.title_chi,
+			  pro_title:obj.staff_id?.pro_title==undefined?"":obj.staff_id.pro_title,
+			  subsidiary_eng: obj.staff_id?.subsidiary_eng==undefined?"":obj.staff_id.subsidiary_eng,
+			  subsidiary_chi: obj.staff_id?.subsidiary_chi==undefined?"":obj.staff_id.subsidiary_chi,
+			  address_eng: obj.staff_id?.address_eng==undefined?"":obj.staff_id.address_eng,
+			  address_chi: obj.staff_id?.address_chi==undefined?"":obj.staff_id.address_chi,
 			  
 		  });
+			}
 		});
 			  
 			  
