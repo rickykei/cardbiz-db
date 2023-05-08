@@ -96,10 +96,12 @@ exports.create = async (req, res) => {
 	google_play_url: req.body.googleplay_url,
 	snapchat_url: req.body.snapchat_url,
 	telegram_url: req.body.telegram_url, 
-	note: req.body.xiaohongshu_url,
-	qrcode_option: req.body.qrcode_option,
+	xiaohongshu_url: req.body.xiaohongshu_url,
+	note: req.body.note,
+	note_timestamp: req.body.note_timestamp,
 	smartcard_uid: req.body.smartcard_uid,
 	bizcard_option: req.body.bizcard_option,
+	qrcode_option: req.body.qrcode_option,
 	profile_counter: 0,
 	vcf_counter: 0,
 	 status: req.body.status ? req.body.status : false,
@@ -228,7 +230,7 @@ exports.findByCompanyId = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Staff.findById(id).populate('company_id').populate('smartcard_uid')
+  Staff.findById(id).populate('company_id')
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Staff with id " + id });
@@ -271,14 +273,14 @@ console.log("update id");
   
   
   if (req.body.smartcard_uid=="" || req.body.smartcard_uid=='null')
-	  req.body.smartcard_uid=undefined;
+	  req.body.smartcard_uid=null;
   
   
-    if (req.body.qrcode_option=="" || req.body.qrcode_option=='null')
+    if (req.body.qrcode_option==undefined || req.body.qrcode_option=='null')
 	  req.body.qrcode_option=undefined;
 
-   if (req.body.bizcard_option=="" || req.body.qrcode_option=='null')
-	  req.body.qrcode_option=undefined;
+   if (req.body.bizcard_option==undefined || req.body.qrcode_option=='null')
+	  req.body.bizcard_option=undefined;
   
   const updatedoc=req.body;
    console.log(updatedoc);
@@ -386,6 +388,7 @@ console.log("update id");
 									  google_play_url: data.google_play_url,
 									  snapchat_url: data.snapchat_url,
 									  telegram_url: data.telegram_url,
+									  xiaohongshu_url: data.xiaohongshu_url,
 									  note: data.note,
 									  note_timestamp: data.note_timestamp,
 									  
