@@ -11,9 +11,13 @@ module.exports = app => {
   
   router.get("/findByCompanyId", staffs.findByCompanyId);
 
- 
+   // Retrieve a single findByUserProfile pop smartcard db
+  router.get("/findByUserProfile", staffs.findByUserProfile);
+
   // Retrieve a single Tutorial with id
   router.get("/:id", staffs.findOne);
+
+
 
   // Update a Tutorial with id
   router.put("/:id", staffs.update);

@@ -99,7 +99,7 @@ exports.create = async (req, res) => {
 	xiaohongshu_url: req.body.xiaohongshu_url,
 	note: req.body.note,
 	note_timestamp: req.body.note_timestamp,
-	smartcard_uid: req.body.smartcard_uid,
+	smartcard_uid: req.body.smartcard_uid?req.body.smartcard_uid:null,
 	bizcard_option: req.body.bizcard_option,
 	qrcode_option: req.body.qrcode_option,
 	profile_counter: 0,
@@ -231,6 +231,26 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Staff.findById(id).populate('company_id')
+    .then(data => {
+      if (!data)
+        res.status(404).send({ message: "Not found Staff with id " + id });
+	  else{
+ 
+		  res.send(data);
+	  }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving Staff with id=" + id });
+    });
+};
+// Find a single Staff with an id
+exports.findByUserProfile = (req, res) => {
+	console.log("findbyuserprofile");
+ const {id} = req.query;
+   
+  Staff.findById(id).populate('company_id').populate('smartcard_uid')
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Staff with id " + id });

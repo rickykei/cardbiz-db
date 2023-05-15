@@ -26,7 +26,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  company_name_chi: String,
 	  fname:String,
 	  lname:String,
-	  staff_no: String,
+	 
 	  headshot: String,
 	  work_email: String,
 	  work_email2: String,
@@ -60,6 +60,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  address2: String,
 	  address3: String,
 	  address4: String,
+	  staff_no: String,
 	  division: String,
 	  department: String,
 	  country: String,
@@ -87,7 +88,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  google_play_url: String,
 	  snapchat_url: String,
 	  telegram_url: String,
-	  
+	  xiaohongshu_url: String,
 	  note: String,
 	  note_timestamp: Boolean,
 	  smartcard_uid: {

@@ -26,7 +26,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  company_name_chi: String,
 	  fname:String,
 	  lname:String,
-	  staff_no: String,
+	 
 	  headshot: String,
 	  work_email: String,
 	  work_email2: String,
@@ -60,6 +60,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  address2: String,
 	  address3: String,
 	  address4: String,
+	  staff_no: String,
 	  division: String,
 	  department: String,
 	  country: String,
@@ -92,7 +93,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  note_timestamp: Boolean,
 	  smartcard_uid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "smartcard", default: ""
+        ref: "smartcard" 
       },
 	  bizcard_option: Boolean,
 	  qrcode_option: Number,
