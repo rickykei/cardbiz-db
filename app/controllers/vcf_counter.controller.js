@@ -140,23 +140,25 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	
 
 		objs.forEach((obj) => {
+			
+			 
 			let updateDate=obj.updatedAt.split(' ');
 			vcfCnts.push({
 						  updatedAtDate: updateDate[0],
 			  updatedAtTime: updateDate[1],
-			  company_name_eng: obj.staff_id.company_name_eng,
-			  company_name_chi: obj.staff_id.company_name_chi,
-			  fname: obj.staff_id.fname,
-			  lname: obj.staff_id.lname,
-			  position: obj.staff_id.position,
-			  address: obj.staff_id.address,
-			  address2: obj.staff_id.address2,
-			  address3: obj.staff_id.address3,
-			  address4: obj.staff_id.address4,
-			  staff_no: obj.staff_id.staff_no,
-			  division : obj.staff_id.division ,
-			  department: obj.staff_id.department,
-			  country: obj.staff_id.country,
+			    company_name_eng: obj.staff_id?.company_name_eng==undefined?"":obj.staff_id.company_name_eng,
+			  company_name_chi: obj.staff_id?.company_name_chi==undefined?"":obj.staff_id.company_name_chi,
+			  name_eng: obj.staff_id?.fname==undefined?"":obj.staff_id.fname,
+			  name_chi: obj.staff_id?.lname==undefined?"":obj.staff_id.lname,
+			  position: obj.staff_id?.position==undefined?"":obj.staff_id.position,
+			  address: obj.staff_id?.address==undefined?"":obj.staff_id.address,
+			  address2: obj.staff_id?.address2==undefined?"":obj.staff_id.address2,
+			  address3: obj.staff_id?.address3==undefined?"":obj.staff_id.address3,
+			  address4: obj.staff_id?.address4==undefined?"":obj.staff_id.address4,
+			  staff_no: obj.staff_id?.staff_no==undefined?"":obj.staff_id.staff_no,
+			  division : obj.staff_id?.division==undefined?"":obj.staff_id.division,
+			  department: obj.staff_id?.department==undefined?"":obj.staff_id.department,
+			  country: obj.staff_id?.country==undefined?"":obj.staff_id.country,
 			  
 		  });
 		});
