@@ -234,12 +234,26 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 };
  
 exports.downloadStaffExcel =  (req, res) => {
+	console.log("downloadStaffExcel");
 	 const { company_id  } = req.query;
+	  let query={};
 	if (company_id == undefined || company_id =="") {
 		  return res.status(400).send("ERROR");
 		}
 	 
-  Staffs.find({ company_id: company_id }).then((objs) => {
+	 if (company_id!="63142fd5b54bdbb18f556016")
+	 {
+	 
+			query.company_id = ObjectId(company_id);
+	 
+		console.log("non nfc");
+	 }else{
+		  
+		 console.log("nfc");
+	 }
+	 
+	 console.log(query);
+  Staffs.find( query ).then((objs) => {
     let staffs = [];
 
     objs.forEach((obj) => {
