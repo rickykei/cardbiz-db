@@ -95,7 +95,6 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  telegram_url: row[y++],
 		  note: row[y++],
 		  note_timestamp: row[y++],
-		  smartcard_uid: row[y++],
 		  bizcard_option: row[y++],
 		  qrcode_option: row[y++],
 		  status:row[y++],
@@ -205,9 +204,8 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 		  youtube_url:row[30],
 		  twitter_url:row[31],
 		  wechat_id:row[32],
-		  smartcard_uid:row[33],
-		  bizcard_option: row[34],
-		  status:row[35],
+		  bizcard_option: row[33],
+		  status:row[34],
         };
 
         staffs.push(staff);
@@ -329,7 +327,6 @@ exports.downloadStaffExcel =  (req, res) => {
 		  telegram_url: obj.telegram_url,
 		  note: obj.note,
 		  note_timestamp: obj.note_timestamp,
-		  smartcard_uid: str_smartcard_uid,
 		  qrcode_option: obj.qrcode_option,
 		  
 		  bizcard_option: obj.bizcard_option,
@@ -408,7 +405,6 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "telegram_url", key: "telegram_url", width: 25 },
 	  { header: "note", key: "note", width: 25 },
 	  { header: "note_timestamp", key: "note_timestamp", width: 25 },
-	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },

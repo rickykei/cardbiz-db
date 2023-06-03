@@ -44,17 +44,26 @@ exports.findByCompanyId = (req, res) => {
   console.log("--start smartcard.findByCompanyId--");
   const { currentPage, pageSize, search, orderBy , companyId } = req.query;
   console.log("CompanyId="+companyId);
+
+  let query={};
+    
+		
   if (companyId!="")
-    var condition = search ? { company_id: { code : { $regex: new RegExp(search), $options: "i" }}, company_id: ObjectId(companyId) } : {company_id: ObjectId(companyId)};
-  else
-	var condition =  { company_id: ObjectId(1)};
-console.log("condition="+condition);
+  query.company_id =  ObjectId(companyId);
+else
+query.company_id =  ObjectId(0);
+
+  if (search ){
+  query.uid ={  $regex: new RegExp(search), $options: "i" } ;
+  console.log(query);
+  }
+
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : -1 }:{};
   
   
   
-  Smartcard.paginate(condition, {populate, offset, limit , sort})
+  Smartcard.paginate(query, {populate, offset, limit , sort})
     .then((data) => {
       res.send({
         status: data.status,
