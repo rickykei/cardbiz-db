@@ -126,13 +126,24 @@ exports.findAll = (req, res) => {
 exports.downloadStaffLogExcel =  (req, res) => {
   console.log("entered  Vcf_counter.downloadStaffLogExcel");
   const populate=['staff_id'];
-  
+  let query={};
 	 const { company_id, uid  } = req.query;
 	if (company_id == undefined || company_id =="" || uid=="" || uid == undefined) {
 		  return res.status(400).send("ERROR");
 		}
+	   if (company_id!="63142fd5b54bdbb18f556016")
+	 {
 	 
-  Vcf_counter.find({ company_id: company_id }).populate(populate)
+			query.company_id = ObjectId(company_id);
+	 
+		console.log("non nfc");
+	 }else{
+		  
+		 console.log("nfc");
+	 }
+	 
+	  console.log(query);
+  Vcf_counter.find(query).populate(populate)
   .then((objs) => {
    
 	//prepare excel Array
@@ -148,8 +159,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 			  updatedAtTime: updateDate[1],
 			    company_name_eng: obj.staff_id?.company_name_eng==undefined?"":obj.staff_id.company_name_eng,
 			  company_name_chi: obj.staff_id?.company_name_chi==undefined?"":obj.staff_id.company_name_chi,
-			  name_eng: obj.staff_id?.fname==undefined?"":obj.staff_id.fname,
-			  name_chi: obj.staff_id?.lname==undefined?"":obj.staff_id.lname,
+			  fname: obj.staff_id?.fname==undefined?"":obj.staff_id.fname,
+			  lname: obj.staff_id?.lname==undefined?"":obj.staff_id.lname,
 			  position: obj.staff_id?.position==undefined?"":obj.staff_id.position,
 			  address: obj.staff_id?.address==undefined?"":obj.staff_id.address,
 			  address2: obj.staff_id?.address2==undefined?"":obj.staff_id.address2,

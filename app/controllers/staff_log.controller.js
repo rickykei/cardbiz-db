@@ -53,13 +53,27 @@ exports.findAll = (req, res) => {
 exports.downloadStaffLogExcel =  (req, res) => {
   console.log("entered stafflog.downloadStaffLogExcel");
   const populate=['company_id','smartcard_uid','createdBy','updatedBy'];
-  
-	 const { company_id, uid  } = req.query;
+  const { company_id, uid  } = req.query;
+   let query={};
+   
 	if (company_id == undefined || company_id =="" || uid=="" || uid == undefined) {
 		  return res.status(400).send("ERROR");
 		}
 	 
-  Staff_log.find({ company_id: company_id }).populate(populate)
+	 
+	 if (company_id!="63142fd5b54bdbb18f556016")
+	 {
+	 
+			query.company_id = ObjectId(company_id);
+	 
+		console.log("non nfc");
+	 }else{
+		  
+		 console.log("nfc");
+	 }
+	 
+	  console.log(query);
+  Staff_log.find(query).populate(populate)
   .then((objs) => {
    
     //prepare excel Array
@@ -133,16 +147,16 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		wechatpage_url: obj.wechatpage_url,
 		tiktok_url: obj.tiktok_url,
 		line_url: obj.line_url,
-		facebook_messenger_url: obj.facebookmessenger_url,
+		facebook_messenger_url: obj.facebook_messenger_url,
 		weibo_url: obj.weibo_url,
 		bilibili_url: obj.bilibili_url,
 		qq_url: obj.qq_url,
 		zhihu_url: obj.zhihu_url,
-		app_store_url: obj.appsstore_url,
-		google_play_url: obj.googleplay_url,
+		app_store_url: obj.app_store_url,
+		google_play_url: obj.google_play_url,
 		snapchat_url: obj.snapchat_url,
 		telegram_url: obj.telegram_url, 
-		xiaohongshu_url: obj.xiaohongshu_url,
+		
 		note: obj.note,
 		note_timestamp: obj.note_timestamp,
 		smartcard_uid: obj.smartcard_uid?obj.smartcard_uid.uid:null,
@@ -212,7 +226,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	    { header: "twitter_url", key: "twitter_url", width: 25 },
 	      { header: "wechat_id", key: "wechat_id", width: 25 },
 	    { header: "wechatpage_url", key: "wechatpage_url", width: 25 },
-	    { header: "douyin_url", key: "douyin_url", width: 25 },
+	   
 	    { header: "tiktok_url", key: "tiktok_url", width: 25 },
 	    { header: "kuaishou_url", key: "kuaishou_url", width: 25 },
 	    { header: "line_url", key: "line_url", width: 25 },
@@ -225,7 +239,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		   { header: "google_play_url", key: "google_play_url", width: 25 },
 	    { header: "snapchat_url", key: "snapchat_url", width: 25 },
 	    { header: "telegram_url", key: "telegram_url", width: 25 },
-	    { header: "xiaohongshu_url", key: "xiaohongshu_url", width: 25 },
+	   
 	    { header: "note", key: "note", width: 25 },
 	    { header: "note_timestamp", key: "note_timestamp", width: 25 },
 	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },

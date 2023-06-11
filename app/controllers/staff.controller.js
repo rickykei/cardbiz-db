@@ -353,10 +353,10 @@ console.log("update id");
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  work_tel4: data.work_tel4,
-									    mobile_tel: data.mobile_tel,
-									  mobile_tel2: data.mobile_tel2,
-									  mobile_tel3: data.mobile_tel3,
-									  mobile_tel4: data.mobile_tel4,
+									    mobile: data.mobile,
+									  mobile2: data.mobile2,
+									  mobile3: data.mobile3,
+									  mobile4: data.mobile4,
 									  home_tel: data.home_tel,
 									  fax: data.fax,
 									  web_link: data.web_link,
@@ -408,7 +408,7 @@ console.log("update id");
 									  google_play_url: data.google_play_url,
 									  snapchat_url: data.snapchat_url,
 									  telegram_url: data.telegram_url,
-									  xiaohongshu_url: data.xiaohongshu_url,
+									  
 									  note: data.note,
 									  note_timestamp: data.note_timestamp,
 									  
