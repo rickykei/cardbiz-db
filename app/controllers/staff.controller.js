@@ -19,7 +19,7 @@ let uploadFiles="";
 exports.create = async (req, res) => {
   // Validate request
   console.log("entered Staff.create");
-   
+   let uid=req.body.createdBy;  //admin staff doc id
 	//upload head shot 
 	
   await upload(req, res);
@@ -136,8 +136,116 @@ exports.create = async (req, res) => {
 			color: "border-theme-1",
 		});
 		
-		actionLog.save(actionLog);
+		actionLog.save(actionLog).then(data2 => {
+							if (!data2){
+								res.status(404).send({
+									message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+									});
+							}else{
 		 //white action log before send successfully
+		 
+		 			//backup old staff records to table staff_logs
+								console.log("actionLog save for create");
+								 
+								console.log(data);
+								staff_log = new Staff_log({
+									action_log_id: ObjectId(data2.id),
+									staff_id: ObjectId(data._id),
+									udid:data.udid,
+									company_id: data.company_id,
+									company_name_eng: data.company_name_eng,
+									company_name_chi: data.company_name_chi,
+									fname: data.fname,
+									lname: data.lname,
+									  headshot: data.headshot,
+									  work_email: data.work_email,
+									  work_email2: data.work_email2,
+									  work_email3: data.work_email3,
+									  home_email: data.home_email,
+									  other_email: data.other_email,
+									  position: data.position,
+									    work_tel: data.work_tel,
+									  work_tel2: data.work_tel2,
+									  work_tel3: data.work_tel3,
+									  work_tel4: data.work_tel4,
+									    mobile: data.mobile,
+									  mobile2: data.mobile2,
+									  mobile3: data.mobile3,
+									  mobile4: data.mobile4,
+									  home_tel: data.home_tel,
+									  fax: data.fax,
+									  web_link: data.web_link,
+									  web_link2: data.web_link2,
+									  web_link3: data.web_link3,
+									  web_link4: data.web_link4,
+									  web_link5: data.web_link5,
+									  web_link6: data.web_link6,
+									  
+									  web_link_label: data.web_link_label,
+									  web_link_label2: data.web_link_label2,
+									  web_link_label3: data.web_link_label3,
+									  web_link_label4: data.web_link_label4,
+									  web_link_label5: data.web_link_label5,
+									  web_link_label6: data.web_link_label6,
+									  
+									  address: data.address,
+									  address2: data.address2,
+									  address3: data.address3,
+									  address4: data.address4,
+									 staff_no: data.staff_no,
+									
+									  division: data.division,
+									  
+									  department: data.department,
+									  
+									  country: data.country,
+									  
+									  bio: data.bio,
+									  
+									  company_website_url: data.company_website_url,
+									  more_info_tab_url: data.more_info_tab_url,
+									  facebook_url: data.facebook_url,
+									  instagram_url: data.instagram_url,
+									  whatsapp_url: data.whatsapp_url,
+									  linkedin_url: data.linkedin_url,
+									  youtube_url: data.youtube_url,
+									  twitter_url: data.twitter_url,
+									  wechat_id: data.wechat_id,
+									  wechatpage_url: data.wechatpage_url,
+									  tiktok_url: data.tiktok_url,
+									  line_url: data.line_url,
+									  facebook_messenger_url: data.facebook_messenger_url,
+									  weibo_url: data.weibo_url,
+									  bilibili_url: data.bilibili_url,
+									  qq_url: data.qq_url,
+									  zhihu_url: data.zhihu_url,
+									  app_store_url: data.app_store_url,
+									  google_play_url: data.google_play_url,
+									  snapchat_url: data.snapchat_url,
+									  telegram_url: data.telegram_url,
+									  
+									  note: data.note,
+									  note_timestamp: data.note_timestamp,
+									  
+									  smartcard_uid: data.smartcard_uid,
+									  bizcard_option: data.bizcard_option,
+									  qrcode_option: data.qrcode_option,
+									  profile_counter: data.profile_counter,
+									  vcf_counter: data.vcf_counter,
+									 
+									  status: data.status, 
+									  updatedBy: ObjectId(uid), 
+									  createdBy: data.createdBy, 
+									  createdAt: data.createdAt, 
+									  updatedAt: Date.now(),
+								});
+								console.log("copy staff_log");
+								  console.log(staff_log);
+								staff_log.save(staff_log);
+							
+							//backup old staff records to table staff_logs
+							}
+							});
       res.send(data);
     })
     .catch(err => {
@@ -304,7 +412,7 @@ console.log("update id");
   
   const updatedoc=req.body;
    console.log(updatedoc);
-  Staff.findByIdAndUpdate(id, updatedoc, { useFindAndModify: false ,omitUndefined: false,})
+  Staff.findByIdAndUpdate(id, updatedoc, {new: true, useFindAndModify: false ,omitUndefined: false,})
     .then(data => {
       if (!data) {
         res.status(404).send({
