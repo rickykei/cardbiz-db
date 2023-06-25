@@ -101,6 +101,7 @@ exports.create = async (req, res) => {
 	note_timestamp: req.body.note_timestamp,
 	smartcard_uid: req.body.smartcard_uid?req.body.smartcard_uid:null,
 	bizcard_option: req.body.bizcard_option,
+	dig_card_in_vcf: req.body.dig_card_in_vcf,
 	qrcode_option: req.body.qrcode_option,
 	profile_counter: 0,
 	vcf_counter: 0,
@@ -229,6 +230,7 @@ exports.create = async (req, res) => {
 									  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
+									  dig_card_in_vcf: data.dig_card_in_vcf,
 									  qrcode_option: data.qrcode_option,
 									  profile_counter: data.profile_counter,
 									  vcf_counter: data.vcf_counter,
@@ -410,8 +412,15 @@ console.log("update id");
    if (req.body.bizcard_option==undefined || req.body.qrcode_option=='null')
 	  req.body.bizcard_option=undefined;
   
+  
+   if (req.body.dig_card_in_vcf==undefined || req.body.dig_card_in_vcf=='null')
+	  req.body.dig_card_in_vcf=undefined;
+  
+  
   const updatedoc=req.body;
-   console.log(updatedoc);
+  console.log('updatedoc.dig_card_in_vcf');
+  console.log(updatedoc.dig_card_in_vcf);
+  // console.log(updatedoc);
   Staff.findByIdAndUpdate(id, updatedoc, {new: true, useFindAndModify: false ,omitUndefined: false,})
     .then(data => {
       if (!data) {
@@ -522,6 +531,7 @@ console.log("update id");
 									  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
+									  dig_card_in_vcf: data.dig_card_in_vcf,
 									  qrcode_option: data.qrcode_option,
 									  profile_counter: data.profile_counter,
 									  vcf_counter: data.vcf_counter,

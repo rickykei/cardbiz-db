@@ -1,8 +1,10 @@
 const db = require("../models");
-const Staffs = db.staffs;
 const readXlsxFile = require('read-excel-file/node')
- var ObjectId = require('mongodb').ObjectId; 
+var ObjectId = require('mongodb').ObjectId; 
 const excel = require("exceljs");
+const Action_log = db.action_log;
+const Staff_log = db.staff_log;
+const Staff = db.staffs;
 
 exports.uploadStaffExcel =  async (req, res) => {
 	try {
@@ -12,6 +14,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  return res.status(400).send("Please upload an excel file!");
 		}
 	let company_id=req.body.company_id;
+	let uid=req.body.uid;  //admin staff doc id
 	 var staffs = [];
 	 var xls_staffs = [];
       var new_staffs = [];
@@ -96,6 +99,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  note: row[y++],
 		  note_timestamp: row[y++],
 		  bizcard_option: row[y++],
+		  dig_card_in_vcf: row[y++], 
 		  qrcode_option: row[y++],
 		  status:row[y++],
         };
@@ -113,7 +117,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  var query ={};
 		   query.company_id =  ObjectId(company_id);
 		   query.work_email =  s.work_email;
-		let mongoDocument =  await Staffs.findOne(query).exec();
+		let mongoDocument =  await Staff.findOne(query).exec();
 		
 		if (mongoDocument!=undefined)
 		{
@@ -121,28 +125,277 @@ exports.uploadStaffExcel =  async (req, res) => {
 			
 			old_staffs.push(s);
 			console.log("old doc id"+mongoDocument.id);
-			await Staffs.findByIdAndUpdate(mongoDocument.id, s, { useFindAndModify: true });
+			
+			//batch update excel staff one by one
+			Staff.findByIdAndUpdate(mongoDocument.id, s, {new: true, useFindAndModify: true })
+			.then(data => {
+					if (!data) {
+						res.status(404).send({
+						  message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+						});
+					} else  {
+				 
+						//write action log for those updated staff by batchuploader
+						const actionLog = new Action_log({
+							action: "Batch Update Staff Records",
+							log: data.fname,
+							company_id: data.company_id,
+							staff_id: data.id,
+							createdBy: data.createdBy,
+							color: "border-theme-1",
+						});
+						
+						actionLog.save(actionLog)
+						.then(data2 => {
+							if (!data2){
+								res.status(404).send({
+									message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+									});
+							}else{
+								//backup old staff records to table staff_logs
+								console.log("actionLog save for edit");
+								 
+								console.log(data);
+								staff_log = new Staff_log({
+									action_log_id: ObjectId(data2.id),
+									staff_id: ObjectId(data._id),
+									udid:data.udid,
+									company_id: data.company_id,
+									company_name_eng: data.company_name_eng,
+									company_name_chi: data.company_name_chi,
+									fname: data.fname,
+									lname: data.lname,
+									  headshot: data.headshot,
+									  work_email: data.work_email,
+									  work_email2: data.work_email2,
+									  work_email3: data.work_email3,
+									  home_email: data.home_email,
+									  other_email: data.other_email,
+									  position: data.position,
+									    work_tel: data.work_tel,
+									  work_tel2: data.work_tel2,
+									  work_tel3: data.work_tel3,
+									  work_tel4: data.work_tel4,
+									    mobile: data.mobile,
+									  mobile2: data.mobile2,
+									  mobile3: data.mobile3,
+									  mobile4: data.mobile4,
+									  home_tel: data.home_tel,
+									  fax: data.fax,
+									  web_link: data.web_link,
+									  web_link2: data.web_link2,
+									  web_link3: data.web_link3,
+									  web_link4: data.web_link4,
+									  web_link5: data.web_link5,
+									  web_link6: data.web_link6,
+									  
+									  web_link_label: data.web_link_label,
+									  web_link_label2: data.web_link_label2,
+									  web_link_label3: data.web_link_label3,
+									  web_link_label4: data.web_link_label4,
+									  web_link_label5: data.web_link_label5,
+									  web_link_label6: data.web_link_label6,
+									  
+									  address: data.address,
+									  address2: data.address2,
+									  address3: data.address3,
+									  address4: data.address4,
+									 staff_no: data.staff_no,
+									
+									  division: data.division,
+									  
+									  department: data.department,
+									  
+									  country: data.country,
+									  
+									  bio: data.bio,
+									  
+									  company_website_url: data.company_website_url,
+									  more_info_tab_url: data.more_info_tab_url,
+									  facebook_url: data.facebook_url,
+									  instagram_url: data.instagram_url,
+									  whatsapp_url: data.whatsapp_url,
+									  linkedin_url: data.linkedin_url,
+									  youtube_url: data.youtube_url,
+									  twitter_url: data.twitter_url,
+									  wechat_id: data.wechat_id,
+									  wechatpage_url: data.wechatpage_url,
+									  tiktok_url: data.tiktok_url,
+									  line_url: data.line_url,
+									  facebook_messenger_url: data.facebook_messenger_url,
+									  weibo_url: data.weibo_url,
+									  bilibili_url: data.bilibili_url,
+									  qq_url: data.qq_url,
+									  zhihu_url: data.zhihu_url,
+									  app_store_url: data.app_store_url,
+									  google_play_url: data.google_play_url,
+									  snapchat_url: data.snapchat_url,
+									  telegram_url: data.telegram_url,
+									  
+									  note: data.note,
+									  note_timestamp: data.note_timestamp,
+									  
+									  smartcard_uid: data.smartcard_uid,
+									  bizcard_option: data.bizcard_option,
+									  dig_card_in_vcf: data.dig_card_in_vcf,
+									  qrcode_option: data.qrcode_option,
+									  profile_counter: data.profile_counter,
+									  vcf_counter: data.vcf_counter,
+									 
+									  status: data.status, 
+									  updatedBy: ObjectId(uid), 
+									  createdBy: data.createdBy, 
+									  createdAt: data.createdAt, 
+									  updatedAt: Date.now(),
+								});
+								  
+								staff_log.save(staff_log);
+							//backup old staff records to table staff_logs
+							}
+						});
+						 //white action log before send successful
+					}
+			});
 		}else{
 			s.company_id=company_id;
 			new_staffs.push(s);
+			console.log("new doc id");
 			
+			 // Save Staff in the database
+			 var staff=new Staff(s);
+			staff.save(s)
+				.then(data => {
+					 //white action log before send successfully
+					 const actionLog = new Action_log({
+						action: "Batch Create Staff",
+						log: data.fname,
+						company_id: data.company_id,
+						staff_id: data.id,
+						createdBy: data.createdBy,
+						color: "border-theme-1",
+					});
+					
+					actionLog.save(actionLog).then(data2 => {
+										if (!data2){
+											res.status(404).send({
+												message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+												});
+										}else{
+					 //white action log before send successfully
+					 
+								//backup old staff records to table staff_logs
+											console.log("actionLog save for create");
+											 
+											console.log(data);
+											staff_log = new Staff_log({
+												action_log_id: ObjectId(data2.id),
+												staff_id: ObjectId(data._id),
+												udid:data.udid,
+												company_id: data.company_id,
+												company_name_eng: data.company_name_eng,
+												company_name_chi: data.company_name_chi,
+												fname: data.fname,
+												lname: data.lname,
+												  headshot: data.headshot,
+												  work_email: data.work_email,
+												  work_email2: data.work_email2,
+												  work_email3: data.work_email3,
+												  home_email: data.home_email,
+												  other_email: data.other_email,
+												  position: data.position,
+													work_tel: data.work_tel,
+												  work_tel2: data.work_tel2,
+												  work_tel3: data.work_tel3,
+												  work_tel4: data.work_tel4,
+													mobile: data.mobile,
+												  mobile2: data.mobile2,
+												  mobile3: data.mobile3,
+												  mobile4: data.mobile4,
+												  home_tel: data.home_tel,
+												  fax: data.fax,
+												  web_link: data.web_link,
+												  web_link2: data.web_link2,
+												  web_link3: data.web_link3,
+												  web_link4: data.web_link4,
+												  web_link5: data.web_link5,
+												  web_link6: data.web_link6,
+												  
+												  web_link_label: data.web_link_label,
+												  web_link_label2: data.web_link_label2,
+												  web_link_label3: data.web_link_label3,
+												  web_link_label4: data.web_link_label4,
+												  web_link_label5: data.web_link_label5,
+												  web_link_label6: data.web_link_label6,
+												  
+												  address: data.address,
+												  address2: data.address2,
+												  address3: data.address3,
+												  address4: data.address4,
+												 staff_no: data.staff_no,
+												
+												  division: data.division,
+												  
+												  department: data.department,
+												  
+												  country: data.country,
+												  
+												  bio: data.bio,
+												  
+												  company_website_url: data.company_website_url,
+												  more_info_tab_url: data.more_info_tab_url,
+												  facebook_url: data.facebook_url,
+												  instagram_url: data.instagram_url,
+												  whatsapp_url: data.whatsapp_url,
+												  linkedin_url: data.linkedin_url,
+												  youtube_url: data.youtube_url,
+												  twitter_url: data.twitter_url,
+												  wechat_id: data.wechat_id,
+												  wechatpage_url: data.wechatpage_url,
+												  tiktok_url: data.tiktok_url,
+												  line_url: data.line_url,
+												  facebook_messenger_url: data.facebook_messenger_url,
+												  weibo_url: data.weibo_url,
+												  bilibili_url: data.bilibili_url,
+												  qq_url: data.qq_url,
+												  zhihu_url: data.zhihu_url,
+												  app_store_url: data.app_store_url,
+												  google_play_url: data.google_play_url,
+												  snapchat_url: data.snapchat_url,
+												  telegram_url: data.telegram_url,
+												  
+												  note: data.note,
+												  note_timestamp: data.note_timestamp,
+												  
+												  smartcard_uid: data.smartcard_uid,
+												  bizcard_option: data.bizcard_option,
+												  dig_card_in_vcf: data.dig_card_in_vcf,
+												  qrcode_option: data.qrcode_option,
+												  profile_counter: data.profile_counter,
+												  vcf_counter: data.vcf_counter,
+												 
+												  status: data.status, 
+												  updatedBy: ObjectId(uid), 
+												  createdBy: data.createdBy, 
+												  createdAt: data.createdAt, 
+												  updatedAt: Date.now(),
+											});
+											console.log("copy staff_log");
+											  console.log(staff_log);
+											staff_log.save(staff_log);
+										
+										//backup old staff records to table staff_logs
+										}
+										});
+				 
+				})
 		}
 	  }
 	
 	console.log("new"+new_staffs.length);
 	console.log("old"+old_staffs.length);
 	  	 
-		  
-	 Staffs.insertMany(new_staffs).then(function(){
-			console.log("Data inserted")  // Success
-			res.send({message: "done"});
-		}).catch(function(error){
-			console.log(error)      // Failure
-		});
-			 
+	 
 	 res.send({message: "done",old_staffs,new_staffs});
-  
-	  
    
   } catch (error) {
     console.log(error);
@@ -212,7 +465,7 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 		
       });
 	  	 
-	 Staffs.insertMany(staffs).then(function(){
+	 Staff.insertMany(staffs).then(function(){
     console.log("Data inserted")  // Success
 	res.send({message: "done"});
 }).catch(function(error){
@@ -251,7 +504,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	 }
 	 
 	 console.log(query);
-  Staffs.find( query ).then((objs) => {
+  Staff.find( query ).then((objs) => {
     let staffs = [];
 
     objs.forEach((obj) => {
@@ -330,6 +583,7 @@ exports.downloadStaffExcel =  (req, res) => {
 		  qrcode_option: obj.qrcode_option,
 		  
 		  bizcard_option: obj.bizcard_option,
+		  dig_card_in_vcf: obj.dig_card_in_vcf,
 		  status:obj.status,
          
       });
@@ -406,6 +660,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "note", key: "note", width: 25 },
 	  { header: "note_timestamp", key: "note_timestamp", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
+	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
     ];

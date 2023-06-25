@@ -161,6 +161,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		note_timestamp: obj.note_timestamp,
 		smartcard_uid: obj.smartcard_uid?obj.smartcard_uid.uid:null,
 		bizcard_option: obj.bizcard_option,
+		dig_card_in_vcf: obj.dig_card_in_vcf,
 		qrcode_option: obj.qrcode_option,
 		status:obj.status, 
       });
@@ -244,6 +245,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	    { header: "note_timestamp", key: "note_timestamp", width: 25 },
 	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
+	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
 	   { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
     ];

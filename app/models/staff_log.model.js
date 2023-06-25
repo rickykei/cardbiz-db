@@ -105,6 +105,7 @@ module.exports = (mongoose, mongoosePaginate) => {
         ref: "smartcard"
       },
 	  bizcard_option: Boolean,
+	  dig_card_in_vcf: Boolean,
 	  qrcode_option: Number,
 	  profile_counter: Number,
 	  vcf_counter: Number,
