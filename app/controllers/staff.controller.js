@@ -537,7 +537,8 @@ console.log("update id");
 									  vcf_counter: data.vcf_counter,
 									 
 									  status: data.status, 
-									  updatedBy: ObjectId(uid), 
+									  updatedBy: data.updatedBy, 
+
 									  createdBy: data.createdBy, 
 									  createdAt: data.createdAt, 
 									  updatedAt: Date.now(),
