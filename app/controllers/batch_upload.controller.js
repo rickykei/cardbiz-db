@@ -114,7 +114,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 			/////////////////////////
 			//update old staff no. record
 			////////////////////////////
-			 Staffs.findByIdAndUpdate(oldStaffDoc.id, s, { useFindAndModify: true })
+			 Staffs.findByIdAndUpdate(oldStaffDoc.id, s, {new: true,  useFindAndModify: true })
 			.then(data => {
 				  if (!data) {
 					res.status(404).send({
@@ -141,60 +141,60 @@ exports.uploadStaffExcel =  async (req, res) => {
 									});
 							}else{
 								//backup old staff records to table staff_logs
-								console.log("actionLog save for edit");
+								console.log("batch update existing staffs log");
 								 
-								console.log(oldStaffDoc);
+								console.log(data);
 								staff_log = new Staff_log({
 									action_log_id: ObjectId(data2.id),
-									staff_id: ObjectId(oldStaffDoc._id),
-									udid:oldStaffDoc.udid,
-									company_id: oldStaffDoc.company_id,
-									rc_no: oldStaffDoc.rc_no,
-									staff_no: oldStaffDoc.staff_no,
-									name_eng: oldStaffDoc.name_eng,
-									name_chi: oldStaffDoc.name_chi,
-									company_name_eng: oldStaffDoc.company_name_eng,
-									company_name_chi: oldStaffDoc.company_name_chi,
-									title_eng: oldStaffDoc.title_eng,
-									title_chi: oldStaffDoc.title_chi,
-									  pro_title: oldStaffDoc.pro_title,
-									  subsidiary_eng: oldStaffDoc.subsidiary_eng,
-									  subsidiary_chi: oldStaffDoc.subsidiary_chi,
-									  address_eng: oldStaffDoc.address_eng,
-									  address_chi: oldStaffDoc.address_chi,
-									  headshot: oldStaffDoc.headshot,
-									  work_tel: oldStaffDoc.work_tel,
-									  work_tel2: oldStaffDoc.work_tel2,
-									  work_tel3: oldStaffDoc.work_tel3,
-									  direct_tel: oldStaffDoc.direct_tel,
-									  direct_tel2: oldStaffDoc.direct_tel2,
-									  direct_tel3: oldStaffDoc.direct_tel3,
-									  mobile_tel: oldStaffDoc.mobile_tel,
-									  mobile_tel2: oldStaffDoc.mobile_tel2,
-									  mobile_tel3: oldStaffDoc.mobile_tel3,
-									  mobile_tel4: oldStaffDoc.mobile_tel4,
-									  mobile_tel5: oldStaffDoc.mobile_tel5,
-									  fax_no: oldStaffDoc.fax_no,
-									  fax_no2: oldStaffDoc.fax_no2,
-									  fax_no3: oldStaffDoc.fax_no3,
-									  fax_no4: oldStaffDoc.fax_no4,
-									  fax_no5: oldStaffDoc.fax_no5,
-									  reuters: oldStaffDoc.reuters,
-									  work_email: oldStaffDoc.work_email,
-									  agent_no: oldStaffDoc.agent_no,
-									  broker_no: oldStaffDoc.broker_no,
-									  mpf_no: oldStaffDoc.mpf_no,
-									  hkma_no: oldStaffDoc.hkma_no,
-									  hkma_eng: oldStaffDoc.hkma_eng,
-									  hkma_chi: oldStaffDoc.hkma_chi,
-									  smartcard_uid: oldStaffDoc.smartcard_uid,
-									  bizcard_option: oldStaffDoc.bizcard_option,
-									  profile_counter: oldStaffDoc.profile_counter,
-									  vcf_counter: oldStaffDoc.vcf_counter,
-									  status: oldStaffDoc.status, 
+									staff_id: ObjectId(data._id),
+									udid:data.udid,
+									company_id: data.company_id,
+									rc_no: data.rc_no,
+									staff_no: data.staff_no,
+									name_eng: data.name_eng,
+									name_chi: data.name_chi,
+									company_name_eng: data.company_name_eng,
+									company_name_chi: data.company_name_chi,
+									title_eng: data.title_eng,
+									title_chi: data.title_chi,
+									  pro_title: data.pro_title,
+									  subsidiary_eng: data.subsidiary_eng,
+									  subsidiary_chi: data.subsidiary_chi,
+									  address_eng: data.address_eng,
+									  address_chi: data.address_chi,
+									  headshot: data.headshot,
+									  work_tel: data.work_tel,
+									  work_tel2: data.work_tel2,
+									  work_tel3: data.work_tel3,
+									  direct_tel: data.direct_tel,
+									  direct_tel2: data.direct_tel2,
+									  direct_tel3: data.direct_tel3,
+									  mobile_tel: data.mobile_tel,
+									  mobile_tel2: data.mobile_tel2,
+									  mobile_tel3: data.mobile_tel3,
+									  mobile_tel4: data.mobile_tel4,
+									  mobile_tel5: data.mobile_tel5,
+									  fax_no: data.fax_no,
+									  fax_no2: data.fax_no2,
+									  fax_no3: data.fax_no3,
+									  fax_no4: data.fax_no4,
+									  fax_no5: data.fax_no5,
+									  reuters: data.reuters,
+									  work_email: data.work_email,
+									  agent_no: data.agent_no,
+									  broker_no: data.broker_no,
+									  mpf_no: data.mpf_no,
+									  hkma_no: data.hkma_no,
+									  hkma_eng: data.hkma_eng,
+									  hkma_chi: data.hkma_chi,
+									  smartcard_uid: data.smartcard_uid,
+									  bizcard_option: data.bizcard_option,
+									  profile_counter: data.profile_counter,
+									  vcf_counter: data.vcf_counter,
+									  status: data.status, 
 									  updatedBy: ObjectId(uid), 
-									  createdBy: oldStaffDoc.createdBy, 
-									  createdAt: oldStaffDoc.createdAt, 
+									  createdBy: data.createdBy, 
+									  createdAt: data.createdAt, 
 									  updatedAt: Date.now(),
 								});
 								  
@@ -247,9 +247,79 @@ exports.uploadStaffExcel =  async (req, res) => {
 								color: "border-theme-1",
 							});
 							
-							actionLog.save(actionLog);
-							 
-							 //white action log before send successful
+							actionLog.save(actionLog).then(data2 => {
+										if (!data2){
+											res.status(404).send({
+												message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+												});
+										}else{
+					 //white action log before send successfully
+					 
+								//backup old staff records to table staff_logs
+											console.log("actionLog save for create");
+											 
+											console.log(data);
+											staff_log = new Staff_log({
+											action_log_id: ObjectId(data2.id),
+											staff_id: ObjectId(oldStaffDoc._id),
+											udid:oldStaffDoc.udid,
+											company_id: oldStaffDoc.company_id,
+											rc_no: oldStaffDoc.rc_no,
+											staff_no: oldStaffDoc.staff_no,
+											name_eng: oldStaffDoc.name_eng,
+											name_chi: oldStaffDoc.name_chi,
+											company_name_eng: oldStaffDoc.company_name_eng,
+											company_name_chi: oldStaffDoc.company_name_chi,
+											title_eng: oldStaffDoc.title_eng,
+											title_chi: oldStaffDoc.title_chi,
+											  pro_title: oldStaffDoc.pro_title,
+											  subsidiary_eng: oldStaffDoc.subsidiary_eng,
+											  subsidiary_chi: oldStaffDoc.subsidiary_chi,
+											  address_eng: oldStaffDoc.address_eng,
+											  address_chi: oldStaffDoc.address_chi,
+											  headshot: oldStaffDoc.headshot,
+											  work_tel: oldStaffDoc.work_tel,
+											  work_tel2: oldStaffDoc.work_tel2,
+											  work_tel3: oldStaffDoc.work_tel3,
+											  direct_tel: oldStaffDoc.direct_tel,
+											  direct_tel2: oldStaffDoc.direct_tel2,
+											  direct_tel3: oldStaffDoc.direct_tel3,
+											  mobile_tel: oldStaffDoc.mobile_tel,
+											  mobile_tel2: oldStaffDoc.mobile_tel2,
+											  mobile_tel3: oldStaffDoc.mobile_tel3,
+											  mobile_tel4: oldStaffDoc.mobile_tel4,
+											  mobile_tel5: oldStaffDoc.mobile_tel5,
+											  fax_no: oldStaffDoc.fax_no,
+											  fax_no2: oldStaffDoc.fax_no2,
+											  fax_no3: oldStaffDoc.fax_no3,
+											  fax_no4: oldStaffDoc.fax_no4,
+											  fax_no5: oldStaffDoc.fax_no5,
+											  reuters: oldStaffDoc.reuters,
+											  work_email: oldStaffDoc.work_email,
+											  agent_no: oldStaffDoc.agent_no,
+											  broker_no: oldStaffDoc.broker_no,
+											  mpf_no: oldStaffDoc.mpf_no,
+											  hkma_no: oldStaffDoc.hkma_no,
+											  hkma_eng: oldStaffDoc.hkma_eng,
+											  hkma_chi: oldStaffDoc.hkma_chi,
+											  smartcard_uid: oldStaffDoc.smartcard_uid,
+											  bizcard_option: oldStaffDoc.bizcard_option,
+											  profile_counter: oldStaffDoc.profile_counter,
+											  vcf_counter: oldStaffDoc.vcf_counter,
+											  status: oldStaffDoc.status, 
+											  updatedBy: ObjectId(uid), 
+											  createdBy: oldStaffDoc.createdBy, 
+											  createdAt: oldStaffDoc.createdAt, 
+											  updatedAt: Date.now(),
+										});
+										  console.log("copy staff_log");
+													  console.log(staff_log);
+										staff_log.save(staff_log);
+									//backup old staff records to table staff_logs
+									 //white action log before send successful
+										}
+								});
+				 
 					 }
 				}
 					   
@@ -269,7 +339,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 				console.log("insertedstaffDocId="+data.id);
 				 //white action log before send successfully
 				 const actionLog = new Action_log({
-					action: "Record by Batch Upload",
+					action: "Create Staff Record by Batch Upload",
 					log: "batch excel",
 					company_id: data.company_id,
 					staff_id: data.id,

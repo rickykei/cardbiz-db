@@ -14,18 +14,14 @@ const CryptoJS = require('crypto-js');
 var mailTransport = nodemailer.createTransport( {
 
 	host: "smtpout.secureserver.net",  
-//	service: 'gmail',
      debug: true,
 	 secure: true,
   secureConnection: true,
-  //port: 465,
+  port: 465,
        tls: {rejectUnauthorized: false},  
   auth: {
-    //user: "info@profiles.digital",
-    //user: "admin@profiles.digital",
-	 user:"admin@e-profile.digital",
+    user: "admin@profiles.digital",
     pass: "soso2016~",
-    //pass: "sysarguzfkymqgax",
 	
   
   },
@@ -52,7 +48,8 @@ exports.create = async (req, res) => {
       message: "Data to update can not be empty!"
     });
   }
- console.log(req.body);
+  let uid=req.body.createdBy;  //admin staff doc id
+  
   // Create a Staff
   const staff = new Staff({
     udid: crypto.randomUUID(),
@@ -127,8 +124,78 @@ exports.create = async (req, res) => {
 			color: "border-theme-1",
 		});
 		
-		actionLog.save(actionLog);
+		actionLog.save(actionLog).then(data2 => {
+							if (!data2){
+								res.status(404).send({
+									message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
+									});
+							}else{
+		  
 		 //white action log before send successfully
+		 //backup old staff records to table staff_logs
+								console.log("actionLog save for create");
+								console.log(data);
+								console.log("uid");
+								console.log(uid);
+								staff_log = new Staff_log({
+									 
+									action_log_id: ObjectId(data2.id),
+									staff_id: ObjectId(data._id),
+									udid:data.udid,
+									company_id: data.company_id,
+									rc_no: data.rc_no,
+									staff_no: data.staff_no,
+									name_eng: data.name_eng,
+									name_chi: data.name_chi,
+									company_name_eng: data.company_name_eng,
+									company_name_chi: data.company_name_chi,
+									title_eng: data.title_eng,
+									title_chi: data.title_chi,
+									  pro_title: data.pro_title,
+									  subsidiary_eng: data.subsidiary_eng,
+									  subsidiary_chi: data.subsidiary_chi,
+									  address_eng: data.address_eng,
+									  address_chi: data.address_chi,
+									  headshot: data.headshot,
+									  work_tel: data.work_tel,
+									  work_tel2: data.work_tel2,
+									  work_tel3: data.work_tel3,
+									  direct_tel: data.direct_tel,
+									  direct_tel2: data.direct_tel2,
+									  direct_tel3: data.direct_tel3,
+									  mobile_tel: data.mobile_tel,
+									  mobile_tel2: data.mobile_tel2,
+									  mobile_tel3: data.mobile_tel3,
+									  mobile_tel4: data.mobile_tel4,
+									  mobile_tel5: data.mobile_tel5,
+									  fax_no: data.fax_no,
+									  fax_no2: data.fax_no2,
+									  fax_no3: data.fax_no3,
+									  fax_no4: data.fax_no4,
+									  fax_no5: data.fax_no5,
+									  reuters: data.reuters,
+									  work_email: data.work_email,
+									  agent_no: data.agent_no,
+									  broker_no: data.broker_no,
+									  mpf_no: data.mpf_no,
+									  hkma_no: data.hkma_no,
+									  hkma_eng: data.hkma_eng,
+									  hkma_chi: data.hkma_chi,
+									  smartcard_uid: data.smartcard_uid,
+									  bizcard_option: data.bizcard_option,
+									  profile_counter: data.profile_counter,
+									  vcf_counter: data.vcf_counter,
+									  status: data.status, 
+									  updatedBy: ObjectId(uid), 
+									  createdBy: data.createdBy, 
+									  createdAt: data.createdAt, 
+									  updatedAt: Date.now(),
+								});
+								  
+								staff_log.save(staff_log);
+							//backup old staff records to table staff_logs
+								}
+							});		
       res.send(data);
     })
     .catch(err => {
@@ -274,7 +341,7 @@ exports.update = async (req, res) => {
   
   console.log(req.body);
   
-  Staff.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Staff.findByIdAndUpdate(id, req.body, {new: true, useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -401,11 +468,12 @@ exports.sendNotificationByStaffDocId = async (req, res) => {
 				mailTransport.sendMail(
 			  {
 				from: 'staff notification <admin@e-profile.digital>',
+				//to: 'ricky.kei@gmail.com',
 				//bcc: 'stephen@nfctouch.com.hk',
-				//to : 'stephen@nfctouch.com.hk',
-				 to: 'Namecard_Application@cncbinternational.com',
+				to: 'Namecard_Application@cncbinternational.com',
 				subject: 'E-Name card (QR Code) '+doc.work_email,
-			  html: '<p>****************************************************************</p><p>This is an auto-message sent from the system. Please do no reply to this e-mail.</p><p>****************************************************************</p><p>Dear Colleague,</p><p>Please retrieve your e-name card from the below QR Code:</p><img width="250" src="https://namecard.cncbintl.com/profile/Touchless/genvcf2png.php?key='+ciphertext+'"/><p>To share your business contact with your future prospects, simply ask he / she to scan this QR Code to get access to your digital business profile. </p><p>We would recommend you to save this http link as a shortcut on your smartphone for your own convenience. </p><p>The user manual is now available at EIP document library and please click the link  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/listform.aspx?PageType=4&ListId=%7B1E0637EC%2DD6B0%2D43B6%2DA597%2D6707517C8714%7D&ID=6557&ContentTypeID=0x01006370EF457A75334BA00991EB61622412"><span>HERE</span></a><span>]  to access. </span></p><p>Please note that CS shall update your new office address in the e-name card system prior your move, if applicable.  Should there be any change in your name card information, such as phone number, title, department / Division name in future, please notify us by using the application form  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/WopiFrame.aspx?sourcedoc=/Dept/CSS/Lists/CKWB%20Document%20Library/Attachments/6544/Requisition%20Form%20for%20Business%20Card%20(e-form).xlsx&action=default"><span>HERE</span></a><span>]  and we shall update upon confirmation from the related units.  All the changes will be made in your digital profile while your QR code (the http link to your digital profile) will be kept unchanged.</span></p><p> If you have any enquiries or need further assistance regarding the e-name card, please feel free to contact CS-Aggie Yeung (x 2063) / Gigi Wong (x 2065).</p><p>Best regards,</p> <p>Corporate Services</p>',
+				  html: '<p>****************************************************************</p><p>This is an auto-message sent from the system. Please do no reply to this e-mail.</p><p>****************************************************************</p><p>Dear Colleague,</p><p>Please retrieve your e-name card from the below QR Code:</p><img width="250" src="https://namecard.cncbintl.com/profile/Touchless/genvcf2png.php?key='+ciphertext+'"/><p>To share your business contact with your future prospects, simply ask he / she to scan this QR Code to get access to your digital business profile. </p><p>We would recommend you to save this http link as a shortcut on your smartphone for your own convenience. </p><p>The user manual is now available at EIP document library and please click the link  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/listform.aspx?PageType=4&ListId=%7B1E0637EC%2DD6B0%2D43B6%2DA597%2D6707517C8714%7D&ID=6557&ContentTypeID=0x01006370EF457A75334BA00991EB61622412"><span>HERE</span></a><span>]  to access. </span></p><p>Please note that CS shall update your new office address in the e-name card system prior your move, if applicable.  Should there be any change in your name card information, such as phone number, title, department / Division name in future, please notify us by using the application form  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/WopiFrame.aspx?sourcedoc=/Dept/CSS/Lists/CKWB%20Document%20Library/Attachments/6544/Requisition%20Form%20for%20Business%20Card%20(e-form).xlsx&action=default"><span>HERE</span></a><span>]  and we shall update upon confirmation from the related units.  All the changes will be made in your digital profile while your QR code (the http link to your digital profile) will be kept unchanged.</span></p><p> If you have any enquiries or need further assistance regarding the e-name card, please feel free to contact CS-Aggie Yeung (x 2063) / Gigi Wong (x 2065).</p><p>Best regards,</p> <p>Corporate Services</p>',
+				//html: '<p>Dear Colleague,</p><p>Please find below your e-name card retrievable from the QR Code:</p><img width="350" src="http://whospets.com/profile/Touchless/genvcf2png.php?key='+ciphertext+'"/><p>To share your contact with your future prospects, you can simply scan this QR Code to get access to your digital profile. We would recommend you to save this http link as a shortcut on your phone for future uase.</p><p>The user manual is now available at the EIP document library and please click the link  [<a href="http://eip.cncbinternational.com/Dept/CSS/_layouts/15/listform.aspx?PageType=4&amp;ListId=%7B1E0637EC%2DD6B0%2D43B6%2DA597%2D6707517C8714%7D&amp;ID=6557&amp;ContentTypeID=0x01006370EF457A75334BA00991EB61622412"><span>HERE</span></a><span>]  to access. </span></p><p> FYI, CS shall update the new office address from system before your office relocation to TTP.  No change / update on your QR code is required.</p><p> If you have any enquiries or need further assistance regarding the e-name card, please feel free to contact CS-Aggie Yeung (x 2063) / Gigi Wong (x 2065).</p><p>Best regards,</p> <p>Corporate Services</p>',
 			  },
 			  function(err) {
 				if (err) {
