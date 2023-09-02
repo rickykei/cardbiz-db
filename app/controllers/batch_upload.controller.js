@@ -34,6 +34,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		let y=0;	
         var staff = {
 			company_id: company_id,
+			 staff_no:row[y++],
 		  company_name_eng:row[y++],
 		  company_name_chi:row[y++],
 		  company_name_eng2: row[y++],
@@ -41,7 +42,6 @@ exports.uploadStaffExcel =  async (req, res) => {
 	      company_name_eng3: row[y++],
 	      company_name_chi3: row[y++],
            cc_no:row[y++],
-		  app_id:row[y++],
 		  fname: row[y++],
 		  lname: row[y++],
 		  title_eng:row[y++],
@@ -153,7 +153,9 @@ exports.uploadStaffExcel =  async (req, res) => {
 									action_log_id: ObjectId(data2.id),
 									staff_id: ObjectId(data._id),
 									udid:data.udid,
+									
 									company_id: data.company_id,
+									staff_no: data.staff_no,
 									company_name_eng: data.company_name_eng,
 									company_name_chi: data.company_name_chi,
 									company_name_eng2: data.company_name_eng,
@@ -163,7 +165,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 									fname: data.fname,
 									lname: data.lname,
 									  cc_no: data.cc_no,
-									  app_id: data.app_id,
+									  
 									  title_eng: data.title_eng,
 									  title_chi: data.title_chi,
 									  pro_title: data.pro_title,
@@ -268,6 +270,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 												staff_id: ObjectId(data._id),
 												udid:data.udid,
 									company_id: data.company_id,
+									staff_no: data.staff_no,
 									company_name_eng: data.company_name_eng,
 									company_name_chi: data.company_name_chi,
 									company_name_eng2: data.company_name_eng,
@@ -277,7 +280,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 									fname: data.fname,
 									lname: data.lname,
 									  cc_no: data.cc_no,
-									  app_id: data.app_id,
+									  
 									  title_eng: data.title_eng,
 									  title_chi: data.title_chi,
 									  pro_title: data.pro_title,
@@ -384,15 +387,17 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
       rows.forEach((row) => {
        let y=0;	
         var staff = {
+			 company_id: company_id,
+		    staff_no:row[y++],
 		  company_name_eng:row[y++],
 		  company_name_chi:row[y++],
 		  company_name_eng2: row[y++],
 		  company_name_chi2: row[y++],
 	      company_name_eng3: row[y++],
 	      company_name_chi3: row[y++],
-		  company_id: company_id,
+		 
 		   cc_no:row[y++],
-		  app_id:row[y++],
+		
           fname: row[y++],
 		  lname: row[y++],
 		  title_eng:row[y++],
@@ -503,15 +508,15 @@ exports.downloadStaffExcel =  (req, res) => {
 		
       staffs.push({
 		  
-			 
+								staff_no: data.staff_no,
 									company_name_eng: data.company_name_eng,
 									company_name_chi: data.company_name_chi,
-									company_name_eng2: data.company_name_eng,
-									company_name_chi2: data.company_name_chi,
-									company_name_eng3: data.company_name_eng,
-									company_name_chi3: data.company_name_chi,
+									company_name_eng2: data.company_name_eng2,
+									company_name_chi2: data.company_name_chi2,
+									company_name_eng3: data.company_name_eng3,
+									company_name_chi3: data.company_name_chi3,
 									 cc_no: data.cc_no,
-									  app_id: data.app_id,
+									 
 									  fname: data.fname,
 									lname: data.lname,
 									 
@@ -581,6 +586,7 @@ exports.downloadStaffExcel =  (req, res) => {
     let worksheet = workbook.addWorksheet("Staffs");
 
     worksheet.columns = [
+	{ header: "staff_no", key: "staff_no", width: 25 },
 	{ header: "company_name_eng", key: "company_name_eng", width: 25 },
 	{ header: "company_name_chi", key: "company_name_chi", width: 25 },
 	{ header: "company_name_eng2", key: "company_name_eng2", width: 25 },
@@ -589,9 +595,9 @@ exports.downloadStaffExcel =  (req, res) => {
 	{ header: "company_name_chi3", key: "company_name_chi3", width: 25 },
  
       { header: "cc_no", key: "cc_no", width: 25 },
-      { header: "app_id", key: "app_id", width: 25 },
+      
 	  { header: "eng_name", key: "fname", width: 25 },
-      { header: "chi_name", key: "lname", width: 25 }
+      { header: "chi_name", key: "lname", width: 25 },
       { header: "title_eng", key: "title_eng", width: 25 },
 	  { header: "title_chi", key: "title_chi", width: 25 },
 	  { header: "pro_title", key: "pro_title", width: 25 },
