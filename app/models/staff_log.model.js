@@ -40,6 +40,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  company_name_chi3: String,
 	  fname:String,
 	  lname:String,
+	  staff_no:String,
 	  cc_no:String,
 	  app_id:String,
 	  title_eng: String,

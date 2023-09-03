@@ -88,7 +88,6 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  qrcode_option: Number,
 	  profile_counter: Number,
 	  vcf_counter: Number,
-	   
 	  status: Boolean, 
 	  updatedBy: 
       {
