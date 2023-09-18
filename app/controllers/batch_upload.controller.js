@@ -823,3 +823,19 @@ exports.downloadStaffExcel =  (req, res) => {
     });
   });
 };
+
+
+exports.uploadStaffJson =  async (req, res) => {
+ try{
+	 console.log(req.body); 
+	 res.json(req.body);
+	 res.send({message: "done"});
+	 
+   
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Could not upload the json file: ",
+    });
+  }
+};

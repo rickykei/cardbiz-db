@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 const initRoutes = require("./src/routes");
 
+
 global.__basedir = __dirname + "/";
 
 var corsOptions = {
@@ -47,7 +48,7 @@ require("./app/routes/profile_counter.routes")(app);
 require("./app/routes/batch_upload.routes")(app);
 require("./app/routes/action_log.routes")(app);
 require("./app/routes/staff_log.routes")(app);
-
+ 
 initRoutes(app);
 
 // set port, listen for requests
