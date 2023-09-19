@@ -81,8 +81,8 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  reuters_code: String,
 	  bloomberg_info: String,
 	  sfc_no: String,
-	  sfc_type1_no: String,
-	  sfc_type2_no: String,
+	  sfc_type1_no: Boolean,
+	  sfc_type2_no: Boolean,
 	  field051: String,
 	  field052: String,
 	  field053: String,
@@ -102,19 +102,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  field067: String,
 	  field068: String,
 	  field069: String,
-	  field070: String,
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	   
-	  
-	  
-	  
-	  
+	  field070: String, 
 	  additional_info: String,
 	  note: String,
 	  note_timestamp: Boolean,
