@@ -115,7 +115,7 @@ exports.create = async (req, res) => {
 	  field070: req.body.field070, 
 	  additional_info: req.body.additional_info,
 	note: req.body.note,
-	note_timestamp: req.body.note_timestamp,
+	note_timestamp: req.body.note_timestamp?req.body.note_timestamp:false,
 	smartcard_uid: req.body.smartcard_uid?req.body.smartcard_uid:null,
 	bizcard_option: req.body.bizcard_option,
 	dig_card_in_vcf: req.body.dig_card_in_vcf,
@@ -440,11 +440,12 @@ console.log("update id");
   
    if (req.body.dig_card_in_vcf==undefined || req.body.dig_card_in_vcf=='null')
 	  req.body.dig_card_in_vcf=undefined;
+  if (req.body.note_timestamp==undefined || req.body.note_timestamp=='null')
+	  req.body.note_timestamp=undefined;
   
   
   const updatedoc=req.body;
-  console.log('updatedoc.dig_card_in_vcf');
-  console.log(updatedoc.dig_card_in_vcf);
+ 
   // console.log(updatedoc);
   Staff.findByIdAndUpdate(id, updatedoc, {new: true, useFindAndModify: false ,omitUndefined: false,})
     .then(data => {
@@ -565,7 +566,7 @@ console.log("update id");
 									  field070: data.field070, 
 									  additional_info: data.additional_info,
 									  note: data.note,
-									  note_timestamp: data.note_timestamp,
+									  note_timestamp: data.note_timestamp?data.note_timestamp:false,
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
 									  dig_card_in_vcf: data.dig_card_in_vcf,
