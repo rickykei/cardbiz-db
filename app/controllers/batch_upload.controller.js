@@ -133,7 +133,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 	  for (var s of xls_staffs){
 		  var query ={};
 		   query.company_id =  ObjectId(company_id);
-		   query.work_email =  s.work_email;
+		   query.staff_no =  s.staff_no;
 		let mongoDocument =  await Staff.findOne(query).exec();
 		
 		if (mongoDocument!=undefined)
@@ -755,7 +755,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "web_link_label", key: "web_link_label", width: 25 },
 	  { header: "web_link2", key: "web_link2", width: 25 },
 	  { header: "web_link_label2", key: "web_link_label2", width: 25 },
-	  { header: "web_link", key: "web_link", width: 25 },
+	  { header: "web_link3", key: "web_link3", width: 25 },
 	 { header: "web_link_label3", key: "web_link_label3", width: 25 },
 	  { header: "agent_no", key: "agent_no", width: 25 },
 	  { header: "insurance_no", key: "insurance_no", width: 25 },
