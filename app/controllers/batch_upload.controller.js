@@ -113,10 +113,9 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  field069: row[y++],
 		  field070: row[y++], 
 		  additional_info: row[y++], 
-		  note: row[y++],
-		  note_timestamp: row[y++],
+		 
 		  bizcard_option: row[y++],
-		  dig_card_in_vcf: row[y++], 
+		    
 		  qrcode_option: row[y++],
 		  status:row[y++],
         };
@@ -260,11 +259,10 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  field069: data.field069,
 									  field070: data.field070, 
 									  additional_info: data.additional_info,									 
-									  note: data.note,
-									  note_timestamp: data.note_timestamp,
+									  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
-									  dig_card_in_vcf: data.dig_card_in_vcf,
+									   
 									  qrcode_option: data.qrcode_option,
 									  profile_counter: data.profile_counter,
 									  vcf_counter: data.vcf_counter,
@@ -399,12 +397,10 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  field069: data.field069,
 												  field070: data.field070, 
 												  additional_info: data.additional_info,	
-												  note: data.note,
-												  note_timestamp: data.note_timestamp,
 												  
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
-												  dig_card_in_vcf: data.dig_card_in_vcf,
+												  
 												  qrcode_option: data.qrcode_option,
 												  profile_counter: data.profile_counter,
 												  vcf_counter: data.vcf_counter,
@@ -543,10 +539,9 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 		  field069: row[y++],
 		  field070: row[y++], 
 		  additional_info: row[y++], 
-		  note: row[y++],
-		  note_timestamp: row[y++],
+		 
 		  bizcard_option: row[y++],
-		  dig_card_in_vcf: row[y++], 
+		  
 		  qrcode_option: row[y++],
 		  status:row[y++],
         };
@@ -688,12 +683,10 @@ exports.downloadStaffExcel =  (req, res) => {
 									  field069: data.field069,
 									  field070: data.field070, 
 									  additional_info: data.additional_info,	
-									 note: data.note,
-												  note_timestamp: data.note_timestamp,
-												  
+									 
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
-												  dig_card_in_vcf: data.dig_card_in_vcf,
+												  
 												  qrcode_option: data.qrcode_option,
 												  profile_counter: data.profile_counter,
 												  vcf_counter: data.vcf_counter,
@@ -791,10 +784,9 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "mshotline_tel2", key: "field069", width: 25 },
 	  { header: "mshotline_tel3", key: "field070", width: 25 },
 	  { header: "additional_info", key: "additional_info", width: 25 },
-	  { header: "note", key: "note", width: 25 },
-	  { header: "note_timestamp", key: "note_timestamp", width: 25 },
+	 
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
-	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
+	 
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
     ];
