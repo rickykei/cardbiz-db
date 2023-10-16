@@ -113,7 +113,8 @@ exports.create = async (req, res) => {
 	  field068: req.body.field068,
 	  field069: req.body.field069,
 	  field070: req.body.field070, 
-	  additional_info: req.body.additional_info,
+	   field071: req.body.field071, 
+	  
 	note: req.body.note,
 	note_timestamp: req.body.note_timestamp?req.body.note_timestamp:false,
 	smartcard_uid: req.body.smartcard_uid?req.body.smartcard_uid:null,
@@ -251,8 +252,8 @@ exports.create = async (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
-									  additional_info: data.additional_info,
-									  note: data.note,
+									  field071: data.field071, 
+									   
 									  note_timestamp: data.note_timestamp,
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
@@ -300,9 +301,7 @@ exports.findAll = (req, res) => {
 	if (search){
 		queryArray.push({"fname" : {  $regex: new RegExp(search), $options: "i" }}) ;
 		queryArray.push({"lname" : {  $regex: new RegExp(search), $options: "i" }}) ;
-		queryArray.push({"company_name_chi" : {  $regex: new RegExp(search), $options: "i" }}) ;
-		queryArray.push({"company_name_eng" : {  $regex: new RegExp(search), $options: "i" }}) ;
-		queryArray.push({"staff_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"cc_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
 		query['$or'] = queryArray;
 	}
 	
@@ -331,15 +330,20 @@ exports.findByCompanyId = (req, res) => {
   const populate=['company_id','createdBy','updatedBy'];
   const { currentPage, pageSize, search, orderBy , companyId} = req.query;
   let query={};
-    
+     let queryArray=[];
 		
-	if (search)
-	query.fname = {  $regex: new RegExp(search), $options: "i" } ;
+	if (search){
+queryArray.push({"fname" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"lname" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		queryArray.push({"cc_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+	query['$or'] = queryArray;
+	}
 	if (companyId!="")
     query.company_id =  ObjectId(companyId);
 	else
 	query.company_id =  ObjectId(0);	
 	
+	console.log(query);
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
   Staff.paginate(query, { populate,offset, limit , sort})
@@ -564,8 +568,8 @@ console.log("update id");
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
-									  additional_info: data.additional_info,
-									  note: data.note,
+									  field071: data.field071, 
+									  
 									  note_timestamp: data.note_timestamp?data.note_timestamp:false,
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,

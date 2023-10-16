@@ -113,8 +113,8 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  field068: String,
 	  field069: String,
 	  field070: String, 
-	  additional_info: String,
-	  note: String,
+	  field071: String, 
+	 
 	  note_timestamp: Boolean,
 	  smartcard_uid: {
         type: mongoose.Schema.Types.ObjectId,

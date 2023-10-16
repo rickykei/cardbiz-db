@@ -50,6 +50,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  title_eng2:row[y++],
 		  title_chi2:row[y++],
 		  pro_title:row[y++],
+		  pro_title2:row[y++],
 		  division_eng:row[y++],
 		  division_chi: row[y++],
 		  dept_eng:row[y++],
@@ -114,8 +115,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  field068: row[y++],
 		  field069: row[y++],
 		  field070: row[y++], 
-		  additional_info: row[y++], 
-		 
+		  
 		  bizcard_option: row[y++],
 		    
 		  qrcode_option: row[y++],
@@ -196,6 +196,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 									    title_eng2: data.title_eng2,
 									  title_chi2: data.title_chi2,
 									  pro_title: data.pro_title,
+									  pro_title2: data.field071,
 									  division_eng: data.division_eng,
 									  division_chi: data.division_chi,
 									  dept_eng: data.dept_eng,
@@ -260,7 +261,6 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
-									  additional_info: data.additional_info,									 
 									  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
@@ -334,6 +334,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  title_eng2: data.title_eng2,
 												  title_chi2: data.title_chi2,
 												  pro_title: data.pro_title,
+												   pro_title2: data.field071,
 												  division_eng: data.division_eng,
 												  division_chi: data.division_chi,
 												  dept_eng: data.dept_eng,
@@ -398,8 +399,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  field068: data.field068,
 												  field069: data.field069,
 												  field070: data.field070, 
-												  additional_info: data.additional_info,	
-												  
+												   
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
 												  
@@ -620,6 +620,7 @@ exports.downloadStaffExcel =  (req, res) => {
 									  title_eng2: data.title_eng2,
 									  title_chi2: data.title_chi2,
 									  pro_title: data.pro_title,
+									  pro_title2: data.field071,
 									  division_eng: data.division_eng,
 									  division_chi: data.division_chi,
 									  dept_eng: data.dept_eng,
@@ -684,8 +685,7 @@ exports.downloadStaffExcel =  (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
-									  additional_info: data.additional_info,	
-									 
+									  
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
 												  
@@ -704,7 +704,7 @@ exports.downloadStaffExcel =  (req, res) => {
     let worksheet = workbook.addWorksheet("Staffs");
 
     worksheet.columns = [
-	{ header: "staff_no", key: "staff_no", width: 25 },
+	{ header: "app_id", key: "staff_no", width: 25 },
 	{ header: "company_name_option", key: "company_name_option", width: 25 },
  
 	{ header: "company_name_eng2", key: "company_name_eng2", width: 25 },
@@ -714,13 +714,14 @@ exports.downloadStaffExcel =  (req, res) => {
  
       { header: "cc_no", key: "cc_no", width: 25 },
       
-	  { header: "eng_name", key: "fname", width: 25 },
-      { header: "chi_name", key: "lname", width: 25 },
+	  { header: "name_eng", key: "fname", width: 25 },
+      { header: "name_chi", key: "lname", width: 25 },
       { header: "title_eng", key: "title_eng", width: 25 },
 	  { header: "title_chi", key: "title_chi", width: 25 },
 	  { header: "title_eng2", key: "title_eng2", width: 25 },
 	  { header: "title_chi2", key: "title_chi2", width: 25 },
 	  { header: "pro_title", key: "pro_title", width: 25 },
+	  { header: "pro_title2", key: "pro_title2", width: 25 },
       { header: "division_eng", key: "division_eng", width: 25 },
 	  { header: "division_chi", key: "division_chi", width: 25 },
 	  { header: "dept_eng", key: "dept_eng", width: 25 },
@@ -746,20 +747,20 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "work_email", key: "work_email", width: 25 },
 	  { header: "work_email2", key: "work_email2", width: 25 },
 	  { header: "work_email3", key: "work_email3", width: 25 },
-	  { header: "web_link", key: "web_link", width: 25 },
-	  { header: "web_link_label", key: "web_link_label", width: 25 },
-	  { header: "web_link2", key: "web_link2", width: 25 },
-	  { header: "web_link_label2", key: "web_link_label2", width: 25 },
-	  { header: "web_link3", key: "web_link3", width: 25 },
-	 { header: "web_link_label3", key: "web_link_label3", width: 25 },
+	  { header: "website", key: "web_link", width: 25 },
+	  { header: "website_title", key: "web_link_label", width: 25 },
+	  { header: "website2", key: "web_link2", width: 25 },
+	  { header: "website_title2", key: "web_link_label2", width: 25 },
+	  { header: "website3", key: "web_link3", width: 25 },
+	 { header: "website_title3", key: "web_link_label3", width: 25 },
 	  { header: "agent_no", key: "agent_no", width: 25 },
 	  { header: "insurance_no", key: "insurance_no", width: 25 },
 	  { header: "mpf_no", key: "mpf_no", width: 25 },
 	  { header: "hkma_no", key: "hkma_no", width: 25 },
-	  { header: "type1_no", key: "type1_no", width: 25 },
-	  { header: "type4_no", key: "type4_no", width: 25 },
-	  { header: "type6_no", key: "type6_no", width: 25 },
-	    { header: "type9_no", key: "type9_no", width: 25 },
+	  { header: "hkma_type1_no", key: "type1_no", width: 25 },
+	  { header: "hkma_type4_no", key: "type4_no", width: 25 },
+	  { header: "hkma_type6_no", key: "type6_no", width: 25 },
+	    { header: "hkma_type9_no", key: "type9_no", width: 25 },
 	  { header: "reuters_code", key: "reuters_code", width: 25 },
 	  { header: "bloomberg_info", key: "bloomberg_info", width: 25 },
 	  { header: "sfc_no", key: "sfc_no", width: 25 },
@@ -785,9 +786,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "mshotline_tel", key: "field068", width: 25 },
 	  { header: "mshotline_tel2", key: "field069", width: 25 },
 	  { header: "mshotline_tel3", key: "field070", width: 25 },
-	  { header: "additional_info", key: "additional_info", width: 25 },
-	 
-	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
+	   { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	 
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
@@ -889,6 +888,7 @@ exports.uploadStaffJson =  async (req, res) => {
 									    title_eng2: data.title_eng2,
 									  title_chi2: data.title_chi2,
 									  pro_title: data.pro_title,
+									  pro_title2: data.field071,
 									  division_eng: data.division_eng,
 									  division_chi: data.division_chi,
 									  dept_eng: data.dept_eng,
@@ -953,8 +953,7 @@ exports.uploadStaffJson =  async (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
-									  additional_info: data.additional_info,									 
-									  
+									 
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
 									   
@@ -1027,6 +1026,7 @@ exports.uploadStaffJson =  async (req, res) => {
 												  title_eng2: data.title_eng2,
 												  title_chi2: data.title_chi2,
 												  pro_title: data.pro_title,
+												  pro_title2: data.field071,
 												  division_eng: data.division_eng,
 												  division_chi: data.division_chi,
 												  dept_eng: data.dept_eng,
@@ -1091,7 +1091,6 @@ exports.uploadStaffJson =  async (req, res) => {
 												  field068: data.field068,
 												  field069: data.field069,
 												  field070: data.field070, 
-												  additional_info: data.additional_info,	
 												  
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
