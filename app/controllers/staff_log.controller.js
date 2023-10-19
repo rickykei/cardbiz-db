@@ -215,7 +215,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	  { header: "title_eng2", key: "title_eng2", width: 25 },
 	  { header: "title_chi2", key: "title_chi2", width: 25 },
 	  { header: "pro_title", key: "pro_title", width: 25 },
-	  { header: "pro_title2", key: "field070", width: 25 },
+	  { header: "pro_title2", key: "field071", width: 25 },
       { header: "division_eng", key: "division_eng", width: 25 },
 	  { header: "division_chi", key: "division_chi", width: 25 },
 	  { header: "dept_eng", key: "dept_eng", width: 25 },
