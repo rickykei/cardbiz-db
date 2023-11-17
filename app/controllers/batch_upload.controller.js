@@ -7,6 +7,16 @@ const Staff_log = db.staff_log;
 const Staff = db.staffs;
 const BeaCompanyId="64f37df6528e09409ddab475";
 const BeaUid="64f49b8bd7517dffb354c33e";
+const CryptoJS = require('crypto-js');
+const profileUrl=db.profileUrl;
+
+function AES_ENCRYPT(text, secretKey) {
+  const encrypted = CryptoJS.AES.encrypt(text,secretKey ,{
+   mode: CryptoJS.mode.CBC,
+   padding: CryptoJS.pad.Pkcs7
+ }).toString();
+ return encrypted;
+} 
 
 exports.uploadStaffExcel =  async (req, res) => {
 	try {
@@ -1144,4 +1154,143 @@ exports.uploadStaffJson =  async (req, res) => {
       message: "Could not upload the json file: ",
     });
   }
+};
+
+
+exports.downloadStaffJson =  (req, res) => {
+	console.log("downloadStaffJson");
+	 const { company_id  } = req.query;
+	  let query={};
+	if (company_id == undefined || company_id =="") {
+		  return res.status(400).send("ERROR");
+		}
+	 
+	 if (company_id!="63142fd5b54bdbb18f556016")
+	 {
+	 
+			query.company_id = ObjectId(company_id);
+	 
+		console.log("non nfc");
+	 }else{
+		  
+		 console.log("nfc");
+	 }
+	 
+	 console.log(query);
+  Staff.find( query ).then((objs) => {
+    let staffs = [];
+
+    objs.forEach((data) => {
+		
+		var str_smartcard_uid=undefined;
+		 str_smartcard_uid= JSON.stringify(data.smartcard_uid);
+		str_smartcard_uid=(str_smartcard_uid||'').replaceAll('"','');;
+		 
+		
+      staffs.push({
+		  
+								staff_no: data.staff_no,
+								 company_name_option:data.company_name_option,
+								 
+									company_name_eng2: data.company_name_eng2,
+									company_name_chi2: data.company_name_chi2,
+									company_name_eng3: data.company_name_eng3,
+									company_name_chi3: data.company_name_chi3,
+									 cc_no: data.cc_no,
+									 
+									  fname: data.fname,
+									lname: data.lname,
+									 
+									  title_eng: data.title_eng,
+									  title_chi: data.title_chi,
+									  title_eng2: data.title_eng2,
+									  title_chi2: data.title_chi2,
+									  pro_title: data.pro_title,
+									  field071: data.field071,
+									  division_eng: data.division_eng,
+									  division_chi: data.division_chi,
+									  dept_eng: data.dept_eng,
+									  dept_chi: data.dept_chi,
+									  address_eng: data.address_eng,
+									  address_chi: data.address_chi,
+									  address_eng2: data.address_eng2,
+									  address_chi2: data.address_chi2,
+									  work_tel: data.work_tel,
+									  work_tel2: data.work_tel2,
+									  work_tel3: data.work_tel3,
+									  direct_tel: data.direct_tel,
+									  direct_tel2: data.direct_tel2,
+									  direct_tel3: data.direct_tel3,
+									  mobile: data.mobile,
+									  mobile2: data.mobile2,
+									  mobile3: data.mobile3,
+									  mobile_china_tel: data.mobile_china_tel,
+									  mobile_china_tel2: data.mobile_china_tel2,
+									  mobile_china_tel3: data.mobile_china_tel3,
+									  fax: data.fax,
+									  swift_no: data.swift_no,
+									  work_email: data.work_email,
+									  work_email2: data.work_email2,
+									  work_email3: data.work_email2,
+									  web_link: data.web_link,
+									  web_link_label: data.web_link_label,
+									  web_link2: data.web_link2,
+									  web_link_label2: data.web_link_label2,
+									  web_link3: data.web_link3,
+									  web_link_label3: data.web_link_label3,
+									  agent_no: data.agent_no,
+									  insurance_no: data.insurance_no,
+									  mpf_no: data.mpf_no,
+									  hkma_no: data.hkma_no,
+									  type1_no: data.type1_no,
+									  type4_no: data.type4_no,
+									  type6_no: data.type6_no,
+									  type9_no: data.type9_no,
+									  reuters_code: data.reuters_code,
+									  bloomberg_info: data.bloomberg_info,
+									  sfc_no: data.sfc_no,
+									   sfc_type1_no: data.sfc_type1_no,
+									  sfc_type2_no: data.sfc_type2_no,
+									  field051: data.field051,
+									  field052: data.field052,
+									  field053: data.field053,
+									  field054: data.field054,
+									  field055: data.field055,
+									  field056: data.field056,
+									  field057: data.field057,
+									  field058: data.field058,
+									  field059: data.field059,
+									  field060: data.field060,
+									  field061: data.field061,
+									  field062: data.field062,
+									  field063: data.field063,
+									  field064: data.field064,
+									  field065: data.field065,
+									  field066: data.field066,
+									  field067: data.field067,
+									  field068: data.field068,
+									  field069: data.field069,
+									  field070: data.field070, 
+									  field072: data.field072, 
+									  field073: data.field073, 
+									  
+												  smartcard_uid: data.smartcard_uid,
+												  bizcard_option: data.bizcard_option,
+												  
+												  qrcode_option: data.qrcode_option,
+												  profile_counter: data.profile_counter,
+												  vcf_counter: data.vcf_counter,
+												 
+												  status: data.status, 
+												  profile_url: global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678")),
+         
+      });
+    });
+
+ 
+   
+    
+     res.send({message: "done",staffs});
+ 
+  });
 };

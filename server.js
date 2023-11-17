@@ -2,13 +2,12 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const initRoutes = require("./src/routes");
 
-
+global.profileUrl="https://ebcard.hkbea.digital/?key=";
 global.__basedir = __dirname + "/";
 
 var corsOptions = {
-  origin: [ process.env.CLIENT_ORIGIN ,"http://localhost:8080","https://admin_bea.profiles.digital","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://uat.profiles.digital:3000"]
+  origin: [ process.env.CLIENT_ORIGIN ,"http://localhost:8080","http://admin-ebcard.hkbea.digital","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://ebcard.hkbea.digital"]
 };
 
 app.use(cors(corsOptions));
@@ -52,7 +51,7 @@ require("./app/routes/staff_log.routes")(app);
 //initRoutes(app);
 
 // set port, listen for requests
-const PORT = process.env.NODE_DOCKER_PORT  || 8080;
+const PORT = process.env.NODE_DOCKER_PORT  || 8081;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
