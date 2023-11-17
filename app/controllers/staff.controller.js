@@ -114,7 +114,8 @@ exports.create = async (req, res) => {
 	  field069: req.body.field069,
 	  field070: req.body.field070, 
 	   field071: req.body.field071, 
-	  
+	  field072: req.body.field072,
+	  field073: req.body.field073,
 	note: req.body.note,
 	note_timestamp: req.body.note_timestamp?req.body.note_timestamp:false,
 	smartcard_uid: req.body.smartcard_uid?req.body.smartcard_uid:null,
@@ -253,7 +254,9 @@ exports.create = async (req, res) => {
 									  field069: data.field069,
 									  field070: data.field070, 
 									  field071: data.field071, 
-									   
+									   field072: data.field072, 
+									  field073: data.field073, 
+									  
 									  note_timestamp: data.note_timestamp,
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
@@ -569,6 +572,8 @@ console.log("update id");
 									  field069: data.field069,
 									  field070: data.field070, 
 									  field071: data.field071, 
+									  field072: data.field072, 
+									  field073: data.field073, 
 									  
 									  note_timestamp: data.note_timestamp?data.note_timestamp:false,
 									  smartcard_uid: data.smartcard_uid,

@@ -178,7 +178,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 									  field069: data.field069,
 									  field070: data.field070, 
 									  field071: data.field071, 
-									  
+									   field072: data.field072, 
+									    field073: data.field073, 
 									  note_timestamp: data.note_timestamp,
 									smartcard_uid: data.smartcard_uid?data.smartcard_uid.uid:null,
 									bizcard_option: data.bizcard_option,
@@ -280,7 +281,9 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	  { header: "mshotline_tel", key: "field068", width: 25 },
 	  { header: "mshotline_tel2", key: "field069", width: 25 },
 	  { header: "mshotline_tel3", key: "field070", width: 25 },
-	   
+	   { header: "2_company_position", key: "field072", width: 25 },
+	  { header: "2_company_position2", key: "field073", width: 25 },
+	  
 	  { header: "note_timestamp", key: "note_timestamp", width: 25 },
 	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },

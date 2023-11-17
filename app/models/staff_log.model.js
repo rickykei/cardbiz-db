@@ -114,6 +114,8 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  field069: String,
 	  field070: String, 
 	  field071: String, 
+	  field072: String, 
+	  field073: String, 
 	 
 	  note_timestamp: Boolean,
 	  smartcard_uid: {

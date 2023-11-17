@@ -115,6 +115,8 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  field068: row[y++],
 		  field069: row[y++],
 		  field070: row[y++], 
+		  field072: row[y++], 
+		  field073: row[y++], 
 		  
 		  bizcard_option: row[y++],
 		    
@@ -261,6 +263,8 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
+									  field072: data.field072, 
+									  field073: data.field073, 
 									  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
@@ -399,7 +403,8 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  field068: data.field068,
 												  field069: data.field069,
 												  field070: data.field070, 
-												   
+												   field072: data.field072, 
+												   field073: data.field073, 
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
 												  
@@ -541,6 +546,8 @@ exports.uploadStaffExcelAddOnly =  (req, res) => {
 		  field068: row[y++],
 		  field069: row[y++],
 		  field070: row[y++], 
+		  field072: row[y++],
+		  field073: row[y++],
 		  additional_info: row[y++], 
 		 
 		  bizcard_option: row[y++],
@@ -686,6 +693,8 @@ exports.downloadStaffExcel =  (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
+									  field072: data.field072, 
+									  field073: data.field073, 
 									  
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
@@ -787,6 +796,8 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "mshotline_tel", key: "field068", width: 25 },
 	  { header: "mshotline_tel2", key: "field069", width: 25 },
 	  { header: "mshotline_tel3", key: "field070", width: 25 },
+	   { header: "2_company_position", key: "field072", width: 25 },
+	    { header: "2_company_position2", key: "field073", width: 25 },
 	   { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	 
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
@@ -954,6 +965,8 @@ exports.uploadStaffJson =  async (req, res) => {
 									  field068: data.field068,
 									  field069: data.field069,
 									  field070: data.field070, 
+									 field072: data.field072, 
+									 field073: data.field073, 
 									 
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
@@ -1092,7 +1105,8 @@ exports.uploadStaffJson =  async (req, res) => {
 												  field068: data.field068,
 												  field069: data.field069,
 												  field070: data.field070, 
-												  
+												  field072: data.field072, 
+												  field073: data.field073, 
 												  smartcard_uid: data.smartcard_uid,
 												  bizcard_option: data.bizcard_option,
 												  
