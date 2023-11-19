@@ -46,92 +46,86 @@ exports.uploadStaffExcel =  async (req, res) => {
 		let y=0;	
         var staff = {
 		  company_id: company_id,
+		  cc_no:row[y++],
 		  staff_no:row[y++],
-		  company_name_option:row[y++], 
-		  company_name_eng2: row[y++],
-		  company_name_chi2: row[y++],
-	      company_name_eng3: row[y++],
-	      company_name_chi3: row[y++],
-          cc_no:row[y++],
+		  status:row[y++],
 		  fname: row[y++],
 		  lname: row[y++],
+		  pro_title:row[y++],
+		  field071:row[y++],
 		  title_eng:row[y++],
 		  title_chi:row[y++],
 		  title_eng2:row[y++],
 		  title_chi2:row[y++],
-		  pro_title:row[y++],
-		  field071:row[y++],
-		  division_eng:row[y++],
-		  division_chi: row[y++],
+		  field066: row[y++],
 		  dept_eng:row[y++],
 		  dept_chi: row[y++],
+		  division_eng:row[y++],
+		  division_chi: row[y++],
+		  company_name_option:row[y++], 
+		  company_name_eng2: row[y++],
+		  company_name_chi2: row[y++],
+		  field072: row[y++], 
+		  field073: row[y++],  
+	      company_name_eng3: row[y++],
+	      company_name_chi3: row[y++],
+          field069: row[y++],
+		  field070: row[y++], 
+		  hkma_no: row[y++],
+		 type1_no: row[y++],
+		  type4_no: row[y++],
+		  type6_no: row[y++],
+		  type9_no: row[y++],
+		   mpf_no: row[y++],
+		    agent_no: row[y++],
+			insurance_no: row[y++],
+			 sfc_no: row[y++],
+		  sfc_type1_no: row[y++],
+		  sfc_type2_no: row[y++],
+		   bloomberg_info:row[y++],
+		   reuters_code: row[y++],
+		   field052: row[y++],
+		    field054: row[y++],
+			field055: row[y++],
+			  field051: row[y++],
+		    field053: row[y++],
+		   swift_no: row[y++],
+		    work_tel: row[y++],
+		  work_tel2: row[y++],
+		  work_tel3: row[y++],
+		  direct_tel: row[y++],
+		   mobile: row[y++],
+		  mobile2: row[y++],
+		  mobile3: row[y++],
+		   mobile_china_tel: row[y++],
+		  mobile_china_tel2: row[y++],
+		  mobile_china_tel3: row[y++],
+		  field068: row[y++],
+		  work_email: row[y++],
+		  work_email2: row[y++],
+		  work_email3: row[y++],
+		  fax: row[y++],
 		  address_eng: row[y++],
 		  address_chi: row[y++],
 		  address_eng2: row[y++],
 		  address_chi2: row[y++],
-		  work_tel: row[y++],
-		  work_tel2: row[y++],
-		  work_tel3: row[y++],
-		  direct_tel: row[y++],
-		  direct_tel2: row[y++],
-		  direct_tel3: row[y++],
-		  mobile: row[y++],
-		  mobile2: row[y++],
-		  mobile3: row[y++],
-		  mobile_china_tel: row[y++],
-		  mobile_china_tel2: row[y++],
-		  mobile_china_tel3: row[y++],
-		  fax: row[y++],
-		  swift_no: row[y++],
-		  work_email: row[y++],
-		  work_email2: row[y++],
-		  work_email3: row[y++],
 		  web_link: row[y++],
-		  web_link_label: row[y++],
-		  web_link2: row[y++],
-		  web_link_label2: row[y++],
-		  web_link3: row[y++],
-		  web_link_label3: row[y++],
-		  agent_no: row[y++],
-		  insurance_no: row[y++],
-		  mpf_no: row[y++],
-		  hkma_no: row[y++],
-		  type1_no: row[y++],
-		  type4_no: row[y++],
-		  type6_no: row[y++],
-		  type9_no: row[y++],
-		  reuters_code: row[y++],
-		  bloomberg_info:row[y++],
-		  sfc_no: row[y++],
-		  sfc_type1_no: row[y++],
-		  sfc_type2_no: row[y++],
-		  field051: row[y++],
-		  field052: row[y++],
-		  field053: row[y++],
-		  field054: row[y++],
-		  field055: row[y++],
+		   web_link2: row[y++],
+		   web_link3: row[y++],
+		   bizcard_option: row[y++],
+		qrcode_option: row[y++],
 		  field056: row[y++],
 		  field057: row[y++],
 		  field058: row[y++],
 		  field059: row[y++],
 		  field060: row[y++],
-		  field061: row[y++],
+		 field065: row[y++],
+		  field067: row[y++],
+		   field061: row[y++],
 		  field062: row[y++],
 		  field063: row[y++],
-		  field064: row[y++],
-		  field065: row[y++],
-		  field066: row[y++],
-		  field067: row[y++],
-		  field068: row[y++],
-		  field069: row[y++],
-		  field070: row[y++], 
-		  field072: row[y++], 
-		  field073: row[y++], 
-		  
-		  bizcard_option: row[y++],
-		    
-		  qrcode_option: row[y++],
-		  status:row[y++],
+		  field064: row[y++], 
+		 
         };
 
         staffs.push(staff);
@@ -221,8 +215,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
+									  
 									  mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
@@ -235,11 +228,11 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  work_email2: data.work_email2,
 									  work_email3: data.work_email2,
 									  web_link: data.web_link,
-									  web_link_label: data.web_link_label,
+									  
 									  web_link2: data.web_link2,
-									  web_link_label2: data.web_link_label2,
+									  
 									  web_link3: data.web_link3,
-									  web_link_label3: data.web_link_label3,
+									  
 									  agent_no: data.agent_no,
 									  insurance_no: data.insurance_no,
 									  mpf_no: data.mpf_no,
@@ -361,8 +354,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  work_tel2: data.work_tel2,
 												  work_tel3: data.work_tel3,
 												  direct_tel: data.direct_tel,
-												  direct_tel2: data.direct_tel2,
-												  direct_tel3: data.direct_tel3,
+												 
 												  mobile: data.mobile,
 												  mobile2: data.mobile2,
 												  mobile3: data.mobile3,
@@ -375,11 +367,11 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  work_email2: data.work_email2,
 												  work_email3: data.work_email2,
 												  web_link: data.web_link,
-												   web_link_label: data.web_link_label,
+												   
 												  web_link2: data.web_link2,
-												  web_link_label2: data.web_link_label2,
+												 
 												  web_link3: data.web_link3,
-												  web_link_label3: data.web_link_label3,
+												 
 												  agent_no: data.agent_no,
 												  insurance_no: data.insurance_no,
 												  mpf_no: data.mpf_no,
@@ -651,8 +643,7 @@ exports.downloadStaffExcel =  (req, res) => {
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
+									  
 									  mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
@@ -665,11 +656,11 @@ exports.downloadStaffExcel =  (req, res) => {
 									  work_email2: data.work_email2,
 									  work_email3: data.work_email2,
 									  web_link: data.web_link,
-									  web_link_label: data.web_link_label,
+									 
 									  web_link2: data.web_link2,
-									  web_link_label2: data.web_link_label2,
+									  
 									  web_link3: data.web_link3,
-									  web_link_label3: data.web_link_label3,
+									 
 									  agent_no: data.agent_no,
 									  insurance_no: data.insurance_no,
 									  mpf_no: data.mpf_no,
@@ -721,97 +712,88 @@ exports.downloadStaffExcel =  (req, res) => {
  
  
     let workbook = new excel.Workbook();
-    let worksheet = workbook.addWorksheet("Staffs");
+    let worksheet = workbook.addWorksheet("Staffs2023");
 
     worksheet.columns = [
+	{ header: "cc_no", key: "cc_no", width: 25 },
 	{ header: "app_id", key: "staff_no", width: 25 },
+	{ header: "status", key: "status", width: 25 },
+	{ header: "name_eng", key: "fname", width: 25 },
+    { header: "name_chi", key: "lname", width: 25 },
+	{ header: "pro_title", key: "pro_title", width: 25 },
+	{ header: "pro_title2", key: "field071", width: 25 },
+	{ header: "title_eng", key: "title_eng", width: 25 },
+	{ header: "title_chi", key: "title_chi", width: 25 },
+	{ header: "title_eng2", key: "title_eng2", width: 25 },
+	{ header: "title_chi2", key: "title_chi2", width: 25 },
+	{ header: "special_title", key: "field066", width: 25 },
+    { header: "dept_eng", key: "dept_eng", width: 25 },
+	{ header: "dept_chi", key: "dept_chi", width: 25 },
+    { header: "division_eng", key: "division_eng", width: 25 },
+    { header: "division_chi", key: "division_chi", width: 25 },
 	{ header: "company_name_option", key: "company_name_option", width: 25 },
- 
-	{ header: "company_name_eng2", key: "company_name_eng2", width: 25 },
+ 	{ header: "company_name_eng2", key: "company_name_eng2", width: 25 },
 	{ header: "company_name_chi2", key: "company_name_chi2", width: 25 },
+	 { header: "company2_position", key: "field072", width: 25 },
+	{ header: "company2_position2", key: "field073", width: 25 },
 	{ header: "company_name_eng3", key: "company_name_eng3", width: 25 },
 	{ header: "company_name_chi3", key: "company_name_chi3", width: 25 },
- 
-      { header: "cc_no", key: "cc_no", width: 25 },
-      
-	  { header: "name_eng", key: "fname", width: 25 },
-      { header: "name_chi", key: "lname", width: 25 },
-      { header: "title_eng", key: "title_eng", width: 25 },
-	  { header: "title_chi", key: "title_chi", width: 25 },
-	  { header: "title_eng2", key: "title_eng2", width: 25 },
-	  { header: "title_chi2", key: "title_chi2", width: 25 },
-	  { header: "pro_title", key: "pro_title", width: 25 },
-	  { header: "pro_title2", key: "field071", width: 25 },
-      { header: "division_eng", key: "division_eng", width: 25 },
-	  { header: "division_chi", key: "division_chi", width: 25 },
-	  { header: "dept_eng", key: "dept_eng", width: 25 },
-	  { header: "dept_chi", key: "dept_chi", width: 25 },
-	  { header: "address_eng", key: "address_eng", width: 25 },
-	  { header: "address_chi", key: "address_chi", width: 25 },
-	  { header: "address_eng2", key: "address_eng2", width: 25 },
-	  { header: "address_chi2", key: "address_chi2", width: 25 },
+    { header: "company3_position", key: "field069", width: 25 },
+	  { header: "company3_position2", key: "field070", width: 25 },
+	  { header: "hkma_no", key: "hkma_no", width: 25 },
+	  { header: "hkma_type1_no", key: "type1_no", width: 25 },
+	  { header: "hkma_type4_no", key: "type4_no", width: 25 },
+	  { header: "hkma_type6_no", key: "type6_no", width: 25 },
+	  { header: "hkma_type9_no", key: "type9_no", width: 25 },
+	  { header: "mpf_no", key: "mpf_no", width: 25 },
+	  { header: "agent_no", key: "agent_no", width: 25 },
+	  { header: "insurance_no", key: "insurance_no", width: 25 },
+	  { header: "sfc_no", key: "sfc_no", width: 25 },
+	  { header: "sfc_type1_no", key: "sfc_type1_no", width: 25 },
+	  { header: "sfc_type2_no", key: "sfc_type2_no", width: 25 },
+	  { header: "bloomberg_info", key: "bloomberg_info", width: 25 },
+	  { header: "reuters_code", key: "reuters_code", width: 25 },
+	  { header: "estate_agent_individual_no", key: "field052", width: 25 },
+	  { header: "property_tier1_no", key: "field054", width: 25 },
+	  { header: "property_tier2_no", key: "field055", width: 25 },
+	  { header: "estate_agent_company_no", key: "field051", width: 25 },
+	  { header: "property_management_company_no", key: "field053", width: 25 },
+	  { header: "swift_no", key: "swift_no", width: 25 },
 	  { header: "work_tel", key: "work_tel", width: 25 },
 	  { header: "work_tel2", key: "work_tel2", width: 25 },
 	  { header: "work_tel3", key: "work_tel3", width: 25 },
 	  { header: "direct_tel", key: "direct_tel", width: 25 },
-	  { header: "direct_tel2", key: "direct_tel2", width: 25 },
-	  { header: "direct_tel3", key: "direct_tel3", width: 25 },
 	  { header: "mobile_tel", key: "mobile_tel", width: 25 },
 	  { header: "mobile_tel2", key: "mobile_tel2", width: 25 },
 	  { header: "mobile_tel3", key: "mobile_tel3", width: 25 },
 	  { header: "mobile_china_tel", key: "mobile_china_tel", width: 25 },
 	  { header: "mobile_china_tel2", key: "mobile_china_tel2", width: 25 },
 	  { header: "mobile_china_tel3", key: "mobile_china_tel3", width: 25 },
-	  { header: "fax_no", key: "fax_no", width: 25 },
-	  { header: "swift_no", key: "swift_no", width: 25 },
+	  { header: "mshotline_tel", key: "field068", width: 25 },
 	  { header: "work_email", key: "work_email", width: 25 },
 	  { header: "work_email2", key: "work_email2", width: 25 },
 	  { header: "work_email3", key: "work_email3", width: 25 },
+	  { header: "fax_no", key: "fax_no", width: 25 },
+	  { header: "address_eng", key: "address_eng", width: 25 },
+	  { header: "address_chi", key: "address_chi", width: 25 },
+	  { header: "address_eng2", key: "address_eng2", width: 25 },
+	  { header: "address_chi2", key: "address_chi2", width: 25 }, 
 	  { header: "website", key: "web_link", width: 25 },
-	  { header: "website_title", key: "web_link_label", width: 25 },
-	  { header: "website2", key: "web_link2", width: 25 },
-	  { header: "website_title2", key: "web_link_label2", width: 25 },
+      { header: "website2", key: "web_link2", width: 25 },
 	  { header: "website3", key: "web_link3", width: 25 },
-	 { header: "website_title3", key: "web_link_label3", width: 25 },
-	  { header: "agent_no", key: "agent_no", width: 25 },
-	  { header: "insurance_no", key: "insurance_no", width: 25 },
-	  { header: "mpf_no", key: "mpf_no", width: 25 },
-	  { header: "hkma_no", key: "hkma_no", width: 25 },
-	  { header: "hkma_type1_no", key: "type1_no", width: 25 },
-	  { header: "hkma_type4_no", key: "type4_no", width: 25 },
-	  { header: "hkma_type6_no", key: "type6_no", width: 25 },
-	    { header: "hkma_type9_no", key: "type9_no", width: 25 },
-	  { header: "reuters_code", key: "reuters_code", width: 25 },
-	  { header: "bloomberg_info", key: "bloomberg_info", width: 25 },
-	  { header: "sfc_no", key: "sfc_no", width: 25 },
-	  { header: "sfc_type1_no", key: "sfc_type1_no", width: 25 },
-	  { header: "sfc_type2_no", key: "sfc_type2_no", width: 25 },
-	  { header: "estate_agent_company_no", key: "field051", width: 25 },
-	  { header: "estate_agent_individual_no", key: "field052", width: 25 },
-	  { header: "property_management_company_no", key: "field053", width: 25 },
-	  { header: "property_tier1_no", key: "field054", width: 25 },
-	  { header: "property_tier2_no", key: "field055", width: 25 },
+	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
+	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
 	  { header: "additional_info", key: "field056", width: 25 },
 	  { header: "additional_info2", key: "field057", width: 25 },
 	  { header: "additional_info3", key: "field058", width: 25 },
 	  { header: "additional_info4", key: "field059", width: 25 },
 	  { header: "additional_info5", key: "field060", width: 25 },
-	  { header: "additional_info6", key: "field061", width: 25 },
+	  { header: "additional_info10", key: "field065", width: 25 }, 
+	  { header: "additional_info12", key: "field067", width: 25 },
+	    { header: "additional_info6", key: "field061", width: 25 },
 	  { header: "additional_info7", key: "field062", width: 25 },
 	  { header: "additional_info8", key: "field063", width: 25 },
-	  { header: "additional_info9", key: "field064", width: 25 },
-	  { header: "additional_info10", key: "field065", width: 25 },
-	  { header: "additional_info11", key: "field066", width: 25 },
-	  { header: "additional_info12", key: "field067", width: 25 },
-	  { header: "mshotline_tel", key: "field068", width: 25 },
-	  { header: "mshotline_tel2", key: "field069", width: 25 },
-	  { header: "mshotline_tel3", key: "field070", width: 25 },
-	   { header: "2_company_position", key: "field072", width: 25 },
-	    { header: "2_company_position2", key: "field073", width: 25 },
-	   { header: "bizcard_option", key: "bizcard_option", width: 25 },
-	 
-	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
-	  { header: "status", key: "status", width: 25 },
+	  { header: "additional_info9", key: "field064", width: 25 }, 
     ];
 
     // Add Array Rows
@@ -823,7 +805,7 @@ exports.downloadStaffExcel =  (req, res) => {
     );
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=" + "staffs.xlsx"
+      "attachment; filename=" + "staffs2023.xlsx"
     );
 
     return workbook.xlsx.write(res).then(function () {
@@ -834,6 +816,20 @@ exports.downloadStaffExcel =  (req, res) => {
 
 
 exports.uploadStaffJson =  async (req, res) => {
+	 
+	 
+ function renameKey ( obj, oldKey, newKey ) {
+  obj[newKey] = obj[oldKey];
+  delete obj[oldKey];
+}
+
+
+   var requestIP = req.header('x-forwarded-for');
+	console.log('ip');
+	console.log(requestIP);
+    if(global.trustedIps.indexOf(requestIP) >= 0) {
+        // do stuff
+  
  try{
 	 //console.log(req.body[0]); 
 	 console.log("count of staff records:");
@@ -843,7 +839,46 @@ exports.uploadStaffJson =  async (req, res) => {
 	 var xls_staffs = [];
       var new_staffs = [];
 	  var old_staffs = [];
- 
+	  
+	  
+		console.log("-=------------req body start---------=");
+		console.log(req.body); 
+		console.log("-=------------req body end---------=");
+		 // convert req json body to staff Array
+		 
+		 req.body.forEach( obj => renameKey( obj, 'name_eng', 'fname' ) );
+		req.body.forEach( obj => renameKey( obj, 'name_chi', 'lname' ) );
+		req.body.forEach( obj => renameKey( obj, 'estate_agent_company_no', 'field051' ) );
+		req.body.forEach( obj => renameKey( obj, 'estate_agent_individual_no', 'field052' ) );
+		
+		req.body.forEach( obj => renameKey( obj, 'property_management_company_no', 'field053' ) );
+		req.body.forEach( obj => renameKey( obj, 'property_tier1_no', 'field054' ) );
+		req.body.forEach( obj => renameKey( obj, 'property_tier2_no', 'field055' ) );
+		 
+		req.body.forEach( obj => renameKey( obj, 'additional_info', 'field056' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info2', 'field057' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info3', 'field058' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info4', 'field059' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info5', 'field060' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info6', 'field061' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info7', 'field062' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info8', 'field063' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info9', 'field064' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info10', 'field065' ) );
+		req.body.forEach( obj => renameKey( obj, 'special_title', 'field066' ) );
+		req.body.forEach( obj => renameKey( obj, 'additional_info12', 'field067' ) );
+		req.body.forEach( obj => renameKey( obj, 'mshotline_tel', 'field068' ) );
+		req.body.forEach( obj => renameKey( obj, 'company3_position', 'field069' ) );
+		req.body.forEach( obj => renameKey( obj, 'company3_position2', 'field070' ) );
+		req.body.forEach( obj => renameKey( obj, 'pro_title2', 'field071' ) );
+		req.body.forEach( obj => renameKey( obj, 'company2_position', 'field072' ) );
+		req.body.forEach( obj => renameKey( obj, 'company2_position2', 'field073' ) );
+		const updatedJson = req.body;
+		 // convert req json body to staff Array
+		 
+		console.log("-=------------req body start converted---------=");
+		console.log(updatedJson); 
+		console.log("-=------------req body end converted---------=");
 	for ( i in req.body ){
 		  var query ={};
 		   query.company_id =  ObjectId(BeaCompanyId);
@@ -923,8 +958,7 @@ exports.uploadStaffJson =  async (req, res) => {
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
+						 
 									  mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
@@ -937,11 +971,9 @@ exports.uploadStaffJson =  async (req, res) => {
 									  work_email2: data.work_email2,
 									  work_email3: data.work_email2,
 									  web_link: data.web_link,
-									  web_link_label: data.web_link_label,
-									  web_link2: data.web_link2,
-									  web_link_label2: data.web_link_label2,
-									  web_link3: data.web_link3,
-									  web_link_label3: data.web_link_label3,
+									   web_link2: data.web_link2,
+									   web_link3: data.web_link3,
+									  
 									  agent_no: data.agent_no,
 									  insurance_no: data.insurance_no,
 									  mpf_no: data.mpf_no,
@@ -976,11 +1008,9 @@ exports.uploadStaffJson =  async (req, res) => {
 									  field069: data.field069,
 									  field070: data.field070, 
 									 field072: data.field072, 
-									 field073: data.field073, 
-									 
+									 field073: data.field073,  
 									  smartcard_uid: data.smartcard_uid,
 									  bizcard_option: data.bizcard_option,
-									   
 									  qrcode_option: data.qrcode_option,
 									  profile_counter: data.profile_counter,
 									  vcf_counter: data.vcf_counter,
@@ -1063,8 +1093,7 @@ exports.uploadStaffJson =  async (req, res) => {
 												  work_tel2: data.work_tel2,
 												  work_tel3: data.work_tel3,
 												  direct_tel: data.direct_tel,
-												  direct_tel2: data.direct_tel2,
-												  direct_tel3: data.direct_tel3,
+												  
 												  mobile: data.mobile,
 												  mobile2: data.mobile2,
 												  mobile3: data.mobile3,
@@ -1077,11 +1106,11 @@ exports.uploadStaffJson =  async (req, res) => {
 												  work_email2: data.work_email2,
 												  work_email3: data.work_email2,
 												  web_link: data.web_link,
-												   web_link_label: data.web_link_label,
+												 
 												  web_link2: data.web_link2,
-												  web_link_label2: data.web_link_label2,
+												 
 												  web_link3: data.web_link3,
-												  web_link_label3: data.web_link_label3,
+											 
 												  agent_no: data.agent_no,
 												  insurance_no: data.insurance_no,
 												  mpf_no: data.mpf_no,
@@ -1154,11 +1183,22 @@ exports.uploadStaffJson =  async (req, res) => {
       message: "Could not upload the json file: ",
     });
   }
+    } else {
+        // handle unallowed ip
+		res.status(500).send({
+			message: "Could not upload the json file: ip not allowed ",
+		});
+    }
 };
 
 
 exports.downloadStaffJson =  (req, res) => {
 	console.log("downloadStaffJson");
+		  
+    var requestIP = req.header('x-forwarded-for');
+	console.log("requestIp"+requestIP);
+    if(global.trustedIps.indexOf(requestIP) >= 0) {
+        // do stuff
 	 const { company_id  } = req.query;
 	  let query={};
 	if (company_id == undefined || company_id =="") {
@@ -1188,101 +1228,86 @@ exports.downloadStaffJson =  (req, res) => {
 		 
 		
       staffs.push({
-		  
-								staff_no: data.staff_no,
-								 company_name_option:data.company_name_option,
-								 
-									company_name_eng2: data.company_name_eng2,
-									company_name_chi2: data.company_name_chi2,
-									company_name_eng3: data.company_name_eng3,
-									company_name_chi3: data.company_name_chi3,
-									 cc_no: data.cc_no,
-									 
-									  fname: data.fname,
-									lname: data.lname,
-									 
-									  title_eng: data.title_eng,
+		  cc_no: data.cc_no,
+		  staff_no: data.staff_no,
+			status: data.status,						 
+					  name_eng: data.fname,
+									name_chi: data.lname,	
+								pro_title: data.pro_title,		
+								  pro_title2: data.field071,	
+								 title_eng: data.title_eng,
 									  title_chi: data.title_chi,
 									  title_eng2: data.title_eng2,
-									  title_chi2: data.title_chi2,
-									  pro_title: data.pro_title,
-									  field071: data.field071,
-									  division_eng: data.division_eng,
-									  division_chi: data.division_chi,
-									  dept_eng: data.dept_eng,
+									  title_chi2: data.title_chi2,  
+									  special_title: data.field066,
+									    dept_eng: data.dept_eng,
 									  dept_chi: data.dept_chi,
-									  address_eng: data.address_eng,
-									  address_chi: data.address_chi,
-									  address_eng2: data.address_eng2,
-									  address_chi2: data.address_chi2,
+									   division_eng: data.division_eng,
+									  division_chi: data.division_chi,
+								 company_name_option:data.company_name_option, 
+									company_name_eng2: data.company_name_eng2,
+									company_name_chi2: data.company_name_chi2,
+									company2_position: data.field072, 
+									company2_position2: data.field073,  
+									company_name_eng3: data.company_name_eng3,
+									company_name_chi3: data.company_name_chi3,
+									 company3_position: data.field069,
+									 company3_position2: data.field070, 
+									 hkma_no: data.hkma_no,
+									 type1_no: data.type1_no,
+									  type4_no: data.type4_no,
+									  type6_no: data.type6_no,
+									  type9_no: data.type9_no,
+									   mpf_no: data.mpf_no,
+									   agent_no: data.agent_no,
+									   insurance_no: data.insurance_no,
+									    sfc_no: data.sfc_no,
+									   sfc_type1_no: data.sfc_type1_no,
+									  sfc_type2_no: data.sfc_type2_no,
+									  bloomberg_info: data.bloomberg_info,
+									   reuters_code: data.reuters_code,
+									    estate_agent_individual_no: data.field052,
+										property_tier1_no: data.field054,
+										 property_tier2_no: data.field055,
+										estate_agent_company_no: data.field051, 
+									  property_management_company_no: data.field053,
+									  swift_no: data.swift_no,
 									  work_tel: data.work_tel,
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
-									  mobile: data.mobile,
+									   mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
 									  mobile_china_tel: data.mobile_china_tel,
 									  mobile_china_tel2: data.mobile_china_tel2,
 									  mobile_china_tel3: data.mobile_china_tel3,
-									  fax: data.fax,
-									  swift_no: data.swift_no,
+									  mshotline_tel: data.field068,
 									  work_email: data.work_email,
 									  work_email2: data.work_email2,
 									  work_email3: data.work_email2,
+									  fax: data.fax, 
+									  address_eng: data.address_eng,
+									  address_chi: data.address_chi,
+									  address_eng2: data.address_eng2,
+									  address_chi2: data.address_chi2, 
 									  web_link: data.web_link,
-									  web_link_label: data.web_link_label,
 									  web_link2: data.web_link2,
-									  web_link_label2: data.web_link_label2,
 									  web_link3: data.web_link3,
-									  web_link_label3: data.web_link_label3,
-									  agent_no: data.agent_no,
-									  insurance_no: data.insurance_no,
-									  mpf_no: data.mpf_no,
-									  hkma_no: data.hkma_no,
-									  type1_no: data.type1_no,
-									  type4_no: data.type4_no,
-									  type6_no: data.type6_no,
-									  type9_no: data.type9_no,
-									  reuters_code: data.reuters_code,
-									  bloomberg_info: data.bloomberg_info,
-									  sfc_no: data.sfc_no,
-									   sfc_type1_no: data.sfc_type1_no,
-									  sfc_type2_no: data.sfc_type2_no,
-									  field051: data.field051,
-									  field052: data.field052,
-									  field053: data.field053,
-									  field054: data.field054,
-									  field055: data.field055,
-									  field056: data.field056,
-									  field057: data.field057,
-									  field058: data.field058,
-									  field059: data.field059,
-									  field060: data.field060,
-									  field061: data.field061,
-									  field062: data.field062,
-									  field063: data.field063,
-									  field064: data.field064,
-									  field065: data.field065,
-									  field066: data.field066,
-									  field067: data.field067,
-									  field068: data.field068,
-									  field069: data.field069,
-									  field070: data.field070, 
-									  field072: data.field072, 
-									  field073: data.field073, 
-									  
-												  smartcard_uid: data.smartcard_uid,
-												  bizcard_option: data.bizcard_option,
-												  
-												  qrcode_option: data.qrcode_option,
-												  profile_counter: data.profile_counter,
-												  vcf_counter: data.vcf_counter,
-												 
-												  status: data.status, 
-												  profile_url: global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678")),
+									  bizcard_option: data.bizcard_option,
+									  qrcode_option: data.qrcode_option,
+									  additional_info: data.field056,
+									  additional_info2: data.field057,
+									  additional_info3: data.field058,
+									  additional_info4: data.field059,
+									  additional_info5: data.field060,
+									  additional_info6: data.field061,
+									  additional_info7: data.field062,
+									  additional_info8: data.field063,
+									  additional_info9: data.field064, 
+									  additional_info10: data.field065,
+									  additional_info12: data.field067, 
+									 profile_url: global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678")),
          
       });
     });
@@ -1293,4 +1318,10 @@ exports.downloadStaffJson =  (req, res) => {
      res.send({message: "done",staffs});
  
   });
+     } else {
+        // handle unallowed ip
+		res.status(500).send({
+			message: "Could not upload the json file: ip not allowed ",
+		});
+    }
 };

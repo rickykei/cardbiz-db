@@ -61,8 +61,7 @@ exports.create = async (req, res) => {
 	  work_tel2: req.body.work_tel2,
 	  work_tel3: req.body.work_tel3,
 	  direct_tel: req.body.direct_tel,
-	  direct_tel2: req.body.direct_tel2,
-	  direct_tel3: req.body.direct_tel3,
+	  
 	  mobile: req.body.mobile,
 	  mobile2: req.body.mobile2,
 	  mobile3: req.body.mobile3,
@@ -77,9 +76,7 @@ exports.create = async (req, res) => {
 	  web_link: req.body.web_link,
 	  web_link2: req.body.web_link2,
 	  web_link3: req.body.web_link3,
-	  web_link_label: req.body.web_link_label,
-	  web_link_label2: req.body.web_link_label2,
-	  web_link_label3: req.body.web_link_label3,
+	  
 	  agent_no: req.body.agent_no,
 	  insurance_no: req.body.insurance_no,
 	  mpf_no: req.body.mpf_no,
@@ -201,8 +198,7 @@ exports.create = async (req, res) => {
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
+									 
 									  mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
@@ -217,9 +213,7 @@ exports.create = async (req, res) => {
 									  web_link: data.web_link,
 									  web_link2: data.web_link2,
 									  web_link3: data.web_link3,
-									  web_link_label: data.web_link_label,
-									  web_link_label2: data.web_link_label2,
-									  web_link_label3: data.web_link_label3,
+									 
 									  agent_no: data.agent_no,
 									  insurance_no: data.insurance_no,
 									  mpf_no: data.mpf_no,
@@ -519,8 +513,7 @@ console.log("update id");
 									  work_tel2: data.work_tel2,
 									  work_tel3: data.work_tel3,
 									  direct_tel: data.direct_tel,
-									  direct_tel2: data.direct_tel2,
-									  direct_tel3: data.direct_tel3,
+									  
 									  mobile: data.mobile,
 									  mobile2: data.mobile2,
 									  mobile3: data.mobile3,
@@ -535,9 +528,7 @@ console.log("update id");
 									  web_link: data.web_link,
 									  web_link2: data.web_link2,
 									  web_link3: data.web_link3,
-									  web_link_label: data.web_link_label,
-									  web_link_label2: data.web_link_label2,
-									  web_link_label3: data.web_link_label3,
+									 
 									  agent_no: data.agent_no,
 									  insurance_no: data.insurance_no,
 									  mpf_no: data.mpf_no,
