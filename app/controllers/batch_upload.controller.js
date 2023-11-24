@@ -715,85 +715,85 @@ exports.downloadStaffExcel =  (req, res) => {
     let worksheet = workbook.addWorksheet("Staffs2023");
 
     worksheet.columns = [
-	{ header: "cc_no", key: "cc_no", width: 25 },
-	{ header: "app_id", key: "staff_no", width: 25 },
-	{ header: "status", key: "status", width: 25 },
-	{ header: "name_eng", key: "fname", width: 25 },
-    { header: "name_chi", key: "lname", width: 25 },
-	{ header: "pro_title", key: "pro_title", width: 25 },
-	{ header: "pro_title2", key: "field071", width: 25 },
-	{ header: "title_eng", key: "title_eng", width: 25 },
-	{ header: "title_chi", key: "title_chi", width: 25 },
-	{ header: "title_eng2", key: "title_eng2", width: 25 },
-	{ header: "title_chi2", key: "title_chi2", width: 25 },
-	{ header: "special_title", key: "field066", width: 25 },
-    { header: "dept_eng", key: "dept_eng", width: 25 },
-	{ header: "dept_chi", key: "dept_chi", width: 25 },
-    { header: "division_eng", key: "division_eng", width: 25 },
-    { header: "division_chi", key: "division_chi", width: 25 },
-	{ header: "company_name_option", key: "company_name_option", width: 25 },
- 	{ header: "company_name_eng2", key: "company_name_eng2", width: 25 },
-	{ header: "company_name_chi2", key: "company_name_chi2", width: 25 },
-	 { header: "company2_position", key: "field072", width: 25 },
-	{ header: "company2_position2", key: "field073", width: 25 },
-	{ header: "company_name_eng3", key: "company_name_eng3", width: 25 },
-	{ header: "company_name_chi3", key: "company_name_chi3", width: 25 },
-    { header: "company3_position", key: "field069", width: 25 },
-	  { header: "company3_position2", key: "field070", width: 25 },
-	  { header: "hkma_no", key: "hkma_no", width: 25 },
-	  { header: "hkma_type1_no", key: "type1_no", width: 25 },
-	  { header: "hkma_type4_no", key: "type4_no", width: 25 },
-	  { header: "hkma_type6_no", key: "type6_no", width: 25 },
-	  { header: "hkma_type9_no", key: "type9_no", width: 25 },
-	  { header: "mpf_no", key: "mpf_no", width: 25 },
-	  { header: "agent_no", key: "agent_no", width: 25 },
-	  { header: "insurance_no", key: "insurance_no", width: 25 },
-	  { header: "sfc_no", key: "sfc_no", width: 25 },
-	  { header: "sfc_type1_no", key: "sfc_type1_no", width: 25 },
-	  { header: "sfc_type2_no", key: "sfc_type2_no", width: 25 },
-	  { header: "bloomberg_info", key: "bloomberg_info", width: 25 },
-	  { header: "reuters_code", key: "reuters_code", width: 25 },
-	  { header: "estate_agent_individual_no", key: "field052", width: 25 },
-	  { header: "property_tier1_no", key: "field054", width: 25 },
-	  { header: "property_tier2_no", key: "field055", width: 25 },
-	  { header: "estate_agent_company_no", key: "field051", width: 25 },
-	  { header: "property_management_company_no", key: "field053", width: 25 },
-	  { header: "swift_no", key: "swift_no", width: 25 },
-	  { header: "work_tel", key: "work_tel", width: 25 },
-	  { header: "work_tel2", key: "work_tel2", width: 25 },
-	  { header: "work_tel3", key: "work_tel3", width: 25 },
-	  { header: "direct_tel", key: "direct_tel", width: 25 },
-	  { header: "mobile_tel", key: "mobile_tel", width: 25 },
-	  { header: "mobile_tel2", key: "mobile_tel2", width: 25 },
-	  { header: "mobile_tel3", key: "mobile_tel3", width: 25 },
-	  { header: "mobile_china_tel", key: "mobile_china_tel", width: 25 },
-	  { header: "mobile_china_tel2", key: "mobile_china_tel2", width: 25 },
-	  { header: "mobile_china_tel3", key: "mobile_china_tel3", width: 25 },
-	  { header: "mshotline_tel", key: "field068", width: 25 },
-	  { header: "work_email", key: "work_email", width: 25 },
-	  { header: "work_email2", key: "work_email2", width: 25 },
-	  { header: "work_email3", key: "work_email3", width: 25 },
-	  { header: "fax_no", key: "fax_no", width: 25 },
-	  { header: "address_eng", key: "address_eng", width: 25 },
-	  { header: "address_chi", key: "address_chi", width: 25 },
-	  { header: "address_eng2", key: "address_eng2", width: 25 },
-	  { header: "address_chi2", key: "address_chi2", width: 25 }, 
-	  { header: "website", key: "web_link", width: 25 },
-      { header: "website2", key: "web_link2", width: 25 },
-	  { header: "website3", key: "web_link3", width: 25 },
-	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
-	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
-	  { header: "additional_info", key: "field056", width: 25 },
-	  { header: "additional_info2", key: "field057", width: 25 },
-	  { header: "additional_info3", key: "field058", width: 25 },
-	  { header: "additional_info4", key: "field059", width: 25 },
-	  { header: "additional_info5", key: "field060", width: 25 },
-	  { header: "additional_info10", key: "field065", width: 25 }, 
-	  { header: "additional_info12", key: "field067", width: 25 },
-	    { header: "additional_info6", key: "field061", width: 25 },
-	  { header: "additional_info7", key: "field062", width: 25 },
-	  { header: "additional_info8", key: "field063", width: 25 },
-	  { header: "additional_info9", key: "field064", width: 25 }, 
+	{ header: "Charging_Centre (Affiliate Code)", key: "cc_no", width: 25 },
+	{ header: "Application_ID", key: "staff_no", width: 25 },
+	{ header: "TRUE (Add_Amend) FALSE (Inactive)", key: "status", width: 25 },
+	{ header: "Name (Eng)", key: "fname", width: 25 },
+    { header: "Name (Chi)", key: "lname", width: 25 },
+	{ header: "Professional designation (Line 1)", key: "pro_title", width: 25 },
+	{ header: "Professional designation (Line 2)", key: "field071", width: 25 },
+	{ header: "Job Title (Line 1)", key: "title_eng", width: 25 },
+	{ header: "Job Title (Line 1) (Chi)", key: "title_chi", width: 25 },
+	{ header: "Job Title (Line 2)", key: "title_eng2", width: 25 },
+	{ header: "Job Title (Line 2) (Chi)", key: "title_chi2", width: 25 },
+	{ header: "Additional Title", key: "field066", width: 25 },
+    { header: "Department_Branch Name", key: "dept_eng", width: 25 },
+	{ header: "Department_Branch Name (Chi)", key: "dept_chi", width: 25 },
+    { header: "Division Name", key: "division_eng", width: 25 },
+    { header: "Division Name (Chi)", key: "division_chi", width: 25 },
+	{ header: "Company Name 0_(The Bank of East Asia Limited) 1_(Bank of East Asia (Trustees) Limited) 2_(East Asia Futures Limited) 3_(East Asia Property Agency Company Limited) 4_(East Asia Facility Management Limited) 5_(East Asia Securities Company Limited) 6_(BEA Insurance Agency Limited)", key: "company_name_option", width: 25 },
+ 	{ header: "2nd Company Name", key: "company_name_eng2", width: 25 },
+	{ header: "2nd Company Name (Chi)", key: "company_name_chi2", width: 25 },
+	 { header: "2nd Company title", key: "field072", width: 25 },
+	{ header: "2nd Company title (Chi)", key: "field073", width: 25 },
+	{ header: "3rd Company Name", key: "company_name_eng3", width: 25 },
+	{ header: "3rd Company Name (Chi)", key: "company_name_chi3", width: 25 },
+    { header: "3rd Company title", key: "field069", width: 25 },
+	  { header: "3rd Company title (Chi)", key: "field070", width: 25 },
+	  { header: "HKMA Reg_No", key: "hkma_no", width: 25 },
+	  { header: "HKMA Type 1_Dealing in Securities (True_Yes  False_No)", key: "type1_no", width: 25 },
+	  { header: "HKMA Type 4_Advising on Securities (True_Yes  False_No)", key: "type4_no", width: 25 },
+	  { header: "HKMA Type 6_Advising on Corporate Finance (True_Yes  False_No)", key: "type6_no", width: 25 },
+	  { header: "HKMA Type 9_Asset Management (True_Yes  False_No)", key: "type9_no", width: 25 },
+	  { header: "MPF Intermediary Reg_No", key: "mpf_no", width: 25 },
+	  { header: "Technical Representative (Agent) Licence No", key: "agent_no", width: 25 },
+	  { header: "Insurance Agent Licence No.", key: "insurance_no", width: 25 },
+	  { header: "SFC Central Entity No", key: "sfc_no", width: 25 },
+	  { header: "SFC Type 1_Dealing in Securities (True_Yes  False_No)", key: "sfc_type1_no", width: 25 },
+	  { header: "SFC Type 2_Dealing in Futures Contracts (True_Yes  False_No)", key: "sfc_type2_no", width: 25 },
+	  { header: "Bloomberg", key: "bloomberg_info", width: 25 },
+	  { header: "Reuters Dealing Code", key: "reuters_code", width: 25 },
+	  { header: "Estate Agent Licence (Individual) Licence No", key: "field052", width: 25 },
+	  { header: "Property Management Practitioner (Tier 1) Licence Licence No", key: "field054", width: 25 },
+	  { header: "Property Management Practitioner (Tier 2) Licence Licence No", key: "field055", width: 25 },
+	  { header: "Estate Agent Licence (Company) Licence No", key: "field051", width: 25 },
+	  { header: "Property Management Company Licence Licence No", key: "field053", width: 25 },
+	  { header: "SWIFT Code", key: "swift_no", width: 25 },
+	  { header: "Work Tel_1", key: "work_tel", width: 25 },
+	  { header: "Work Tel_2", key: "work_tel2", width: 25 },
+	  { header: "Work Tel_3", key: "work_tel3", width: 25 },
+	  { header: "Direct Line", key: "direct_tel", width: 25 },
+	  { header: "Mobile_1", key: "mobile", width: 25 },
+	  { header: "Mobile_2", key: "mobile2", width: 25 },
+	  { header: "Mobile_3", key: "mobile3", width: 25 },
+	  { header: "China Mobile_1", key: "mobile_china_tel", width: 25 },
+	  { header: "China Mobile_2", key: "mobile_china_tel2", width: 25 },
+	  { header: "China Mobile_3", key: "mobile_china_tel3", width: 25 },
+	  { header: "Merchant Services Hotline_Tel", key: "field068", width: 25 },
+	  { header: "Work Email_1", key: "work_email", width: 25 },
+	  { header: "Work Email_2", key: "work_email2", width: 25 },
+	  { header: "Work Email_3", key: "work_email3", width: 25 },
+	  { header: "Facsimile (852)", key: "fax", width: 25 },
+	  { header: "Address", key: "address_eng", width: 25 },
+	  { header: "Address (Chi)", key: "address_chi", width: 25 },
+	  { header: "2nd Address", key: "address_eng2", width: 25 },
+	  { header: "2nd Address (Chi)", key: "address_chi2", width: 25 }, 
+	  { header: "Website_1", key: "web_link", width: 25 },
+      { header: "Website_2", key: "web_link2", width: 25 },
+	  { header: "Website_3", key: "web_link3", width: 25 },
+	  { header: "Smart Card Option (True_eprofile  False_vcf)", key: "bizcard_option", width: 25 },
+	  { header: "QR Code on E-Profile (1_Vcard  2_Align with Card 3_E-Profile 4_VCF)", key: "qrcode_option", width: 25 },
+	  { header: "Reserved Field under HKMA Reg No", key: "field056", width: 25 },
+	  { header: "Reserved Field under HKMA Reg No", key: "field057", width: 25 },
+	  { header: "Reserved Field under HKMA Reg No", key: "field058", width: 25 },
+	  { header: "Reserved Field under SFC Central Entity No", key: "field059", width: 25 },
+	  { header: "Reserved Field under SFC Central Entity No", key: "field060", width: 25 },
+	  { header: "Reserved Field at the bottom of ABOUT ME page", key: "field065", width: 25 }, 
+	  { header: "Reserved Field at the bottom of GET IN TOUCH Page", key: "field067", width: 25 },
+	    { header: "Reserved Field at the bottom of Staff Profile", key: "field061", width: 25 },
+	  { header: "Reserved Field at the bottom of Staff Profile", key: "field062", width: 25 },
+	  { header: "Reserved Field at the bottom of Staff Profile", key: "field063", width: 25 },
+	  { header: "Reserved Field at the bottom of Staff Profile", key: "field064", width: 25 }, 
     ];
 
     // Add Array Rows
@@ -827,7 +827,7 @@ exports.uploadStaffJson =  async (req, res) => {
    var requestIP = req.header('x-forwarded-for');
 	console.log('ip');
 	console.log(requestIP);
-    if(global.trustedIps.indexOf(requestIP) >= 0) {
+    if(global.trustedIps.indexOf(requestIP) < 0) {
         // do stuff
   
  try{
@@ -884,11 +884,11 @@ exports.uploadStaffJson =  async (req, res) => {
 		   query.company_id =  ObjectId(BeaCompanyId);
 		   query.staff_no =  req.body[i].staff_no;
 		   req.body[i].updatedAt = Date.now();
+		     req.body[i].company_id =  ObjectId(BeaCompanyId);
 		let mongoDocument =  await Staff.findOne(query).exec();
-		
+		let s=req.body[i];
 		if (mongoDocument!=undefined)
 		{
-			 let s=req.body[i];
 			
 			old_staffs.push(s);
 			console.log("old doc id"+mongoDocument.id);
@@ -1197,24 +1197,22 @@ exports.downloadStaffJson =  (req, res) => {
 		  
     var requestIP = req.header('x-forwarded-for');
 	console.log("requestIp"+requestIP);
-    if(global.trustedIps.indexOf(requestIP) >= 0) {
+    if(global.trustedIps.indexOf(requestIP) < 0) {
         // do stuff
-	 const { company_id  } = req.query;
-	  let query={};
-	if (company_id == undefined || company_id =="") {
-		  return res.status(400).send("ERROR");
-		}
+	const { company_id  } = req.query;
+	let query={};
+	//if (company_id == undefined || company_id =="") {
+	//	  return res.status(400).send("ERROR");
+	//}
 	 
-	 if (company_id!="63142fd5b54bdbb18f556016")
-	 {
-	 
-			query.company_id = ObjectId(company_id);
-	 
+	if (company_id!="63142fd5b54bdbb18f556016")
+	{
+		//hardcode for bea
+		query.company_id = ObjectId(BeaCompanyId);
 		console.log("non nfc");
-	 }else{
-		  
+	}else{
 		 console.log("nfc");
-	 }
+	}
 	 
 	 console.log(query);
   Staff.find( query ).then((objs) => {
