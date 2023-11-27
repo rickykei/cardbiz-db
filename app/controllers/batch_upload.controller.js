@@ -291,13 +291,15 @@ exports.uploadStaffExcel =  async (req, res) => {
 			});
 		}else{
 			s.company_id=company_id;
-			new_staffs.push(s);
+			n 
 			console.log("new doc id");
 			
 			 // Save Staff in the database
 			 var staff=new Staff(s);
 			staff.save(s)
 				.then(data => {
+					
+					new_staffs.push(s);
 					 //white action log before send successfully
 					 const actionLog = new Action_log({
 						action: "Batch Create Staff",
@@ -837,8 +839,8 @@ exports.uploadStaffJson =  async (req, res) => {
 	 let total_of_records= Object.keys(req.body).length;
 	  var staffs = [];
 	 var xls_staffs = [];
-      var new_staffs = [];
-	  var old_staffs = [];
+    var new_staffs = [];
+	    var old_staffs = [];
 	  
 	  
 		console.log("-=------------req body start---------=");
@@ -877,31 +879,33 @@ exports.uploadStaffJson =  async (req, res) => {
 		 // convert req json body to staff Array
 		 
 		console.log("-=------------req body start converted---------=");
-		console.log(updatedJson); 
+		//console.log(updatedJson); 
 		console.log("-=------------req body end converted---------=");
 	for ( i in req.body ){
 		  var query ={};
 		   query.company_id =  ObjectId(BeaCompanyId);
 		   query.staff_no =  req.body[i].staff_no;
 		   req.body[i].updatedAt = Date.now();
-		     req.body[i].company_id =  ObjectId(BeaCompanyId);
+		   req.body[i].company_id =  ObjectId(BeaCompanyId);
 		let mongoDocument =  await Staff.findOne(query).exec();
-		let s=req.body[i];
+		var s=req.body[i];
+		
 		if (mongoDocument!=undefined)
 		{
-			
+		s.profile_url=global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(mongoDocument.id,"12345678123456781234567812345678"));
+		
 			old_staffs.push(s);
 			console.log("old doc id"+mongoDocument.id);
 			
 			//batch update excel staff one by one
-			Staff.findByIdAndUpdate(mongoDocument.id, s, {new: true, useFindAndModify: true })
+			await Staff.findByIdAndUpdate(mongoDocument.id, s, {new: true, useFindAndModify: true })
 			.then(data => {
 					if (!data) {
 						res.status(404).send({
 						  message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
 						});
 					} else  {
-				 
+						 
 						//write action log for those updated staff by batchuploader
 						const actionLog = new Action_log({
 							action: "Batch Update Staff Records",
@@ -922,7 +926,7 @@ exports.uploadStaffJson =  async (req, res) => {
 								//backup old staff records to table staff_logs
 								console.log("actionLog save for edit");
 								 
-								console.log(data);
+								console.log(data.id);
 								staff_log = new Staff_log({
 									action_log_id: ObjectId(data2.id),
 									staff_id: ObjectId(data._id),
@@ -1019,6 +1023,7 @@ exports.uploadStaffJson =  async (req, res) => {
 									  createdBy: data.createdBy, 
 									  createdAt: data.createdAt, 
 									  updatedAt: Date.now(),
+									  profile_url: global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678")),
 								});
 								  
 								staff_log.save(staff_log);
@@ -1030,13 +1035,23 @@ exports.uploadStaffJson =  async (req, res) => {
 			});
 		}else{
 			 
-			new_staffs.push(s);
-			console.log("new doc id");
+		
+			
 			
 			 // Save Staff in the database
 			 var staff=new Staff(s);
-			staff.save(s)
+			await staff.save(s)
 				.then(data => {
+					console.log("new doc id"+data.id);
+					console.log("under new staff save function");
+					
+					 s.profile_url=global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678"));
+				 
+					 new_staffs.push(s);
+					 
+					//console.log(s);
+					
+					console.log("under new staff save function");
 					 //white action log before send successfully
 					 const actionLog = new Action_log({
 						action: "Batch Create Staff",
@@ -1158,19 +1173,20 @@ exports.uploadStaffJson =  async (req, res) => {
 												  createdBy: data.createdBy, 
 												  createdAt: data.createdAt, 
 												  updatedAt: Date.now(),
+												  profile_url: global.profileUrl+""+encodeURIComponent(AES_ENCRYPT(data.id,"12345678123456781234567812345678")),
 											});
 											console.log("copy staff_log");
-											  console.log(staff_log);
+											 // console.log(staff_log);
 											staff_log.save(staff_log);
 										
 										//backup old staff records to table staff_logs
 										}
 										});
 				 
-				})
+				}) 
 		}
 	  }
-	
+	console.log(new_staffs);
 	console.log("new"+new_staffs.length);
 	console.log("old"+old_staffs.length);
 	  	  res.send({message: "done",old_staffs,new_staffs});
