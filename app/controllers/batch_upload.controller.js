@@ -603,7 +603,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	 }
 	 
 	 console.log(query);
-  Staff.find( query ).then((objs) => {
+  Staff.find( query ).sort({_id:-1}).limit(3500).then((objs) => {
     let staffs = [];
 
     objs.forEach((data) => {

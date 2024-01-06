@@ -101,7 +101,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  field056: String,
 	  field057: String,
 	  field058: String,
-	  field059: String,
+	  field059: Boolean,
 	  field060: String,
 	  field061: String,
 	  field062: String,
