@@ -291,7 +291,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 			});
 		}else{
 			s.company_id=company_id;
-			n 
+			 
 			console.log("new doc id");
 			
 			 // Save Staff in the database
@@ -788,7 +788,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "Reserved Field under HKMA Reg No", key: "field056", width: 25 },
 	  { header: "Reserved Field under HKMA Reg No", key: "field057", width: 25 },
 	  { header: "Reserved Field under HKMA Reg No", key: "field058", width: 25 },
-	  { header: "Reserved Field under SFC Central Entity No", key: "field059", width: 25 },
+	  { header: "SFC Type 4_Advising on Securities (True_Yes  False_No)", key: "field059", width: 25 },
 	  { header: "Reserved Field under SFC Central Entity No", key: "field060", width: 25 },
 	  { header: "Reserved Field at the bottom of ABOUT ME page", key: "field065", width: 25 }, 
 	  { header: "Reserved Field at the bottom of GET IN TOUCH Page", key: "field067", width: 25 },

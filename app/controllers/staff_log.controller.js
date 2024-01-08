@@ -73,7 +73,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	 }
 	 
 	  console.log(query);
-  Staff_log.find(query).populate(populate)
+  Staff_log.find(query).sort({_id:-1}).limit(3500).populate(populate)
   .then((objs) => {
    
     //prepare excel Array
@@ -269,7 +269,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	  { header: "Reserved Field under HKMA Reg No", key: "field056", width: 25 },
 	  { header: "Reserved Field under HKMA Reg No", key: "field057", width: 25 },
 	  { header: "Reserved Field under HKMA Reg No", key: "field058", width: 25 },
-	  { header: "Reserved Field under SFC Central Entity No", key: "field059", width: 25 },
+	  { header: "SFC Type 4_Advising on Securities (True_Yes  False_No)", key: "field059", width: 25 },
 	  { header: "Reserved Field under SFC Central Entity No", key: "field060", width: 25 },
 	  { header: "Reserved Field at the bottom of ABOUT ME page", key: "field065", width: 25 }, 
 	  { header: "Reserved Field at the bottom of GET IN TOUCH Page", key: "field067", width: 25 },
