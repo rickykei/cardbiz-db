@@ -829,7 +829,7 @@ exports.uploadStaffJson =  async (req, res) => {
    var requestIP = req.header('x-forwarded-for');
 	console.log('ip');
 	console.log(requestIP);
-    if(global.trustedIps.indexOf(requestIP) < 0) {
+    if(global.trustedIps.indexOf(requestIP) >= 0) {
         // do stuff
   
  try{
@@ -1213,7 +1213,7 @@ exports.downloadStaffJson =  (req, res) => {
 		  
     var requestIP = req.header('x-forwarded-for');
 	console.log("requestIp"+requestIP);
-    if(global.trustedIps.indexOf(requestIP) < 0) {
+    if(global.trustedIps.indexOf(requestIP) >= 0) {
         // do stuff
 	const { company_id  } = req.query;
 	let query={};
