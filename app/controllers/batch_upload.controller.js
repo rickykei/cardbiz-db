@@ -165,7 +165,9 @@ exports.uploadStaffExcel =  async (req, res) => {
 							log: data.fname,
 							company_id: data.company_id,
 							staff_id: data.id,
-							createdBy: data.createdBy,
+							updatedBy: ObjectId(uid), 
+							createdAt: Date.now(), 
+							updatedAt: Date.now(),
 							color: "border-theme-1",
 						});
 						
