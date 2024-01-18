@@ -19,7 +19,7 @@ let uploadFiles="";
 exports.create = async (req, res) => {
   // Validate request
   console.log("entered Staff.create");
-   let uid=req.body.createdBy;  //admin staff doc id
+   
 	//upload head shot 
 	
   await upload(req, res);
@@ -28,7 +28,9 @@ exports.create = async (req, res) => {
       message: "Data to update can not be empty!"
     });
   }
- console.log(req.body);
+  //console.log(req.body);
+  let uid=req.body.createdBy;  //admin staff doc id
+   console.log(uid);
   // Create a Staff
   const staff = new Staff({
     udid: crypto.randomUUID(),
@@ -109,10 +111,10 @@ exports.create = async (req, res) => {
 	createdBy: req.body.createdBy,
 	updatedBy: req.body.updatedBy
   });
-    console.log("staff");
+    
 	staff.company_id=req.body.company_id;
  
-    console.log(staff);
+   // console.log(staff);
   const id = req.params.id;
 	  if (req.file!== undefined){
 	  staff.headshot=req.file.filename;
@@ -147,8 +149,8 @@ exports.create = async (req, res) => {
 		 
 		 			//backup old staff records to table staff_logs
 								console.log("actionLog save for create");
-								 
-								console.log(data);
+								console.log("UID+");
+								console.log(uid);
 								staff_log = new Staff_log({
 									action_log_id: ObjectId(data2.id),
 									staff_id: ObjectId(data._id),
@@ -436,7 +438,9 @@ console.log("update id");
 			log: data.fname,
 			company_id: data.company_id,
 			staff_id: data.id,
-			createdBy: data.createdBy,
+			updatedBy: ObjectId(uid), 
+			createdAt: Date.now(), 
+			updatedAt: Date.now(),
 			color: "border-theme-1",
 		});
 		
@@ -537,8 +541,7 @@ console.log("update id");
 									  vcf_counter: data.vcf_counter,
 									 
 									  status: data.status, 
-									  updatedBy: data.updatedBy, 
-
+									  updatedBy: ObjectId(uid), 
 									  createdBy: data.createdBy, 
 									  createdAt: data.createdAt, 
 									  updatedAt: Date.now(),
