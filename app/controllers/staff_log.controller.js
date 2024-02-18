@@ -53,15 +53,28 @@ exports.findAll = (req, res) => {
 exports.downloadStaffLogExcel =  (req, res) => {
   console.log("entered stafflog.downloadStaffLogExcel");
   const populate=['company_id','createdBy','updatedBy'];
-  
+    let query={};
 	 const { company_id, uid  } = req.query;
 	if (company_id == undefined || company_id =="" || uid=="" || uid == undefined) {
 		  return res.status(400).send("ERROR");
 		}
 	 
-  Staff_log.find({ company_id: company_id }).populate(populate)
+	 if (company_id!="63142fd5b54bdbb18f556016")
+	 {
+	 
+			query.company_id = ObjectId(company_id);
+	 
+		console.log("non nfc");
+	 }else{
+		  
+		 console.log("nfc");
+	 }
+	 
+	  console.log(query);
+  Staff_log.find(query).populate(populate)
   .then((objs) => {
-   
+   console.log("staff count");
+	console.log(objs.length);
     //prepare excel Array
 	 let staffs = [];
 
@@ -179,7 +192,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
     ];
-
+	
     // Add Array Rows
     worksheet.addRows(staffs);
 
