@@ -230,7 +230,7 @@ exports.downloadStaffLogExcel =  (req, res) => {
 	    { header: "wechatpage_url", key: "wechatpage_url", width: 25 },
 	   
 	    { header: "tiktok_url", key: "tiktok_url", width: 25 },
-	    { header: "kuaishou_url", key: "kuaishou_url", width: 25 },
+	     
 	    { header: "line_url", key: "line_url", width: 25 },
 		   { header: "facebook_messenger_url", key: "facebook_messenger_url", width: 25 },
 	    { header: "weibo_url", key: "weibo_url", width: 25 },
