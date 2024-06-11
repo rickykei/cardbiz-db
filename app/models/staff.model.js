@@ -117,6 +117,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  profile_counter: Number,
 	  vcf_counter: Number,
 	  status: Boolean, 
+	  namecard_jpg: String,
 	  updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,
