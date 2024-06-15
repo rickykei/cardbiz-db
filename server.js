@@ -7,7 +7,7 @@ const initRoutes = require("./src/routes");
 global.__basedir = __dirname + "/";
 
 var corsOptions = {
-  origin: [ process.env.CLIENT_ORIGIN ,"http://localhost:8080","https://admin_uat.profiles.digital","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://uat.profiles.digital:3000"]
+  origin: ["https://admin.e-profile.digital","http://cardbiz.rossfoundry.com:3000","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://e-profile.digital:3000"]
 };
 
 app.use(cors(corsOptions));
