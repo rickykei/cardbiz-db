@@ -26,7 +26,10 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  company_name_chi: String,
 	  fname:String,
 	  lname:String,
-	 
+	  mname:String,
+	  pname:String,
+	  oname:String,
+	  pdname:String,
 	  headshot: String,
 	  work_email: String,
 	  work_email2: String,
