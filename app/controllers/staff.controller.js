@@ -279,7 +279,8 @@ exports.findAll = (req, res) => {
   var  sort = orderBy? {[orderBy] : 1 }:{updatedAt:-1,_id:1 };
   
   
-      let queryArray=[];
+  let queryArray=[];
+  let queryArrayAnd=[];
   let query={};  
 		
 	if (search){
@@ -289,7 +290,11 @@ exports.findAll = (req, res) => {
 		queryArray.push({"company_name_eng" : {  $regex: new RegExp(search), $options: "i" }}) ;
 		queryArray.push({"staff_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
 		query['$or'] = queryArray;
-	}
+		 
+	} 
+		queryArrayAnd.push({"status" : true});
+		query['$and'] = queryArrayAnd;
+	 
 	
 	
   Staff.paginate(query, { populate,offset, limit , sort})
@@ -310,6 +315,54 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
+// Retrieve all Tutorials from the database.
+exports.findAllDeactive = (req, res) => {
+	console.log("entered Staff.findallDeactive");
+	const populate=['company_id','createdBy','updatedBy'];
+	const { currentPage, pageSize, search, orderBy } = req.query;
+	var condition = search ? { fname: { $regex: new RegExp(search), $options: "i" } } : {};
+	const { limit, offset } = getPagination(currentPage-1, pageSize);
+	var  sort = orderBy? {[orderBy] : 1 }:{updatedAt:-1,_id:1 };
+	
+	
+	let queryArray=[];
+	let queryArrayAnd=[];
+	let query={};  
+		  
+	  if (search){
+		  queryArray.push({"fname" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		  queryArray.push({"lname" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		  queryArray.push({"company_name_chi" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		  queryArray.push({"company_name_eng" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		  queryArray.push({"staff_no" : {  $regex: new RegExp(search), $options: "i" }}) ;
+		  query['$or'] = queryArray;
+		   
+	  } 
+		  queryArrayAnd.push({"status" : false});
+		  query['$and'] = queryArrayAnd;
+	   
+	  
+	  
+	Staff.paginate(query, { populate,offset, limit , sort})
+	  .then(data => {
+		res.send({
+		  status: data.status,
+		  totalItem: data.totalDocs,
+		  totalPage: data.totalPages,
+	  currentPage: data.page,
+		  pageSize: pageSize*1,
+		  data: data.docs,
+		});
+	  })
+	  .catch(err => {
+		res.status(500).send({
+		  message:
+			err.message || "Some error occurred while retrieving staffs."
+		});
+	  });
+  };
+
 
 exports.findByCompanyId = (req, res) => {
   console.log("entered Staff.findByCompanyId");
