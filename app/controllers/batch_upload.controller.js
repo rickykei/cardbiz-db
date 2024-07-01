@@ -120,7 +120,10 @@ exports.uploadStaffExcel =  async (req, res) => {
 	  for (var s of xls_staffs){
 		  var query ={};
 		   query.company_id =  ObjectId(company_id);
-		   query.work_email =  s.work_email;
+
+		   //20240702 replace unique key from email to staff_id
+		   //query.work_email =  s.work_email;
+		   query.staff_no =  s.staff_no;
 		let mongoDocument =  await Staff.findOne(query).exec();
 		
 		if (mongoDocument!=undefined)
