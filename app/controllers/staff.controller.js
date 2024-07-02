@@ -367,7 +367,7 @@ exports.findAllDeactive = (req, res) => {
 exports.findByCompanyId = (req, res) => {
   console.log("entered Staff.findByCompanyId");
   const populate=['company_id','createdBy','updatedBy'];
-  const { currentPage, pageSize, search, orderBy , companyId} = req.query;
+  const { currentPage, pageSize, search, orderBy , companyId, deactive} = req.query;
   let query={};
     
 		
@@ -377,6 +377,13 @@ exports.findByCompanyId = (req, res) => {
     query.company_id =  ObjectId(companyId);
 	else
 	query.company_id =  ObjectId(0);	
+
+	if (deactive==1)
+		query.status = false;
+	else
+		query.status = true;
+	
+	
 	
   const { limit, offset } = getPagination(currentPage-1, pageSize);
   var  sort = orderBy? {[orderBy] : 1 }:{ updatedAt : -1 };
