@@ -170,6 +170,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 			  division : obj.staff_id?.division==undefined?"":obj.staff_id.division,
 			  department: obj.staff_id?.department==undefined?"":obj.staff_id.department,
 			  country: obj.staff_id?.country==undefined?"":obj.staff_id.country,
+			  ip: obj.ip==undefined?"":obj.ip,
+			  user_agent:obj.user_agent==undefined?"":obj.user_agent,
 			  
 		  });
 		});
@@ -196,6 +198,8 @@ exports.downloadStaffLogExcel =  (req, res) => {
 		  { header: "division ", key: "division", width: 25 },
 		  { header: "department", key: "department", width: 25 },
 		  { header: "country", key: "country", width: 25 },
+		  { header: "ip", key: "ip", width: 25 },
+		  { header: "user_agent", key: "user_agent", width: 25 },
 	 
 		];
 
