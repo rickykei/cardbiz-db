@@ -124,12 +124,16 @@ exports.uploadStaffExcel =  async (req, res) => {
 		   //20240702 replace unique key from email to staff_id
 		   //query.work_email =  s.work_email;
 		   query.staff_no =  s.staff_no;
+
+		   //if excel status empty fill true 20240803
+			if (s.status!=false)
+				s.status=true;
+
 		let mongoDocument =  await Staff.findOne(query).exec();
 		
 		if (mongoDocument!=undefined)
 		{
-			s.company_id=company_id;
-			
+			s.company_id=company_id; 
 			old_staffs.push(s);
 			console.log("old doc id"+mongoDocument.id);
 			
@@ -270,7 +274,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 					}
 			});
 		}else{
-			s.company_id=company_id;
+			s.company_id=company_id; 
 			new_staffs.push(s);
 			console.log("new doc id");
 			
