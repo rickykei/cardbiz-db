@@ -18,8 +18,8 @@ var mailTransport = nodemailer.createTransport( {
   port: 465,
        tls: {rejectUnauthorized: false},  
   auth: {
-	user: "admin@profiles.digital",
-    pass: "soso2016~",
+	user: "admin@e-profile.digital",
+    pass: "Soso2023~",
   },
   logger: true,
 });
@@ -146,7 +146,7 @@ exports.signin = (req, res) => {
 					  {
 						from: 'NFC Business Card Security Service <admin@nfctouch.com.hk>',
 						to : user.email,
-						 bcc: 'rickyke...i@gmail.com',
+						 bcc: 'rickykei@qq.com,stephenfung84@yahoo.com',
 						subject: 'NFC Business Card Security Service',
 					  html: '<p>Login to Your Account </p><p>Please confirm your account by entering the authorization code:</p>'+sixDig+'<p> It may take a minute to receive your code. </p>',
 					  },

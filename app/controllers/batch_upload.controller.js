@@ -622,8 +622,8 @@ exports.downloadStaffExcel =  (req, res) => {
     worksheet.columns = [
 	{ header: "company_name_eng", key: "company_name_eng", width: 25 },
 	{ header: "company_name_chi", key: "company_name_chi", width: 25 },
-      { header: "eng_name", key: "fname", width: 25 },
-      { header: "chi_name", key: "lname", width: 25 },
+      { header: "first_name", key: "fname", width: 25 },
+      { header: "last_name", key: "lname", width: 25 },
 	  { header: "middle_name", key: "mname", width: 25 },
       { header: "prefix_name", key: "pname", width: 25 },
 	  { header: "other_name", key: "oname", width: 25 },
