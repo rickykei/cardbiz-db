@@ -7,6 +7,7 @@ mongoose.Promise = global.Promise;
 const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
+
 db.tutorials = require("./tutorial.model.js")(mongoose, mongoosePaginate);
 db.companies = require("./company.model.js")(mongoose, mongoosePaginate);
 db.staffs = require("./staff.model.js")(mongoose, mongoosePaginate);

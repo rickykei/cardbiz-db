@@ -5,6 +5,7 @@ module.exports =  app =>  {
     router.post("/uploadStaffExcelAddOnly", upload.single("file"),batch_upload.uploadStaffExcelAddOnly);
     router.post("/uploadStaffExcel", upload.single("file"),batch_upload.uploadStaffExcel);
     router.get("/downloadStaffExcel",batch_upload.downloadStaffExcel);
+    router.get("/downloadStaffLinkExcel",batch_upload.downloadStaffLinkExcel);
   
   app.use("/api/batch_upload", router);
 };

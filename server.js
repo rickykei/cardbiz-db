@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
  
 global.__basedir = __dirname + "/";
+global.profileUrl="https://e-profile.digital/?key=";
 
 var corsOptions = {
   origin: ["https://admin.e-profile.digital","http://cardbiz.rossfoundry.com:3000","http://localhost:3000","http://localhost:8081","http://127.0.0.1:3000","http://e-profile.digital:3000"]
