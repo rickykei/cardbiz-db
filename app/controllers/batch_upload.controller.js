@@ -829,8 +829,8 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 		  telegram_url: obj.telegram_url,
 		  note: obj.note,
 		  note_timestamp: obj.note_timestamp,
-		  qrcode_option: obj.qrcode_option,
-		  
+		  smartcard_uid: str_smartcard_uid,
+		  qrcode_option: obj.qrcode_option, 
 		  bizcard_option: obj.bizcard_option,
 		  dig_card_in_vcf: obj.dig_card_in_vcf,
 		  status:obj.status,
@@ -920,6 +920,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 	  { header: "telegram_url", key: "telegram_url", width: 25 },
 	  { header: "note", key: "note", width: 25 },
 	  { header: "note_timestamp", key: "note_timestamp", width: 25 },
+	  { header: "smartcard_uid", key: "smartcard_uid", width: 25 },
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
