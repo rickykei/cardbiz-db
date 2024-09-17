@@ -109,6 +109,7 @@ exports.create = async (req, res) => {
 	bizcard_option: req.body.bizcard_option,
 	dig_card_in_vcf: req.body.dig_card_in_vcf,
 	qrcode_option: req.body.qrcode_option,
+	minisite_option: req.body.minisite_option,
 	profile_counter: 0,
 	vcf_counter: 0,
 	 status: req.body.status ? req.body.status : false,

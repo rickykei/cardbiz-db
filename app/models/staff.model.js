@@ -77,10 +77,8 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  youtube_url: String,
 	  twitter_url: String,
 	  wechat_id: String,
-	  wechatpage_url: String,
-	  
-	  tiktok_url: String,
-	  
+	  wechatpage_url: String,	  
+	  tiktok_url: String,	  
 	  line_url: String,
 	  facebook_messenger_url: String,
 	  weibo_url:String,
@@ -101,9 +99,9 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  bizcard_option: Boolean,
 	  dig_card_in_vcf: Boolean,
 	  qrcode_option: Number,
+	  minisite_option: Number,
 	  profile_counter: Number,
-	  vcf_counter: Number,
-	   
+	  vcf_counter: Number,	   
 	  status: Boolean, 
 	  updatedBy: 
       {
