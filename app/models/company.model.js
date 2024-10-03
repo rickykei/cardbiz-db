@@ -36,6 +36,13 @@ module.exports = (mongoose, mongoosePaginate) => {
       no_of_admin: Number,
 	  smartcard_uid: String,
       status: Boolean,
+      wallet_field1: String,   
+      wallet_field2: String,   
+      wallet_field3: String,   
+      wallet_logo: String,
+      wallet_banner: String,
+      wallet_qrcode_option: 
+      wallet_status: Boolean,  
       updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
 		createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') } 
     },schemaOptions
