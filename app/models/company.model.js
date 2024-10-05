@@ -1,8 +1,8 @@
-  const moment = require('moment-timezone');
-   const schemaOptions = {
+const moment = require('moment-timezone');
+const schemaOptions = {
   toObject: {
-    getters: true,    
-	virtuals: true,
+    getters: true,
+    virtuals: true,
     versionKey: false,
   },
   toJSON: {
@@ -11,41 +11,43 @@
     versionKey: false,
   },
   runSettersOnQuery: true,
-  };
+};
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
       name: String,
       code: String,
-	  fname: String,
-	  lname: String,
-	  company_name: String,
-	  work_mail: String,
-	  country: String,
-	  website: String,
-	  position: String,
-	  work_tel: String,
-	  address: String,
-	  sub_division : String,
-	  department: String,
-	  banner: String,
-	  mobile: String,
-	  logo: String,
-	  profile_theme: String,
+      fname: String,
+      lname: String,
+      company_name: String,
+      work_mail: String,
+      country: String,
+      website: String,
+      position: String,
+      work_tel: String,
+      address: String,
+      sub_division: String,
+      department: String,
+      banner: String,
+      mobile: String,
+      logo: String,
+      profile_theme: String,
       no_of_license: Number,
       no_of_admin: Number,
-	  smartcard_uid: String,
+      smartcard_uid: String,
       status: Boolean,
-      wallet_field1: String,   
-      wallet_field2: String,   
-      wallet_field3: String,   
-      wallet_logo: String,
+      wallet_field1_option: Number,
+      wallet_field2_option: Number,
+      wallet_field3_option: Number,
+      wallet_logo_option: Number,
       wallet_banner: String,
-      wallet_qrcode_option: 
-      wallet_status: Boolean,  
-      updatedAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
-		createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') } 
-    },schemaOptions
+      wallet_qrcode_option: Number,
+      wallet_text_color: String,
+      wallet_bg_color: String,
+      wallet_status: Boolean,
+      updatedAt: { type: Date, default: Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
+      createdAt: { type: Date, default: Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') }
+    }, schemaOptions
   );
   schema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();

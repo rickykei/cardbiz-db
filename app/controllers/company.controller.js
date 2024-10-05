@@ -197,6 +197,8 @@ exports.updateByHRAdmin = async (req, res) => {
 	 console.log(req.files.logo);
 	 console.log("req.files.profile_theme");
 	 console.log(req.files.profile_theme);
+	 console.log("req.files.wallet_banner");
+	 console.log(req.files.wallet_banner);
 	
  
  
@@ -208,6 +210,8 @@ exports.updateByHRAdmin = async (req, res) => {
 			  req.body.logo=req.files.logo[0].filename;
 			if(req.files.profile_theme!==undefined)
 			  req.body.profile_theme=req.files.profile_theme[0].filename;
+    	if(req.files.wallet_banner!==undefined)
+			  req.body.wallet_banner=req.files.wallet_banner[0].filename;
     
 	   }
  
@@ -236,6 +240,9 @@ exports.updateByHRAdmin = async (req, res) => {
       });
     });
 };
+
+ 
+
 
 // Delete a company with the specified id in the request
 exports.delete = (req, res) => {
