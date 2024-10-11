@@ -757,6 +757,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 		let vcf_link=global.profileUrl+""+enc_uid+"&bo=0";
 		let google_wallet_link=global.profileUrl+""+enc_uid+"&gengw=1";
 		let apple_wallet_link=global.profileUrl+""+enc_uid+"&genaw=1";
+		let mobile_site_link=global.profileUrl+""+enc_uid+"&mobilesite=1";
 	 
 		 
 		var staff =  {
@@ -840,6 +841,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 		  vcf_link: vcf_link,
 		  google_wallet_link: google_wallet_link,
 		  apple_wallet_link: apple_wallet_link,
+		  mobile_site_link: mobile_site_link,
       } 
 
 	  staffs.push(staff);
@@ -931,6 +933,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 	  { header: "vcf_link", key: "vcf_link", width: 25 },
 	  { header: "google_wallet_link", key: "google_wallet_link", width: 25 },
 	  { header: "apple_wallet_link", key: "apple_wallet_link", width: 25 },
+	  { header: "mobile_site_link", key: "mobile_site_link", width: 25 },
     ];
 
     // Add Array Rows
