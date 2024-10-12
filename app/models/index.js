@@ -19,5 +19,8 @@ db.profile_counter = require("./profile_counter.model")(mongoose, mongoosePagina
 db.action_log = require("./action_log.model")(mongoose, mongoosePaginate);
 db.staff_log = require("./staff_log.model")(mongoose, mongoosePaginate);
 db.two_factors = require("./two_factors.model.js")(mongoose, mongoosePaginate);
+db.gw_counter = require("./gw_counter.model")(mongoose, mongoosePaginate);
+db.aw_counter = require("./aw_counter.model")(mongoose, mongoosePaginate);
+db.mobilesite_counter = require("./mobilesite_counter.model")(mongoose, mongoosePaginate);
 
 module.exports = db;

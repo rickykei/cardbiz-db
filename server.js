@@ -47,7 +47,9 @@ require("./app/routes/profile_counter.routes")(app);
 require("./app/routes/batch_upload.routes")(app);
 require("./app/routes/action_log.routes")(app);
 require("./app/routes/staff_log.routes")(app);
-
+require("./app/routes/gw_counter.routes")(app);
+require("./app/routes/aw_counter.routes")(app);
+require("./app/routes/mobilesite_counter.routes")(app);
  
 
 // set port, listen for requests
