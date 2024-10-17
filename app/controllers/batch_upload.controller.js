@@ -115,6 +115,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 		  bizcard_option: row[y++],
 		  dig_card_in_vcf: row[y++], 
 		  qrcode_option: row[y++],
+		  minisite_option: row[y++],
 		  status:row[y++],
         };
 
@@ -266,6 +267,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 									  bizcard_option: data.bizcard_option,
 									  dig_card_in_vcf: data.dig_card_in_vcf,
 									  qrcode_option: data.qrcode_option,
+									  minisite_option: data.minisite_option,
 									  profile_counter: data.profile_counter,
 									  vcf_counter: data.vcf_counter,
 									 
@@ -401,6 +403,7 @@ exports.uploadStaffExcel =  async (req, res) => {
 												  bizcard_option: data.bizcard_option,
 												  dig_card_in_vcf: data.dig_card_in_vcf,
 												  qrcode_option: data.qrcode_option,
+												  minisite_option: data.minisite_option,
 												  profile_counter: data.profile_counter,
 												  vcf_counter: data.vcf_counter,
 												 
@@ -616,7 +619,7 @@ exports.downloadStaffExcel =  (req, res) => {
 		  note: obj.note,
 		  note_timestamp: obj.note_timestamp,
 		  qrcode_option: obj.qrcode_option,
-		  
+		  minisite_option: obj.minisite_option,
 		  bizcard_option: obj.bizcard_option,
 		  dig_card_in_vcf: obj.dig_card_in_vcf,
 		  status:obj.status,
@@ -701,6 +704,7 @@ exports.downloadStaffExcel =  (req, res) => {
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
+	  { header: "minisite_option", key: "minisite_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
     ];
 
@@ -832,6 +836,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 		  note_timestamp: obj.note_timestamp,
 		  smartcard_uid: str_smartcard_uid,
 		  qrcode_option: obj.qrcode_option, 
+		  minisite_option: obj.minisite_option,
 		  bizcard_option: obj.bizcard_option,
 		  dig_card_in_vcf: obj.dig_card_in_vcf,
 		  status:obj.status,
@@ -926,6 +931,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 	  { header: "bizcard_option", key: "bizcard_option", width: 25 },
 	  { header: "dig_card_in_vcf", key: "dig_card_in_vcf", width: 25 },
 	  { header: "qrcode_option", key: "qrcode_option", width: 25 },
+	  { header: "minisite_option", key: "minisite_option", width: 25 },
 	  { header: "status", key: "status", width: 25 },
 	  { header: "vcf_qrcode_link", key: "vcf_qrcode_link", width: 25 },
 	  { header: "align_with_smartcard_link", key: "align_with_smartcard_link", width: 25 },
