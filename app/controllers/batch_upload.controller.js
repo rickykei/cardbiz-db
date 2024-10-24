@@ -728,7 +728,9 @@ exports.downloadStaffExcel =  (req, res) => {
 
 exports.downloadStaffLinkExcel =  (req, res) => {
 	console.log("downloadStaffLinkExcel");
-	 const { company_id  } = req.query;
+	const populate=['company_id','smartcard_uid','createdBy','updatedBy'];
+	const { company_id  } = req.query;
+	 
 	  let query={};
 	if (company_id == undefined || company_id =="") {
 		  return res.status(400).send("ERROR");
@@ -746,14 +748,14 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 	 }
 	 
 	 console.log(query);
-  Staff.find( query ).then((objs) => {
+  Staff.find( query ).populate(populate).then((objs) => {
     let staffs = [];
 
     objs.forEach((obj) => {
 		 
-		var str_smartcard_uid=undefined;
-		 str_smartcard_uid= JSON.stringify(obj.smartcard_uid);
-		str_smartcard_uid=(str_smartcard_uid||'').replaceAll('"','');;
+		//var str_smartcard_uid=undefined;
+		// str_smartcard_uid= JSON.stringify(obj.smartcard_uid);
+		//str_smartcard_uid=(str_smartcard_uid||'').replaceAll('"','');;
 		let enc_uid=encodeURIComponent(AES_ENCRYPT(obj.id,"12345678123456781234567812345678"));
 		let vcf_qrcode_link=global.profileUrl+""+enc_uid+"&qrtype=1";
 		let align_with_smartcard_link=global.profileUrl+""+enc_uid;
@@ -834,7 +836,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
 		  telegram_url: obj.telegram_url,
 		  note: obj.note,
 		  note_timestamp: obj.note_timestamp,
-		  smartcard_uid: str_smartcard_uid,
+		  smartcard_uid: obj.smartcard_uid?obj.smartcard_uid.uid:null,
 		  qrcode_option: obj.qrcode_option, 
 		  minisite_option: obj.minisite_option,
 		  bizcard_option: obj.bizcard_option,
@@ -856,7 +858,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
  
  
     let workbook = new excel.Workbook();
-    let worksheet = workbook.addWorksheet("Staffs");
+    let worksheet = workbook.addWorksheet("StaffFullLists");
 
     worksheet.columns = [
 	{ header: "company_name_eng", key: "company_name_eng", width: 25 },
@@ -951,7 +953,7 @@ exports.downloadStaffLinkExcel =  (req, res) => {
     );
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=" + "staffs.xlsx"
+      "attachment; filename=" + "StaffFullLists.xlsx"
     );
 
     return workbook.xlsx.write(res).then(function () {
