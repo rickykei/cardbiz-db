@@ -499,6 +499,9 @@ exports.update = async (req, res) => {
 	if (req.body.qrcode_option == undefined || req.body.qrcode_option == 'null')
 		req.body.qrcode_option = undefined;
 
+	if (req.body.minisite_option == undefined || req.body.minisite_option == 'null')
+		req.body.minisite_option = undefined;
+
 	if (req.body.bizcard_option == undefined || req.body.qrcode_option == 'null')
 		req.body.bizcard_option = undefined;
 
@@ -647,6 +650,7 @@ exports.update = async (req, res) => {
 							bizcard_option: data.bizcard_option,
 							dig_card_in_vcf: data.dig_card_in_vcf,
 							qrcode_option: data.qrcode_option,
+							minisite_option: data.minisite_option,
 							profile_counter: data.profile_counter,
 							vcf_counter: data.vcf_counter,
 
