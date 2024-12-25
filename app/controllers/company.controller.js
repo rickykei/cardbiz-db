@@ -5,6 +5,13 @@ const uploadBanner = require("../middleware/uploadBanner");
 const GridFSBucket = require("mongodb").GridFSBucket;
 const Company = db.companies;
 const Smartcard = db.smartcards;
+const Actions_logs = db.action_log;
+const Aw_counters = db.aw_counter;
+const Gw_counters = db.gw_counter;
+const Mobilesite_counters = db.mobilesite_counter;
+const Staff_logs = db.staff_log;
+const Staff = db.staffs;
+const users = db.users;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -258,8 +265,28 @@ console.log("del="+id);
 		  console.log(id);
 		Smartcard.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
 			 console.log(id);
-		}
-		);
+		})
+    Actions_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    Aw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    Gw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    Mobilesite_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    Staff_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    Staff.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    })
+    users.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log(id);
+    });
         res.send({
           message: "company was deleted successfully!"
         });
