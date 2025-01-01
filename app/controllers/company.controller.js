@@ -206,7 +206,8 @@ exports.updateByHRAdmin = async (req, res) => {
 	 console.log(req.files.profile_theme);
 	 console.log("req.files.wallet_banner");
 	 console.log(req.files.wallet_banner);
-	
+	 console.log("req.files.bg_image");
+	 console.log(req.files.bg_image);
  
  
 	   if (req.files!== undefined){
@@ -219,7 +220,8 @@ exports.updateByHRAdmin = async (req, res) => {
 			  req.body.profile_theme=req.files.profile_theme[0].filename;
     	if(req.files.wallet_banner!==undefined)
 			  req.body.wallet_banner=req.files.wallet_banner[0].filename;
-    
+      if(req.files.bg_image!==undefined)
+			  req.body.bg_image=req.files.bg_image[0].filename;
 	   }
  
   
