@@ -23,6 +23,8 @@ module.exports = app => {
   // update company by hr admin
   router.post("/:id", companies.updateByHRAdmin);
 
+  // update company by hr admin
+  router.post("/minisite/:id", companies.updateByMinisite);
 
   // Delete a Tutorial with id
   router.delete("/:id", companies.delete);
