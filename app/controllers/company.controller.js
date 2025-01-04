@@ -249,7 +249,7 @@ exports.updateByHRAdmin = async (req, res) => {
   // update company by hr admin
   exports.updateByMinisite = async (req, res) => {
 	
-    console.log("update Company by hr admin");
+    console.log("update minisite by hr admin");
     
     await uploadBanner(req, res);
      
@@ -280,16 +280,16 @@ exports.updateByHRAdmin = async (req, res) => {
       .then(data => {
         if (!data) {
           res.status(404).send({
-            message: `Cannot update company with id=${id}. Maybe company was not found!`
+            message: `Cannot update minisite with id=${id}. Maybe company was not found!`
           });
         } else {
          
-        res.send({ message: "company was updated successfully." });
+        res.send({ message: "minisite was updated successfully." });
       }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating company with id=" + id
+          message: "Error updating minisite with id=" + id
         });
       });
   };
