@@ -58,7 +58,7 @@ module.exports = (mongoose, mongoosePaginate) => {
       links_selected_color:String,
       left_nav_bar_color:String,
       bio_wording_color:String,
-      photo_color:String,
+      key_wording_color:String,
       site_bg_color:String,
       bg_image:String, 
       updatedAt: { type: Date, default: Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
