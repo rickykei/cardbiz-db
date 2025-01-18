@@ -96,6 +96,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  youtube_url: String,
 	  twitter_url: String,
 	  wechat_id: String,
+	  wechat_qr_url: String,
 	  wechatpage_url: String,	  
 	  tiktok_url: String,	  
 	  line_url: String,

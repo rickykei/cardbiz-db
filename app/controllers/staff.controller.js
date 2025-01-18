@@ -109,6 +109,7 @@ exports.create = async (req, res) => {
 		youtube_url: req.body.youtube_url,
 		twitter_url: req.body.twitter_url,
 		wechat_id: req.body.wechat_id,
+		wechat_qr_url:req.body.wechat_qr_url,
 		wechatpage_url: req.body.wechatpage_url,
 		tiktok_url: req.body.tiktok_url,
 		line_url: req.body.line_url,
@@ -264,6 +265,7 @@ exports.create = async (req, res) => {
 						qrcode_option: data.qrcode_option,
 						profile_counter: data.profile_counter,
 						vcf_counter: data.vcf_counter,
+						wechat_qr_url:data.wechat_qr_url,
 
 						status: data.status,
 						updatedBy: ObjectId(uid),
@@ -653,6 +655,7 @@ exports.update = async (req, res) => {
 							minisite_option: data.minisite_option,
 							profile_counter: data.profile_counter,
 							vcf_counter: data.vcf_counter,
+							wechat_qr_url:data.wechat_qr_url,
 
 							status: data.status,
 							updatedBy: ObjectId(uid),
