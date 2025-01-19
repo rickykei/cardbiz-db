@@ -10,18 +10,18 @@ var storage = new GridFsStorage({
     const match = ["image/png", "image/jpeg"];
 
     if (match.indexOf(file.mimetype) === -1) {
-      const filename = `${Date.now()}-e-profile-${file.originalname}`;
+      const filename = `${Date.now()}-staff_headshot-${file.originalname}`;
       return filename;
     }
 
     return {
       bucketName: dbConfig.imgBucket,
-      filename: `${Date.now()}-e-profile-${file.originalname}`
+      filename: `${Date.now()}-staff_headshot-${file.originalname}`
     };
   }
 });
 
 //var uploadFiles = multer({ storage: storage }).array("file", 10);
-var uploadFiles = multer({ storage: storage }).single("file");
+var uploadFiles = multer({ storage: storage }).single("staff_headshot");
 var uploadFilesMiddleware = util.promisify(uploadFiles);
 module.exports = uploadFilesMiddleware;

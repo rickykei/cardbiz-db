@@ -1,7 +1,5 @@
 const db = require("../models");
 const uploadBanner = require("../middleware/uploadBanner");
-
-//const upload = require("../middleware/upload");
 const GridFSBucket = require("mongodb").GridFSBucket;
 const Company = db.companies;
 const Smartcard = db.smartcards;

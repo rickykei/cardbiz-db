@@ -1,4 +1,4 @@
-const upload = require("../middleware/uploadBanner");
+const upload = require("../middleware/upload");
 const GridFSBucket = require("mongodb").GridFSBucket;
 const db = require("../models");
 const crypto = require('crypto');

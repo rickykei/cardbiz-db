@@ -1,5 +1,3 @@
-const upload = require("../middleware/upload");
-
 const db = require("../models");
 
 var ObjectId = require('mongodb').ObjectId;
@@ -13,8 +11,7 @@ const getPagination = (page, size) => {
 	return { limit, offset };
 };
 
-let uploadFiles = "";
-
+  
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
