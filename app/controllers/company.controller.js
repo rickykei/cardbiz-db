@@ -10,6 +10,8 @@ const Mobilesite_counters = db.mobilesite_counter;
 const Staff_logs = db.staff_log;
 const Staff = db.staffs;
 const users = db.users;
+const photos = db.photos;
+const photosChunks = db.photosChunks;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -299,6 +301,80 @@ exports.updateByHRAdmin = async (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 console.log("del="+id);
+  Company.findById(id)
+  .then(data => {
+    if (!data){
+      res.status(404).send({ message: "Not found company with id " + id });
+    }
+    else 
+    {
+      if(data.banner){
+        photos.findOne({filename: data.banner}).exec((err, bannerfiles) => {
+          if (err) {
+            res.status(500).send({ message: err });
+          }
+    
+          if (bannerfiles) {
+            photosChunks.deleteMany({files_id: bannerfiles._id}, { useFindAndModify: false }).then(delBannerChunksResult => {
+              console.log('photosChunks.delete.banner:' + bannerfiles._id + delBannerChunksResult.deletedCount);
+            })        
+          }
+
+        });
+
+        photos.deleteOne({filename: data.banner}, { useFindAndModify: false }).then(delBannerFileResult => {
+          console.log('photo.delete.banner:'+data.banner );
+        })
+      }
+
+      if(data.logo){
+        photos.findOne({filename: data.logo}).exec((err, logofiles) => {
+          if (err) {
+            res.status(500).send({ message: err });
+          }
+    
+          if (logofiles) {
+            console.log('testing-------------'+logofiles._id)
+            photosChunks.deleteMany({files_id: logofiles._id}, { useFindAndModify: false }).then(delLogoChunksResult => {
+              console.log('photosChunks.delete.logo:' + logofiles._id + delLogoChunksResult.deletedCount);
+            })        
+          }
+
+        });
+
+        photos.deleteOne({filename: data.logo}, { useFindAndModify: false }).then(delLogoFileResult => {
+          console.log('photo.delete.logo:'+delLogoFileResult.deletedCount);
+        })
+      }
+
+      if(data.profile_theme){
+        photos.findOne({filename: data.profile_theme}).exec((err, profile_themefiles) => {
+          if (err) {
+            res.status(500).send({ message: err });
+          }
+    
+          if (profile_themefiles) {
+            console.log('testing-------------'+profile_themefiles._id)
+            photosChunks.deleteMany({files_id: profile_themefiles._id}, { useFindAndModify: false }).then(delProfileChunksResult => {
+              console.log('photosChunks.delete.profile_theme:' + profile_themefiles._id + delProfileChunksResult.deletedCount);
+            })        
+          }
+
+        });
+
+        photos.deleteOne({filename: data.profile_theme}, { useFindAndModify: false }).then(delProFileResult => {
+          console.log('photo.delete.profile_theme:'+data.profile_theme+delProFileResult.deletedCount);
+        })
+      }
+
+    }
+    ;
+  })
+  .catch(err => {
+    res
+      .status(500)
+      .send({ message: "Error retrieving company with id=" + id });
+  });
   Company.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
