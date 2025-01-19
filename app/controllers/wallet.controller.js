@@ -11,7 +11,7 @@ return { limit, offset };
 // Create and Save a new smartcards
 exports.create = (req, res) => {
   // Validate request
-  console.log("wallet.create");
+   console.log("wallet.create");
    console.log(req.body);
   if (!req.body.uid) {
     res.status(400).send({ message: "uid can not be empty!" });
@@ -20,8 +20,8 @@ exports.create = (req, res) => {
 
   // Create a Wallet
   const wallet = new Wallet({
-    uid: req.body.uid,
-	company_id: req.body.company_id,
+     uid: req.body.uid,
+	   company_id: req.body.company_id,
      status: req.body.status ? req.body.status : false
   });
 
