@@ -22,5 +22,7 @@ db.two_factors = require("./two_factors.model.js")(mongoose, mongoosePaginate);
 db.gw_counter = require("./gw_counter.model")(mongoose, mongoosePaginate);
 db.aw_counter = require("./aw_counter.model")(mongoose, mongoosePaginate);
 db.mobilesite_counter = require("./mobilesite_counter.model")(mongoose, mongoosePaginate);
+db.photos = require("./photos.model")(mongoose, mongoosePaginate);
+db.photosChunks = require("./photoschunks.model.js")(mongoose, mongoosePaginate);
 
 module.exports = db;
