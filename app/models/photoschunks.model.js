@@ -16,7 +16,10 @@ const moment = require('moment-timezone');
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
-      files_id:String,
+      files_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "photos.files"
+      },
       n:Number,
 	    data: Buffer,
 	    deleteOK: Boolean
