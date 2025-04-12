@@ -129,6 +129,7 @@ exports.uploadStaffExcel = async (req, res) => {
 					google_play_url: row[y++],
 					snapchat_url: row[y++],
 					telegram_url: row[y++],
+					xiaohongshu_url: row[y++],
 					note: row[y++],
 					note_timestamp: row[y++],
 					bizcard_option: row[y++],
@@ -300,7 +301,7 @@ exports.uploadStaffExcel = async (req, res) => {
 											google_play_url: data.google_play_url,
 											snapchat_url: data.snapchat_url,
 											telegram_url: data.telegram_url,
-
+											xiaohongshu_url: data.xiaohongshu_url,
 											note: data.note,
 											note_timestamp: data.note_timestamp,
 
@@ -458,7 +459,7 @@ exports.uploadStaffExcel = async (req, res) => {
 									google_play_url: data.google_play_url,
 									snapchat_url: data.snapchat_url,
 									telegram_url: data.telegram_url,
-
+									xiaohongshu_url: data.xiaohongshu_url,
 									note: data.note,
 									note_timestamp: data.note_timestamp,
 
@@ -699,6 +700,7 @@ exports.downloadStaffExcel = (req, res) => {
 				google_play_url: obj.google_play_url,
 				snapchat_url: obj.snapchat_url,
 				telegram_url: obj.telegram_url,
+				xiaohongshu_url: obj.xiaohongshu_url,
 				note: obj.note,
 				note_timestamp: obj.note_timestamp,
 				qrcode_option: obj.qrcode_option,
@@ -801,6 +803,7 @@ exports.downloadStaffExcel = (req, res) => {
 			{ header: "google_play_url", key: "google_play_url", width: 25 },
 			{ header: "snapchat_url", key: "snapchat_url", width: 25 },
 			{ header: "telegram_url", key: "telegram_url", width: 25 },
+			{ header: "xiaohongshu_url", key: "xiaohongshu_url", width: 25 },
 			{ header: "note", key: "note", width: 25 },
 			{ header: "note_timestamp", key: "note_timestamp", width: 25 },
 			{ header: "bizcard_option", key: "bizcard_option", width: 25 },
@@ -862,8 +865,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			let align_with_smartcard_link = global.profileUrl + "" + enc_uid;
 			let e_profile_link = global.profileUrl + "" + enc_uid + "&bo=1";
 			let vcf_link = global.profileUrl + "" + enc_uid + "&bo=0";
-			let google_wallet_link = global.profileUrl + "" + enc_uid + "&gengw=1";
-			let apple_wallet_link = global.profileUrl + "" + enc_uid + "&genaw=1";
+			let wallet_link = global.profileUrl + "" + enc_uid + "&geniosaos=1";
 			let mobile_site_link = global.profileUrl + "" + enc_uid + "&mobilesite=1";
 
 
@@ -955,6 +957,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				google_play_url: obj.google_play_url,
 				snapchat_url: obj.snapchat_url,
 				telegram_url: obj.telegram_url,
+				xiaohongshu_url: obj.xiaohongshu_url,
 				note: obj.note,
 				note_timestamp: obj.note_timestamp,
 				smartcard_uid: obj.smartcard_uid ? obj.smartcard_uid.uid : null,
@@ -967,8 +970,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				align_with_smartcard_link: align_with_smartcard_link,
 				e_profile_link: e_profile_link,
 				vcf_link: vcf_link,
-				google_wallet_link: google_wallet_link,
-				apple_wallet_link: apple_wallet_link,
+				wallet_link: wallet_link,
 				mobile_site_link: mobile_site_link,
 			}
 
@@ -1067,6 +1069,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "google_play_url", key: "google_play_url", width: 25 },
 			{ header: "snapchat_url", key: "snapchat_url", width: 25 },
 			{ header: "telegram_url", key: "telegram_url", width: 25 },
+			{ header: "xiaohongshu_url", key: "xiaohongshu_url", width: 25 },
 			{ header: "note", key: "note", width: 25 },
 			{ header: "note_timestamp", key: "note_timestamp", width: 25 },
 			{ header: "smartcard_uid", key: "smartcard_uid", width: 25 },
@@ -1079,8 +1082,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "align_with_smartcard_link", key: "align_with_smartcard_link", width: 25 },
 			{ header: "e_profile_link", key: "e_profile_link", width: 25 },
 			{ header: "vcf_link", key: "vcf_link", width: 25 },
-			{ header: "google_wallet_link", key: "google_wallet_link", width: 25 },
-			{ header: "apple_wallet_link", key: "apple_wallet_link", width: 25 },
+			{ header: "wallet_link", key: "wallet_link", width: 25 },
 			{ header: "mobile_site_link", key: "mobile_site_link", width: 25 },
 		];
 

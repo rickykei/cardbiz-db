@@ -184,7 +184,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 					google_play_url: obj.google_play_url,
 					snapchat_url: obj.snapchat_url,
 					telegram_url: obj.telegram_url,
-
+					xiaohongshu_url: obj.xiaohongshu_url,
 					note: obj.note,
 					note_timestamp: obj.note_timestamp,
 					smartcard_uid: obj.smartcard_uid ? obj.smartcard_uid.uid : null,
@@ -292,7 +292,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 				{ header: "google_play_url", key: "google_play_url", width: 25 },
 				{ header: "snapchat_url", key: "snapchat_url", width: 25 },
 				{ header: "telegram_url", key: "telegram_url", width: 25 },
-
+				{ header: "xiaohongshu_url", key: "xiaohongshu_url", width: 25 },
 				{ header: "note", key: "note", width: 25 },
 				{ header: "note_timestamp", key: "note_timestamp", width: 25 },
 				{ header: "smartcard_uid", key: "smartcard_uid", width: 25 },

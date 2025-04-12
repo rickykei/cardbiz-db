@@ -12,6 +12,7 @@ const Staff = db.staffs;
 const users = db.users;
 const photos = db.photos;
 const photosChunks = db.photosChunks;
+const Profile_counters=db.profile_counter;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -300,15 +301,18 @@ exports.updateByHRAdmin = async (req, res) => {
 // Delete a company with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-console.log("del="+id);
-  Company.findById(id)
-  .then(data => {
+  let stopper=0;
+  console.log("del company_id doc id="+ id);
+  Company.findById(id).then(data => {
     if (!data){
       res.status(404).send({ message: "Not found company with id " + id });
     }
     else 
     {
-      if(data.banner){
+
+      console.log("del banner");
+      if(data.banner!=""){
+        console.log('photo.delete.banner:'+ data.banner );
         photos.findOne({filename: data.banner}).exec((err, bannerfiles) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -324,10 +328,12 @@ console.log("del="+id);
 
         photos.deleteOne({filename: data.banner}, { useFindAndModify: false }).then(delBannerFileResult => {
           console.log('photo.delete.banner:'+data.banner );
-        })
+        });
       }
 
-      if(data.logo){
+      console.log("del logo");
+      if(data.logo!=""){
+        console.log('photo.delete.logo:'+ data.logo);
         photos.findOne({filename: data.logo}).exec((err, logofiles) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -344,10 +350,12 @@ console.log("del="+id);
 
         photos.deleteOne({filename: data.logo}, { useFindAndModify: false }).then(delLogoFileResult => {
           console.log('photo.delete.logo:'+delLogoFileResult.deletedCount);
-        })
+        });
       }
 
-      if(data.profile_theme){
+      console.log("del profile_theme");
+      if(data.profile_theme!=""){
+        console.log('photo.delete.profile_theme:'+data.profile_theme);
         photos.findOne({filename: data.profile_theme}).exec((err, profile_themefiles) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -364,59 +372,71 @@ console.log("del="+id);
 
         photos.deleteOne({filename: data.profile_theme}, { useFindAndModify: false }).then(delProFileResult => {
           console.log('photo.delete.profile_theme:'+data.profile_theme+delProFileResult.deletedCount);
-        })
+        });
       }
 
+     Smartcard.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+        console.log("SmartCard doc id del="+data.deletedCount);
+     });
+
+     Actions_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Actions_logs doc id del="+data.deletedCount);
+     });
+
+     Profile_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Profile_counters doc id del="+data.deletedCount);
+     });
+ 
+     Aw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Aw_counters doc id del="+data.deletedCount);
+     });
+
+     Gw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Gw_counters doc id del="+data.deletedCount);
+     });
+
+     Mobilesite_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Mobilesite_counters doc id del="+data.deletedCount);
+     });
+
+     Staff_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Staff_logs doc id del="+data.deletedCount);
+     })
+     Staff.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("Staff doc id del="+data.deletedCount);
+     })
+     users.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
+      console.log("users doc id del="+data.deletedCount);
+     });
     }
-    ;
+    
   })
   .catch(err => {
-    res
-      .status(500)
-      .send({ message: "Error retrieving company with id=" + id });
+    stopper=1;
+    console.log(err);
+    console.log("unexpected problem under delete.findcompany");
   });
-  Company.findByIdAndRemove(id, { useFindAndModify: false })
-    .then(data => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot delete company with id=${id}. Maybe company was not found!`
+
+    if(stopper!=1){
+    Company.findByIdAndRemove(id, { useFindAndModify: false })
+      .then(data => {
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot delete company with id=${id}. Maybe company was not found!`
+          });
+        } else {
+          console.log("company was deleted successfully="+data.id);
+          res.send({
+            message: "company was deleted successfully!"
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Could not delete company with id=" + id
         });
-      } else {
-		  console.log(id);
-		Smartcard.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-			 console.log(id);
-		})
-    Actions_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    Aw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    Gw_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    Mobilesite_counters.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    Staff_logs.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    Staff.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    })
-    users.deleteMany({company_id: id}, { useFindAndModify: false }).then(data => {
-      console.log(id);
-    });
-        res.send({
-          message: "company was deleted successfully!"
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete company with id=" + id
       });
-    });
+  }
 };
 
 // Delete all companies from the database.
