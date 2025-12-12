@@ -63,6 +63,7 @@ exports.uploadStaffExcel = async (req, res) => {
 					other_email_label: row[y++],
 					other_email: row[y++],
 					position: row[y++],
+					position_other_lang: row[y++],
 					work_tel_label: row[y++],
 					work_tel: row[y++],
 					work_tel2_label: row[y++],
@@ -108,6 +109,10 @@ exports.uploadStaffExcel = async (req, res) => {
 					department: row[y++],
 					country: row[y++],
 					bio: row[y++],
+					awards: row[y++],
+					qualifications: row[y++],
+					additional_address: row[y++],
+					achievements: row[y++],
 					company_website_url: row[y++],
 					more_info_tab_url: row[y++],
 					facebook_url: row[y++],
@@ -224,6 +229,7 @@ exports.uploadStaffExcel = async (req, res) => {
 											home_email_label: data.home_email_label,
 											other_email_label: data.other_email_label,
 											position: data.position,
+											position_other_lang: data.position_other_lang,
 											work_tel: data.work_tel,
 											work_tel2: data.work_tel2,
 											work_tel3: data.work_tel3,
@@ -232,7 +238,7 @@ exports.uploadStaffExcel = async (req, res) => {
 											work_tel2_label: data.work_tel2_label,
 											work_tel3_label: data.work_tel3_label,
 											work_tel4_label: data.work_tel4_label,
-										 
+
 											mobile: data.mobile,
 											mobile2: data.mobile2,
 											mobile3: data.mobile3,
@@ -279,6 +285,10 @@ exports.uploadStaffExcel = async (req, res) => {
 											country: data.country,
 
 											bio: data.bio,
+											awards: data.awards,
+											qualifications: data.qualifications,
+											additional_address: data.additional_address,
+											achievements: data.achievements,
 
 											company_website_url: data.company_website_url,
 											more_info_tab_url: data.more_info_tab_url,
@@ -383,6 +393,7 @@ exports.uploadStaffExcel = async (req, res) => {
 									home_email_label: data.home_email_label,
 									other_email_label: data.other_email_label,
 									position: data.position,
+									position_other_lang: data.position_other_lang,
 									work_tel_label: data.work_tel_label,
 									work_tel2_label: data.work_tel2_label,
 									work_tel3_label: data.work_tel3_label,
@@ -422,7 +433,7 @@ exports.uploadStaffExcel = async (req, res) => {
 									address3: data.address3,
 									address4: data.address4,
 
-									
+
 									address_label: data.address_label,
 									address2_label: data.address2_label,
 									address3_label: data.address3_label,
@@ -437,7 +448,10 @@ exports.uploadStaffExcel = async (req, res) => {
 									country: data.country,
 
 									bio: data.bio,
-
+									awards: data.awards,
+									qualifications: data.qualifications,
+									additional_address: data.additional_address,
+									achievements: data.achievements,
 									company_website_url: data.company_website_url,
 									more_info_tab_url: data.more_info_tab_url,
 									facebook_url: data.facebook_url,
@@ -607,9 +621,10 @@ exports.downloadStaffExcel = (req, res) => {
 		objs.forEach((obj) => {
 
 			var str_smartcard_uid = undefined;
+
 			str_smartcard_uid = JSON.stringify(obj.smartcard_uid);
 			str_smartcard_uid = (str_smartcard_uid || '').replaceAll('"', '');;
-
+			str_note_timestamp = JSON.stringify(obj.note_timestamp);
 
 			staffs.push({
 
@@ -632,6 +647,7 @@ exports.downloadStaffExcel = (req, res) => {
 				home_email_label: obj.home_email_label,
 				other_email_label: obj.other_email_label,
 				position: obj.position,
+				position_other_lang: obj.position_other_lang,
 				work_tel: obj.work_tel,
 				work_tel2: obj.work_tel2,
 				work_tel3: obj.work_tel3,
@@ -679,6 +695,10 @@ exports.downloadStaffExcel = (req, res) => {
 				department: obj.department,
 				country: obj.country,
 				bio: obj.bio,
+				awards: obj.awards,
+				qualifications: obj.qualifications,
+				additional_address: obj.additional_address,
+				achievements: obj.achievements,
 				company_website_url: obj.company_website_url,
 				more_info_tab_url: obj.more_info_tab_url,
 				facebook_url: obj.facebook_url,
@@ -702,12 +722,12 @@ exports.downloadStaffExcel = (req, res) => {
 				telegram_url: obj.telegram_url,
 				xiaohongshu_url: obj.xiaohongshu_url,
 				note: obj.note,
-				note_timestamp: obj.note_timestamp,
-				qrcode_option: obj.qrcode_option,
-				minisite_option: obj.minisite_option,
-				bizcard_option: obj.bizcard_option,
-				dig_card_in_vcf: obj.dig_card_in_vcf,
-				status: obj.status,
+				note_timestamp: (obj?.note_timestamp != undefined) && (obj.note_timestamp != true) ? obj.note_timestamp : true,
+				qrcode_option: (obj?.qrcode_option != undefined) && (obj.qrcode_option != "") ? obj.qrcode_option : 1,
+				minisite_option: (obj.minisite_option != "") && (obj?.minisite_option != undefined) ? obj.minisite_option : 1,
+				bizcard_option: (obj?.bizcard_option != undefined) ? obj.bizcard_option : 1,
+				dig_card_in_vcf: (obj.dig_card_in_vcf != true) && (obj?.dig_card_in_vcf != undefined) ? obj.dig_card_in_vcf : true,
+				status: (obj.status != true) && (obj?.status != undefined) ? obj.status : true,
 
 			});
 		});
@@ -737,6 +757,7 @@ exports.downloadStaffExcel = (req, res) => {
 			{ header: "other_email_label", key: "other_email_label", width: 25 },
 			{ header: "other_email", key: "other_email", width: 25 },
 			{ header: "position", key: "position", width: 25 },
+			{ header: "position_other_lang", key: "position_other_lang", width: 25 },
 			{ header: "work_tel_label", key: "work_tel_label", width: 25 },
 			{ header: "work_tel", key: "work_tel", width: 25 },
 			{ header: "work_tel2_label", key: "work_tel2_label", width: 25 },
@@ -782,6 +803,10 @@ exports.downloadStaffExcel = (req, res) => {
 			{ header: "department", key: "department", width: 25 },
 			{ header: "country", key: "country", width: 25 },
 			{ header: "bio", key: "bio", width: 25 },
+			{ header: "awards", key: "awards", width: 25 },
+			{ header: "qualifications", key: "qualifications", width: 25 },
+			{ header: "additional_address", key: "additional_address", width: 25 },
+			{ header: "achievements", key: "achievements", width: 25 },
 			{ header: "company_website_url", key: "company_website_url", width: 25 },
 			{ header: "more_info_tab_url", key: "more_info_tab_url", width: 25 },
 			{ header: "facebook_url", key: "facebook_url", width: 25 },
@@ -891,6 +916,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				other_email_label: obj.other_email_label,
 
 				position: obj.position,
+				position_other_lang: obj.position_other_lang,
 				work_tel: obj.work_tel,
 				work_tel2: obj.work_tel2,
 				work_tel3: obj.work_tel3,
@@ -936,6 +962,10 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				department: obj.department,
 				country: obj.country,
 				bio: obj.bio,
+				awards: obj.awards,
+				qualifications: obj.qualifications,
+				additional_address: obj.additional_address,
+				achievements: obj.achievements,
 				company_website_url: obj.company_website_url,
 				more_info_tab_url: obj.more_info_tab_url,
 				facebook_url: obj.facebook_url,
@@ -1003,6 +1033,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "other_email_label", key: "other_email_label", width: 25 },
 			{ header: "other_email", key: "other_email", width: 25 },
 			{ header: "position", key: "position", width: 25 },
+			{ header: "position_other_lang", key: "position_other_lang", width: 25 },
 			{ header: "work_tel_label", key: "work_tel_label", width: 25 },
 			{ header: "work_tel", key: "work_tel", width: 25 },
 			{ header: "work_tel2_label", key: "work_tel2_label", width: 25 },
@@ -1048,6 +1079,10 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "department", key: "department", width: 25 },
 			{ header: "country", key: "country", width: 25 },
 			{ header: "bio", key: "bio", width: 25 },
+			{ header: "awards", key: "awards", width: 25 },
+			{ header: "qualifications", key: "qualifications", width: 25 },
+			{ header: "additional_address", key: "additional_address", width: 25 },
+			{ header: "achievements", key: "achievements", width: 25 },
 			{ header: "company_website_url", key: "company_website_url", width: 25 },
 			{ header: "more_info_tab_url", key: "more_info_tab_url", width: 25 },
 			{ header: "facebook_url", key: "facebook_url", width: 25 },

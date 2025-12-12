@@ -56,6 +56,7 @@ exports.create = async (req, res) => {
 		home_email_label: req.body.home_email_label,
 		other_email_label: req.body.other_email_label,
 		position: req.body.position,
+		position_other_lang: req.body.position_other_lang,
 		work_tel: req.body.work_tel,
 		work_tel2: req.body.work_tel2,
 		work_tel3: req.body.work_tel3,
@@ -100,6 +101,10 @@ exports.create = async (req, res) => {
 		department: req.body.department,
 		country: req.body.country,
 		bio: req.body.bio,
+		awards: req.body.awards,
+		additional_address: req.body.additional_address,
+		qualifications: req.body.qualifications,
+		achievements: req.body.achievements,
 		company_website_url: req.body.company_website_url,
 		more_info_tab_url: req.body.more_info_tab_url,
 		facebook_url: req.body.facebook_url,
@@ -109,7 +114,7 @@ exports.create = async (req, res) => {
 		youtube_url: req.body.youtube_url,
 		twitter_url: req.body.twitter_url,
 		wechat_id: req.body.wechat_id,
-		wechat_qr_url:req.body.wechat_qr_url,
+		wechat_qr_url: req.body.wechat_qr_url,
 		wechatpage_url: req.body.wechatpage_url,
 		tiktok_url: req.body.tiktok_url,
 		line_url: req.body.line_url,
@@ -196,6 +201,7 @@ exports.create = async (req, res) => {
 						home_email: data.home_email,
 						other_email: data.other_email,
 						position: data.position,
+						position_other_lang: data.position_other_lang,
 						work_tel: data.work_tel,
 						work_tel2: data.work_tel2,
 						work_tel3: data.work_tel3,
@@ -233,7 +239,10 @@ exports.create = async (req, res) => {
 						country: data.country,
 
 						bio: data.bio,
-
+						awards: data.awards,
+						additional_address: data.additional_address,
+						qualifications: data.qualifications,
+						achievements: data.achievements,
 						company_website_url: data.company_website_url,
 						more_info_tab_url: data.more_info_tab_url,
 						facebook_url: data.facebook_url,
@@ -265,7 +274,7 @@ exports.create = async (req, res) => {
 						qrcode_option: data.qrcode_option,
 						profile_counter: data.profile_counter,
 						vcf_counter: data.vcf_counter,
-						wechat_qr_url:data.wechat_qr_url,
+						wechat_qr_url: data.wechat_qr_url,
 
 						status: data.status,
 						updatedBy: ObjectId(uid),
@@ -304,10 +313,14 @@ exports.findAll = (req, res) => {
 	let queryArray = [];
 	let queryArrayAnd = [];
 	let query = {};
-
+	console.log(search);
 	if (search) {
 		queryArray.push({ "fname": { $regex: new RegExp(search), $options: "i" } });
 		queryArray.push({ "lname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "mname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "pname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "pdname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "oname": { $regex: new RegExp(search), $options: "i" } });
 		queryArray.push({ "company_name_chi": { $regex: new RegExp(search), $options: "i" } });
 		queryArray.push({ "company_name_eng": { $regex: new RegExp(search), $options: "i" } });
 		queryArray.push({ "staff_no": { $regex: new RegExp(search), $options: "i" } });
@@ -391,10 +404,21 @@ exports.findByCompanyId = (req, res) => {
 	const populate = ['company_id', 'createdBy', 'updatedBy'];
 	const { currentPage, pageSize, search, orderBy, companyId, deactive } = req.query;
 	let query = {};
+	let queryArray = [];
+	let queryArrayAnd = [];
+	if (search) {
+		queryArray.push({ "fname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "lname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "mname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "pname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "pdname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "oname": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "company_name_chi": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "company_name_eng": { $regex: new RegExp(search), $options: "i" } });
+		queryArray.push({ "staff_no": { $regex: new RegExp(search), $options: "i" } });
+		query['$or'] = queryArray;
+	}
 
-
-	if (search)
-		query.fname = { $regex: new RegExp(search), $options: "i" };
 	if (companyId != "")
 		query.company_id = ObjectId(companyId);
 	else
@@ -430,6 +454,7 @@ exports.findByCompanyId = (req, res) => {
 
 // Find a single Staff with an id
 exports.findOne = (req, res) => {
+	console.log("staff Controller.findOne");
 	const id = req.params.id;
 
 	Staff.findById(id).populate('company_id')
@@ -450,7 +475,23 @@ exports.findOne = (req, res) => {
 // Find a single Staff with an id
 exports.findByUserProfile = (req, res) => {
 	console.log("findbyuserprofile");
-	const { id } = req.query;
+	const { companyId,id } = req.query;
+
+	if (companyId == "63142fd5b54bdbb18f556016") {
+		query = {
+
+			$and: [{ _id: ObjectId(id) }]
+		}
+	} else {
+
+		query = {
+			$and: [
+				{ _id: ObjectId(id) },
+				{ company_id: ObjectId(companyId) }
+			]
+		}
+	}
+
 
 	Staff.findById(id).populate('company_id').populate('smartcard_uid')
 		.then(data => {
@@ -466,6 +507,43 @@ exports.findByUserProfile = (req, res) => {
 				.status(500)
 				.send({ message: "Error retrieving Staff with id=" + id });
 		});
+};
+// Find a single Staff with an id
+exports.findByStaffDocID = (req, res) => {
+
+	console.log("entered Staff.findByStaffDocID");
+	const { companyId, id } = req.query;
+	let query = {};
+
+	if (companyId == "63142fd5b54bdbb18f556016") {
+		query = {
+
+			$and: [{ _id: ObjectId(id) }]
+		}
+	} else {
+
+		query = {
+			$and: [
+				{ _id: ObjectId(id) },
+				{ company_id: ObjectId(companyId) }
+			]
+		}
+	}
+
+	console.log(query);
+
+	Staff.findOne(query).populate('company_id')
+		.then(data => {
+			res.send(data);
+		})
+		.catch(err => {
+			console.log("entered Staff.findByStaffDocID ERROR");
+			res.status(500).send({
+				message:
+					err.message || "Some error occurred while retrieving staffs."
+			});
+		});
+
 };
 
 // Update a Staff by the id in the request
@@ -571,6 +649,7 @@ exports.update = async (req, res) => {
 							home_email_label: data.home_email_label,
 							other_email_label: data.other_email_label,
 							position: data.position,
+							position_other_lang: data.position_other_lang,
 							work_tel: data.work_tel,
 							work_tel2: data.work_tel2,
 							work_tel3: data.work_tel3,
@@ -622,7 +701,10 @@ exports.update = async (req, res) => {
 							country: data.country,
 
 							bio: data.bio,
-
+							awards: data.awards,
+							additional_address: data.additional_address,
+							qualifications: data.qualifications,
+							achievements: data.achievements,
 							company_website_url: data.company_website_url,
 							more_info_tab_url: data.more_info_tab_url,
 							facebook_url: data.facebook_url,
@@ -655,7 +737,7 @@ exports.update = async (req, res) => {
 							minisite_option: data.minisite_option,
 							profile_counter: data.profile_counter,
 							vcf_counter: data.vcf_counter,
-							wechat_qr_url:data.wechat_qr_url,
+							wechat_qr_url: data.wechat_qr_url,
 
 							status: data.status,
 							updatedBy: ObjectId(uid),

@@ -1,0 +1,12 @@
+db["staffs"].updateMany(
+  {}, // Empty filter to match all documents
+  [
+    {
+      $set: {
+        bizcard_option: { $toInt: "$bizcard_option" } // Example: Convert myField to an integer
+      }
+    }
+  ]
+)
+
+

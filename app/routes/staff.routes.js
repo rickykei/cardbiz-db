@@ -13,8 +13,11 @@ module.exports = app => {
   
   router.get("/findByCompanyId", staffs.findByCompanyId);
 
-   // Retrieve a single findByUserProfile pop smartcard db
+  // Retrieve a single findByUserProfile pop smartcard db
   router.get("/findByUserProfile", staffs.findByUserProfile);
+
+  // Retrieve a single staff and given Docid and ensure the company id from the requestor is same
+  router.get("/findByStaffDocID", staffs.findByStaffDocID);
 
   // Retrieve a single Tutorial with id
   router.get("/:id", staffs.findOne);

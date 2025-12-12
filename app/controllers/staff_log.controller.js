@@ -11,7 +11,7 @@ const getPagination = (page, size) => {
 	return { limit, offset };
 };
 
-  
+
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
@@ -112,7 +112,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 					other_email_label: obj.other_email_label,
 
 					position: obj.position,
-
+					position_other_lang: obj.position_other_lang,
 					work_tel: obj.work_tel,
 					work_tel2: obj.work_tel2,
 					work_tel3: obj.work_tel3,
@@ -163,6 +163,11 @@ exports.downloadStaffLogExcel = (req, res) => {
 					department: obj.department,
 					country: obj.country,
 					bio: obj.bio,
+
+					awards: obj.awards,
+					additional_address: obj.additional_address,
+					qualifications: obj.qualifications,
+					achievements: obj.achievements,
 					company_website_url: obj.company_website_url,
 					more_info_tab_url: obj.more_info_tab_url,
 					facebook_url: obj.facebook_url,
@@ -224,6 +229,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 				{ header: "other_email_label", key: "other_email_label", width: 25 },
 				{ header: "other_email", key: "other_email", width: 25 },
 				{ header: "position", key: "position", width: 25 },
+				{ header: "position_other_lang", key: "position_other_lang", width: 25 },
 				{ header: "work_tel_label", key: "work_tel_label", width: 25 },
 				{ header: "work_tel", key: "work_tel", width: 25 },
 				{ header: "work_tel2_label", key: "work_tel2_label", width: 25 },
@@ -269,6 +275,10 @@ exports.downloadStaffLogExcel = (req, res) => {
 				{ header: "department", key: "department", width: 25 },
 				{ header: "country", key: "country", width: 25 },
 				{ header: "bio", key: "bio", width: 25 },
+				{ header: "awards", key: "awards", width: 25 },
+				{ header: "additional_address", key: "additional_address", width: 25 },
+				{ header: "qualifications", key: "qualifications", width: 25 },
+				{ header: "achievements", key: "achievements", width: 25 },
 				{ header: "company_website_url", key: "company_website_url", width: 25 },
 				{ header: "more_info_tab_url", key: "more_info_tab_url", width: 25 },
 				{ header: "facebook_url", key: "facebook_url", width: 25 },

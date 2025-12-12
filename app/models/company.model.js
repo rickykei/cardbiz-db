@@ -50,6 +50,7 @@ module.exports = (mongoose, mongoosePaginate) => {
       font_color: String,
       font_size: String,
       font_family: String,
+      title_font_size: String,
       bg_color: String,
       text_color:String,
       title_text_color:String,
@@ -63,6 +64,8 @@ module.exports = (mongoose, mongoosePaginate) => {
       key_wording_color:String,
       site_bg_color:String,
       bg_image:String, 
+      logo_display_option:{type: Boolean, default: true},
+      headshot_display_option:{type: Boolean, default: true},
       updatedAt: { type: Date, default: Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') },
       createdAt: { type: Date, default: Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') }
     }, schemaOptions
