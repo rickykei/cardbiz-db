@@ -144,6 +144,44 @@ module.exports = (mongoose, mongoosePaginate) => {
     
   );
 
+// ------------------------------
+// 當 刪除員工 → 自動刪除頭像
+// ------------------------------
+  schema.pre('findOneAndDelete', async function(next) {
+  const staff = await this.model.findOne(this.getFilter());
+  if (staff?.headshot) {
+    const photoId = staff.headshot;
+
+    // 刪除 photos.files
+    await mongoose.model('photos.files').deleteOne({ _id: photoId });
+    
+    // 刪除 photos.chunks
+    await mongoose.model('photos.chunks').deleteMany({ files_id: photoId });
+  }
+  next();
+});
+
+// ------------------------------
+// 當 修改員工 → 更換頭像時 → 自動刪除「舊頭像」
+// ------------------------------
+schema.pre('findOneAndUpdate', async function(next) {
+  const oldStaff = await this.model.findOne(this.getFilter());
+  
+  // 如果原本有舊頭像，而且即將被改成新的
+  if (oldStaff?.headshot && this._update.headshot) {
+    const oldPhotoId = oldStaff.headshot;
+    const newPhotoId = this._update.headshot;
+
+    if (oldPhotoId.toString() !== newPhotoId.toString()) {
+      // 刪除舊圖片
+      await mongoose.model('photos.files').deleteOne({ _id: oldPhotoId });
+      await mongoose.model('photos.chunks').deleteMany({ files_id: oldPhotoId });
+    }
+  }
+  next();
+});
+
+
   schema.method("toJSON", function() {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
