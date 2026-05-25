@@ -1,8 +1,10 @@
 const db = require("../models");
 const Vcf_counter = db.vcf_counter;
-var ObjectId = require('mongodb').ObjectId; 
+//var ObjectId = require('mongodb').ObjectId; 
+const { ObjectId } = require('mongoose').Types;
  const readXlsxFile = require('read-excel-file/node')
 const excel = require("exceljs")
+const Staff = db.staffs;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -123,7 +125,143 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.downloadStaffLogExcel =  (req, res) => {
+exports.downloadStaffLogExcel = async (req, res) => {
+  console.log("🚀 进入 Vcf_counter.downloadStaffLogExcel 导出");
+  
+  const { company_id, uid } = req.query;
+  let nfc = 0;
+  let query = {};
+
+  // 參數驗證
+  if (!company_id || !uid) return res.status(400).send("ERROR");
+
+  // 公司條件 + 統一 100 天查詢
+  if (company_id !== "63142fd5b54bdbb18f556016") {
+    query.company_id = ObjectId(company_id);
+    // 🔥 加入 100 天條件
+    query.createdAt = { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) };
+    console.log("📊 非NFC公司 + 100天");
+  } else {
+    nfc = 1;
+    // 🔥 加入 100 天條件
+    query.createdAt = { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) };
+    console.log("📊 NFC公司 + 100天");
+  }
+ 
+
+  try {
+    // ============================
+    // 【高性能】cursor + lean 流式查詢
+    // ============================
+    const cursor = Vcf_counter.find(query)
+      .select("staff_id updatedAt ip user_agent")
+      .lean()
+      .cursor();
+
+    // ============================
+    // 流式 Excel 匯出（不佔記憶體）
+    // ============================
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=staffsVcf.xlsx");
+
+    const workbook = new excel.stream.xlsx.WorkbookWriter({
+      stream: res,
+      useStyles: false,
+      useSharedStrings: false
+    });
+    const worksheet = workbook.addWorksheet("staffvcflog");
+
+    // 一般公司欄位
+    const normalColumns = [
+      { header: "updatedAtDate", key: "updatedAtDate", width: 20 },
+      { header: "updatedAtTime", key: "updatedAtTime", width: 20 },
+      { header: "company_name_eng", key: "company_name_eng", width: 25 },
+      { header: "company_name_chi", key: "company_name_chi", width: 25 },
+      { header: "first_name", key: "fname", width: 15 },
+      { header: "last_name", key: "lname", width: 15 },
+      { header: "position", key: "position", width: 20 },
+      { header: "address", key: "address", width: 30 },
+      { header: "address2", key: "address2", width: 30 },
+      { header: "address3", key: "address3", width: 30 },
+      { header: "address4", key: "address4", width: 30 },
+      { header: "staff_no", key: "staff_no", width: 15 },
+      { header: "division", key: "division", width: 18 },
+      { header: "department", key: "department", width: 18 },
+      { header: "country", key: "country", width: 15 },
+    ];
+
+    // NFC 公司多出 IP + user_agent
+    const nfcColumns = [
+      ...normalColumns,
+      { header: "ip", key: "ip", width: 15 },
+      { header: "user_agent", key: "user_agent", width: 40 },
+    ];
+
+    worksheet.columns = nfc === 0 ? normalColumns : nfcColumns;
+
+    // ============================
+    // 流式逐行處理（記憶體極低）
+    // ============================
+    for await (const obj of cursor) {
+      try {
+        // 跳過空 staff
+        if (!obj.staff_id) continue;
+
+        const staffId = obj.staff_id.toString();
+        if (!ObjectId.isValid(staffId)) continue;
+
+        // 即時查員工（不預載萬筆）
+        const staff = await Staff.findById(staffId).lean();
+        if (!staff) continue;
+
+        // 日期格式化
+        const dt = new Date(obj.updatedAt);
+        const updatedAtDate = dt.toISOString().split('T')[0];
+        const updatedAtTime = dt.toTimeString().slice(0, 8);
+
+        // 組行
+        const row = {
+          updatedAtDate,
+          updatedAtTime,
+          company_name_eng: staff.company_name_eng || "",
+          company_name_chi: staff.company_name_chi || "",
+          fname: staff.fname || "",
+          lname: staff.lname || "",
+          position: staff.position || "",
+          address: staff.address || "",
+          address2: staff.address2 || "",
+          address3: staff.address3 || "",
+          address4: staff.address4 || "",
+          staff_no: staff.staff_no || "",
+          division: staff.division || "",
+          department: staff.department || "",
+          country: staff.country || "",
+        };
+
+        // NFC 才加
+        if (nfc) {
+          row.ip = obj.ip || "";
+          row.user_agent = obj.user_agent || "";
+        }
+
+        // 寫入並釋放記憶體
+        worksheet.addRow(row).commit();
+
+      } catch (err) {
+        continue;
+      }
+    }
+
+    await workbook.commit();
+    console.log("✅ VCF日志导出完成！");
+
+  } catch (err) {
+    console.error("❌ 导出错误:", err.message);
+    if (!res.headersSent) res.status(500).send("FAIL");
+  }
+};
+
+exports.downloadStaffLogExcel2 =  (req, res) => {
   console.log("entered  Vcf_counter.downloadStaffLogExcel");
   const populate=['staff_id'];
   let nfc=0;

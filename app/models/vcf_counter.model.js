@@ -31,6 +31,9 @@
 		createdAt: {type: Date, default: Date.now,get: v => moment(v).format('YYYY-MM-DD HH:mm:ss') } 
     },schemaOptions
   );
+
+    schema.index({ company_id: 1,createdAt: -1 });
+
   schema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
