@@ -15,8 +15,16 @@ verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
-    req.userId = decoded.id;
-    next();
+
+    User.findById(decoded.id).exec((err, user) => {
+      if (err || !user) {
+        return res.status(401).send({ message: "User not found" });
+      }
+
+      req.userId = user._id;
+      req.company_id = user.company_id;
+      next();
+    });
   });
 };
 
@@ -28,9 +36,7 @@ isAdmin = (req, res, next) => {
     }
 
     Role.find(
-      {
-        _id: { $in: user.roles }
-      },
+      { _id: { $in: user.roles } },
       (err, roles) => {
         if (err) {
           res.status(500).send({ message: err });
@@ -45,7 +51,6 @@ isAdmin = (req, res, next) => {
         }
 
         res.status(403).send({ message: "Require Admin Role!" });
-        return;
       }
     );
   });
@@ -59,9 +64,7 @@ isModerator = (req, res, next) => {
     }
 
     Role.find(
-      {
-        _id: { $in: user.roles }
-      },
+      { _id: { $in: user.roles } },
       (err, roles) => {
         if (err) {
           res.status(500).send({ message: err });
@@ -76,7 +79,6 @@ isModerator = (req, res, next) => {
         }
 
         res.status(403).send({ message: "Require Moderator Role!" });
-        return;
       }
     );
   });
@@ -87,4 +89,5 @@ const authJwt = {
   isAdmin,
   isModerator
 };
+
 module.exports = authJwt;
