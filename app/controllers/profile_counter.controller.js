@@ -297,11 +297,11 @@ exports.downloadStaffLogExcel3 = (req, res) => {
   // 构建查询条件
   if (company_id !== "63142fd5b54bdbb18f556016") {
     query.company_id = ObjectId(company_id);
-    query.createdAt = { $gte: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000) };
+    query.createdAt = { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) };
     console.log("non nfc last 90 days record");
   } else {
     nfc = 1;
-    query.createdAt = { $gte: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) };
+    query.createdAt = { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) };
     console.log("nfc only 10 days record");
   }
 
