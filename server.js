@@ -2,7 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
- 
+const authJwt = require("./app/middleware/authJwt");
+
 global.__basedir = __dirname + "/";
 global.profileUrl="https://e-profile.digital/?key=";
 

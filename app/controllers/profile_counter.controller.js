@@ -165,7 +165,7 @@ exports.downloadStaffLogExcel = async (req, res) => {
 
   if (company_id !== "63142fd5b54bdbb18f556016") {
     query.company_id = ObjectId(company_id);
-    query.createdAt = { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) };
+    query.createdAt = { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) };
     console.log("📊 非NFC公司：90天");
   } else {
     nfc = 1;
