@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
+module.exports = mongoose => {
+  const Checkout = mongoose.Schema(
+    {
+      staffId: String,
+      company_id: String,
+      scanDate: { type: Date, default: Date.now }
+    },
+    { timestamps: true }
+  );
 
-const checkoutSchema = new mongoose.Schema({
-  staffId: { type: String, required: true },
-  company_id: { type: String, required: true },
-  scanDate: { type: Date, default: Date.now },
-});
-
-module.exports = mongoose.model('Checkout', checkoutSchema);
+  return mongoose.model("Checkout", Checkout);
+};
