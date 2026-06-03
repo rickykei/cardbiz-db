@@ -8,7 +8,7 @@ const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 
-db.tutorials = require("./tutorial.model.js")(mongoose, mongoosePaginate);
+
 db.companies = require("./company.model.js")(mongoose, mongoosePaginate);
 db.staffs = require("./staff.model.js")(mongoose, mongoosePaginate);
 db.users = require("./user.model")(mongoose, mongoosePaginate);
@@ -24,5 +24,7 @@ db.aw_counter = require("./aw_counter.model")(mongoose, mongoosePaginate);
 db.mobilesite_counter = require("./mobilesite_counter.model")(mongoose, mongoosePaginate);
 db.photos = require("./photos.model")(mongoose, mongoosePaginate);
 db.photosChunks = require("./photoschunks.model.js")(mongoose, mongoosePaginate);
+db.checkin = require("./checkin.model")(mongoose, mongoosePaginate);
+db.checkout = require("./checkout.model")(mongoose, mongoosePaginate);
 
 module.exports = db;
