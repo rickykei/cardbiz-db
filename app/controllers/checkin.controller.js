@@ -1,39 +1,39 @@
 const db = require("../models");
 var ObjectId = require('mongodb').ObjectId;
 
-const Checkin = db.checkins;
-const Checkout = db.checkouts;
+const Checkin = db.checkin;
+const Checkout = db.checkout;
 
 exports.checkIn = async (req, res) => {
     try {
-        const { staffCode } = req.body;
-        if (!staffCode) return res.status(400).json({ message: 'staffCode is required' });
+        
+        if (!req.body.staffId) return res.status(400).json({ message: 'staffId is required' });
 
         const record = await Checkin.create({
-            staffId: staffCode,
-            company_id: req.company_id,
-            scanDate: new Date()
+            staff_id: req.body.staffId,
+            company_id: req.body.companyId 
         });
 
-        res.json({ success: true, staffCode, scanDate: record.scanDate });
+        res.json({ success: true, staffId: record.staff_id});
     } catch (error) {
         res.status(500).json({ message: 'Check In failed' });
+        console.error('Check In failed:', error);
     }
 };
 
 
 exports.checkOut = async (req, res) => {
     try {
-        const { staffCode } = req.body;
-        if (!staffCode) return res.status(400).json({ message: 'staffCode is required' });
+        const { staffId } = req.body;
+        if (!staffId) return res.status(400).json({ message: 'staffId is required' });
 
         const record = await Checkout.create({
-            staffId: staffCode,
+            staffId: staffId,
             company_id: req.company_id,
             scanDate: new Date()
         });
 
-        res.json({ success: true, staffCode, scanDate: record.scanDate });
+        res.json({ success: true, staffId , scanDate: record.scanDate });
     } catch (error) {
         res.status(500).json({ message: 'Check Out failed' });
     }
