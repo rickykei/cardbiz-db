@@ -23,19 +23,19 @@ exports.checkIn = async (req, res) => {
 
 
 exports.checkOut = async (req, res) => {
-    try {
-        const { staffId } = req.body;
-        if (!staffId) return res.status(400).json({ message: 'staffId is required' });
+   try {
+        
+        if (!req.body.staffId) return res.status(400).json({ message: 'staffId is required' });
 
         const record = await Checkout.create({
-            staffId: staffId,
-            company_id: req.company_id,
-            scanDate: new Date()
+            staff_id: req.body.staffId,
+            company_id: req.body.companyId 
         });
 
-        res.json({ success: true, staffId , scanDate: record.scanDate });
+        res.json({ success: true, staffId: record.staff_id});
     } catch (error) {
         res.status(500).json({ message: 'Check Out failed' });
+        console.error('Check Out failed:', error);
     }
 };
 
