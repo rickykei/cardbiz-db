@@ -6,7 +6,7 @@ module.exports = app => {
 
   router.post('/in', checkins.checkIn);
   router.post('/out', checkins.checkOut);
-  router.get('/records', checkins.getRecords);
+  router.post('/records', checkins.getRecords);
 
   app.use("/api/checkin", router);
 };
