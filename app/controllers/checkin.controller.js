@@ -1,247 +1,158 @@
-const db = require("../models");
+
 const mongoose = require('mongoose');
-const { ObjectId } = require('mongoose').Types;
- const readXlsxFile = require('read-excel-file/node')
-const excel = require("exceljs")
-const Staff = db.staffs;
-const Checkin = db.checkin;
-const Checkout = db.checkout;
- 
+const ObjectId = mongoose.Types.ObjectId;
+const excel = require('exceljs');
+const Attendance = require('../models/attendance.model');
+const Staff = require('../models/staff.model');
+
+// 簽到
 exports.checkIn = async (req, res) => {
   try {
-    const { staffId, companyId } = req.body;
-
-    if (!staffId) return res.status(400).json({ message: 'staffId is required' });
-    if (!companyId) return res.status(400).json({ message: 'companyId is required' });
-
-    const staff = await Staff.findOne({
-      _id: staffId,
-      company_id: companyId
-    });
-
-    if (!staff) {
-      return res.status(403).json({ message: 'Staff not found or does not belong to this company' });
-    }
-
-    const record = await Checkin.create({
+    const { staffId, companyId, scanDate } = req.body;
+    const record = new Attendance({
       staff_id: staffId,
-      company_id: companyId
+      company_id: companyId,
+      type: 'in',
+      scanDate: scanDate
     });
-
-    res.json({
-      success: true,
-      staffId: record.staff_id,
-      fname: staff.fname,
-      lname: staff.lname
-    });
-  } catch (error) {
-    console.error('Check In failed:', error);
-    res.status(500).json({ message: 'Check In failed' });
+    await record.save();
+    res.json({ status: 'ok', fname: '', lname: '' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
+// 簽退
 exports.checkOut = async (req, res) => {
   try {
-    const { staffId, companyId } = req.body;
-
-    if (!staffId) return res.status(400).json({ message: 'staffId is required' });
-    if (!companyId) return res.status(400).json({ message: 'companyId is required' });
-
-    const staff = await Staff.findOne({
-      _id: staffId,
-      company_id: companyId
-    });
-
-    if (!staff) {
-      return res.status(403).json({ message: 'Staff not found or does not belong to this company' });
-    }
-
-    const record = await Checkout.create({
+    const { staffId, companyId, scanDate } = req.body;
+    const record = new Attendance({
       staff_id: staffId,
-      company_id: companyId
+      company_id: companyId,
+      type: 'out',
+      scanDate: scanDate
     });
-
-    res.json({
-      success: true,
-      staffId: record.staff_id,
-      fname: staff.fname,
-      lname: staff.lname
-    });
-  } catch (error) {
-    console.error('Check Out failed:', error);
-    res.status(500).json({ message: 'Check Out failed' });
+    await record.save();
+    res.json({ status: 'ok', fname: '', lname: '' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
+// 列表
 exports.getRecords = async (req, res) => {
   try {
-    const { companyId } = req.body;
+    const { companyId, type } = req.body;
 
-    if (!companyId) {
-      return res.status(400).json({ message: 'companyId is required' });
+    let query = {
+      company_id: companyId
+    };
+
+    // 有傳 type 就只對應類型（in / out），沒傳就全部返回
+    if (type === 'in' || type === 'out') {
+      query.type = type;
     }
 
-    // 🔥 正统 mongoose populate，直接带出 fname + lname
-    const checkins = await Checkin.find({ company_id: companyId })
+    const records = await Attendance.find(query)
       .sort({ createdAt: -1 })
-      .populate({
-        path: 'staff_id',
-        select: 'fname lname'
-      });
+      .limit(50)
+      .populate('staff_id', 'fname lname')
+      .lean();
 
-    const checkouts = await Checkout.find({ company_id: companyId })
-      .sort({ createdAt: -1 })
-      .populate({
-        path: 'staff_id',
-        select: 'fname lname'
-      });
-
-    res.json({
-      success: true,
-      checkins,
-      checkouts
-    });
-
+    res.json(records);
   } catch (err) {
-    console.error('Error fetching records:', err);
-    res.status(500).json({ message: 'Error fetching records' });
+    res.status(500).send('FAIL');
   }
 };
+
+// 匯出 only in
 exports.download_checkin = async (req, res) => {
-  console.log("🚀 进入 Checkin.download_checkin 导出");
-
+  console.log("🚀 download_checkin");
   const { company_id, uid } = req.query;
-
   if (!company_id || !uid) return res.status(400).send("ERROR");
 
   try {
-    // 🔥 一次查询：checkin + 关联 staff，只取需要的字段
-    const checkins = await Checkin.find({
+    const records = await Attendance.find({
       company_id: ObjectId(company_id),
+      type: 'in',
       createdAt: { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) }
     })
       .sort({ createdAt: -1 })
-      .populate({
-        path: 'staff_id',
-        select: 'fname lname'  // 只拿姓名，轻量
-      })
+      .populate({ path: 'staff_id', select: 'fname lname' })
       .lean();
 
-    // Excel 流式导出
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     res.setHeader("Content-Disposition", "attachment; filename=staffCheckin.xlsx");
 
-    const workbook = new excel.stream.xlsx.WorkbookWriter({
-      stream: res,
-      useStyles: false,
-      useSharedStrings: false
-    });
-
-    const worksheet = workbook.addWorksheet("staffCheckinLog");
-
-    worksheet.columns = [
+    const workbook = new excel.stream.xlsx.WorkbookWriter({ stream: res });
+    const ws = workbook.addWorksheet("Checkin");
+    ws.columns = [
       { header: "checkInDate", key: "checkInDate", width: 20 },
       { header: "checkInTime", key: "checkInTime", width: 20 },
       { header: "first_name", key: "fname", width: 15 },
-      { header: "last_name", key: "lname", width: 15 },
+      { header: "last_name", key: "lname", width: 15 }
     ];
 
-    // 直接遍历，不再查库
-    for (const record of checkins) {
+    for (const rec of records) {
       try {
-        const staff = record.staff_id;
+        const staff = rec.staff_id;
         if (!staff) continue;
-
-        const dt = new Date(record.createdAt);
+        const dt = new Date(rec.createdAt);
         const checkInDate = dt.toISOString().split('T')[0];
         const checkInTime = dt.toTimeString().slice(0, 8);
-
-        worksheet.addRow({
-          checkInDate,
-          checkInTime,
-          fname: staff.fname || "",
-          lname: staff.lname || ""
-        }).commit();
-
-      } catch (err) {
-        continue;
-      }
+        ws.addRow({ checkInDate, checkInTime, fname: staff.fname, lname: staff.lname }).commit();
+      } catch (e) { continue }
     }
 
     await workbook.commit();
-    console.log("✅ Checkin 导出完成！");
-
   } catch (err) {
-    console.error("❌ Checkin 导出错误:", err.message);
+    console.error(err);
     if (!res.headersSent) res.status(500).send("FAIL");
   }
 };
+
+// 匯出 only out
 exports.download_checkout = async (req, res) => {
-  console.log("🚀 进入 Checkout.download_checkout 导出");
-
+  console.log("🚀 download_checkout");
   const { company_id, uid } = req.query;
-
   if (!company_id || !uid) return res.status(400).send("ERROR");
 
   try {
-    // 一次查询 checkout + 关联 staff
-    const checkouts = await Checkout.find({
+    const records = await Attendance.find({
       company_id: ObjectId(company_id),
+      type: 'out',
       createdAt: { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) }
     })
       .sort({ createdAt: -1 })
-      .populate({
-        path: 'staff_id',
-        select: 'fname lname'
-      })
+      .populate({ path: 'staff_id', select: 'fname lname' })
       .lean();
 
-    // Excel 匯出標頭
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     res.setHeader("Content-Disposition", "attachment; filename=staffCheckout.xlsx");
 
-    const workbook = new excel.stream.xlsx.WorkbookWriter({
-      stream: res,
-      useStyles: false,
-      useSharedStrings: false
-    });
-
-    const worksheet = workbook.addWorksheet("staffCheckoutLog");
-
-    worksheet.columns = [
+    const workbook = new excel.stream.xlsx.WorkbookWriter({ stream: res });
+    const ws = workbook.addWorksheet("Checkout");
+    ws.columns = [
       { header: "checkOutDate", key: "checkOutDate", width: 20 },
       { header: "checkOutTime", key: "checkOutTime", width: 20 },
       { header: "first_name", key: "fname", width: 15 },
-      { header: "last_name", key: "lname", width: 15 },
+      { header: "last_name", key: "lname", width: 15 }
     ];
 
-    // 直接匯出，不再重複查庫
-    for (const record of checkouts) {
+    for (const rec of records) {
       try {
-        const staff = record.staff_id;
+        const staff = rec.staff_id;
         if (!staff) continue;
-
-        const dt = new Date(record.createdAt);
+        const dt = new Date(rec.createdAt);
         const checkOutDate = dt.toISOString().split('T')[0];
         const checkOutTime = dt.toTimeString().slice(0, 8);
-
-        worksheet.addRow({
-          checkOutDate,
-          checkOutTime,
-          fname: staff.fname || "",
-          lname: staff.lname || ""
-        }).commit();
-
-      } catch (err) {
-        continue;
-      }
+        ws.addRow({ checkOutDate, checkOutTime, fname: staff.fname, lname: staff.lname }).commit();
+      } catch (e) { continue }
     }
 
     await workbook.commit();
-    console.log("✅ Checkout 导出完成！");
-
   } catch (err) {
-    console.error("❌ Checkout 导出错误:", err.message);
+    console.error(err);
     if (!res.headersSent) res.status(500).send("FAIL");
   }
 };
