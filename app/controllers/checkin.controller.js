@@ -274,3 +274,66 @@ exports.download_summary = async (req, res) => {
     if (!res.headersSent) res.status(500).send("FAIL");
   }
 };
+
+// 全部打卡記錄 Excel（同一 Sheet，用 type 區分 in/out）
+exports.download_all = async (req, res) => {
+  console.log("🚀 download_all");
+
+  const { company_id, uid } = req.query;
+  if (!company_id || !uid) return res.status(400).send("ERROR");
+
+  try {
+    const records = await Attendance.find({
+      company_id: ObjectId(company_id),
+      createdAt: { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) }
+    })
+      .sort({ createdAt: -1 })
+      .populate({ path: 'staff_id', select: 'fname lname' })
+      .lean();
+
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=staff_attendance_all.xlsx");
+
+    const workbook = new excel.stream.xlsx.WorkbookWriter({
+      stream: res,
+      useStyles: false,
+      useSharedStrings: false
+    });
+
+    const worksheet = workbook.addWorksheet("Attendance");
+
+    worksheet.columns = [
+      { header: "日期", key: "date", width: 15 },
+      { header: "時間", key: "time", width: 15 },
+      { header: "類型", key: "type", width: 12 },
+      { header: "姓氏", key: "lname", width: 15 },
+      { header: "名字", key: "fname", width: 15 }
+    ];
+
+    for (const rec of records) {
+      try {
+        const staff = rec.staff_id;
+        if (!staff) continue;
+
+        const dt = new Date(rec.createdAt);
+        const date = dt.toISOString().split('T')[0];
+        const time = dt.toTimeString().slice(0, 8);
+
+        worksheet.addRow({
+          date,
+          time,
+          type: rec.type === 'in' ? 'Check-in' : 'Check-out',
+          fname: staff.fname || "",
+          lname: staff.lname || ""
+        }).commit();
+      } catch (e) { continue }
+    }
+
+    await workbook.commit();
+    console.log("✅ 全部記錄匯出完成");
+
+  } catch (err) {
+    console.error("❌ download_all error:", err);
+    if (!res.headersSent) res.status(500).send("FAIL");
+  }
+};
