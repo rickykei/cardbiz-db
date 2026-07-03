@@ -9,6 +9,7 @@ module.exports = app => {
   router.post('/records', checkins.getRecords);
   router.get('/download_checkin', checkins.download_checkin);
   router.get('/download_checkout', checkins.download_checkout);
-
+router.get('/download_summary', checkins.download_summary);
+    
   app.use("/api/checkin", router);
 };
