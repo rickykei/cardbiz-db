@@ -8,7 +8,7 @@ const Staff = require('../models/staff.model');
 // 簽到
 exports.checkIn = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate } = req.body;
+    const { staffId, companyId, scanDate ,location} = req.body;
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
@@ -27,7 +27,7 @@ exports.checkIn = async (req, res) => {
 // 簽退
 exports.checkOut = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate } = req.body;
+    const { staffId, companyId, scanDate  ,location} = req.body;
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
