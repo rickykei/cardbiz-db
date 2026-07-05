@@ -11,12 +11,24 @@ exports.findAll = async (req, res) => {
       return res.status(400).send("ERROR");
     }
 
-    const locations = await Location.find({
-      company_id: ObjectId(company_id),
-      status: "active"
-    }).sort({ name: 1 }).lean();
+   const locations = await Location.find({
+  company_id: ObjectId(company_id),
+  status: "active"
+}).sort({ name: 1 }).lean();
 
-    res.json(locations);
+// 1. 确保数组不为空（find 查询未找到时返回空数组 []，它在 JS 中是真值，所以建议判断 length）
+if (locations && locations.length > 0) {
+  
+  // 2. 使用 map 遍历数组，转换每个对象的 _id 
+  const result = locations.map(({ _id, ...rest }) => ({
+    id: _id,
+    ...rest
+  }));
+
+  return res.json(result);
+}
+
+    
   } catch (err) {
     console.error(err);
     res.status(500).send("FAIL");

@@ -30,6 +30,12 @@ const attendanceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  // 正确关联 location 表
+  location_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Location',  // 👈 对应你的地点 model 名称
+    default: null
+  }
 }, schemaOptions);
 
 attendanceSchema.index({ company_id: 1, createdAt: -1 });

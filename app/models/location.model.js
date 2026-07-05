@@ -29,13 +29,7 @@ locationSchema.index({ company_id: 1, name: 1 });
 
 locationSchema.path('createdAt').get(v => moment(v).format('YYYY-MM-DD HH:mm:ss'));
 locationSchema.path('updatedAt').get(v => moment(v).format('YYYY-MM-DD HH:mm:ss'));
-
-locationSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
-
+ 
 locationSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Location', locationSchema, 'location');

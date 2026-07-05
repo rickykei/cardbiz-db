@@ -8,13 +8,13 @@ const Staff = require('../models/staff.model');
 // 簽到
 exports.checkIn = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate ,location} = req.body;
+    const { staffId, companyId, scanDate ,location, locationId } = req.body;
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
       type: 'in',
       location: location || '未指定', // 這裡
-
+      location_id: locationId ,
       scanDate: scanDate
     });
     await record.save();
@@ -27,13 +27,13 @@ exports.checkIn = async (req, res) => {
 // 簽退
 exports.checkOut = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate  ,location} = req.body;
+    const { staffId, companyId, scanDate  ,location, locationId } = req.body;
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
       type: 'out',
         location: location || '未指定', // 這裡
-
+      location_id: locationId ,
       scanDate: scanDate
     });
     await record.save();
@@ -52,7 +52,6 @@ exports.getRecords = async (req, res) => {
       company_id: companyId
     };
 
-    // 有傳 type 就只對應類型（in / out），沒傳就全部返回
     if (type === 'in' || type === 'out') {
       query.type = type;
     }
@@ -61,9 +60,17 @@ exports.getRecords = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(50)
       .populate('staff_id', 'fname lname')
+      .populate('location_id', 'name') // 👈 直接关联取最新名称
       .lean();
 
-    res.json(records);
+    // 自动显示最新地名，旧数据兼容
+    const result = records.map(r => ({
+      ...r,
+      // 有 location_id 就用最新名称，否则用旧的字符串
+      currentLocation: r.location_id?.name || r.location
+    }));
+
+    res.json(result);
   } catch (err) {
     res.status(500).send('FAIL');
   }
