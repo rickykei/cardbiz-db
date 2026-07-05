@@ -6,19 +6,29 @@ const Attendance = require('../models/attendance.model');
 const Staff = require('../models/staff.model');
 
 // 簽到
+// 簽到
 exports.checkIn = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate ,location, locationId } = req.body;
+    const { staffId, companyId, scanDate, location, locationId } = req.body;
+
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
       type: 'in',
-      location: location || '未指定', // 這裡
-      location_id: locationId ,
+      location: location || '未指定',
+      location_id: locationId,
       scanDate: scanDate
     });
     await record.save();
-    res.json({ status: 'ok', fname: '', lname: '' });
+
+    // 用 populate 直接從 Attendance 關聯查出員工
+    const result = await Attendance.findById(record._id).populate('staff_id', 'fname lname');
+
+    res.json({
+      status: 'ok',
+      fname: result?.staff_id?.fname || '',
+      lname: result?.staff_id?.lname || ''
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -27,22 +37,30 @@ exports.checkIn = async (req, res) => {
 // 簽退
 exports.checkOut = async (req, res) => {
   try {
-    const { staffId, companyId, scanDate  ,location, locationId } = req.body;
+    const { staffId, companyId, scanDate, location, locationId } = req.body;
+
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
       type: 'out',
-        location: location || '未指定', // 這裡
-      location_id: locationId ,
+      location: location || '未指定',
+      location_id: locationId,
       scanDate: scanDate
     });
     await record.save();
-    res.json({ status: 'ok', fname: '', lname: '' });
+
+    // 同樣用 populate
+    const result = await Attendance.findById(record._id).populate('staff_id', 'fname lname');
+
+    res.json({
+      status: 'ok',
+      fname: result?.staff_id?.fname || '',
+      lname: result?.staff_id?.lname || ''
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-
 // 列表
 exports.getRecords = async (req, res) => {
   try {
