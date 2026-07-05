@@ -13,6 +13,8 @@ exports.checkIn = async (req, res) => {
       staff_id: staffId,
       company_id: companyId,
       type: 'in',
+      location: location || '未指定', // 這裡
+
       scanDate: scanDate
     });
     await record.save();
@@ -30,6 +32,8 @@ exports.checkOut = async (req, res) => {
       staff_id: staffId,
       company_id: companyId,
       type: 'out',
+        location: location || '未指定', // 這裡
+
       scanDate: scanDate
     });
     await record.save();
@@ -75,6 +79,7 @@ exports.download_checkin = async (req, res) => {
     const records = await Attendance.find({
       company_id: ObjectId(company_id),
       type: 'in',
+      
       createdAt: { $gte: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000) }
     })
       .sort({ createdAt: -1 })

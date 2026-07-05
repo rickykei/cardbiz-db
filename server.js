@@ -52,7 +52,8 @@ require("./app/routes/staff_log.routes")(app);
 require("./app/routes/gw_counter.routes")(app);
 require("./app/routes/aw_counter.routes")(app);
 require("./app/routes/mobilesite_counter.routes")(app);
- 
+require("./app/routes/location.routes")(app);
+
 
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT  || 8080;

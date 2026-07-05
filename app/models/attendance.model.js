@@ -24,7 +24,12 @@ const attendanceSchema = new mongoose.Schema({
     type: String,
     enum: ['in', 'out'],
     required: true
-  }
+  },
+    // 新增 ↓
+  location: {
+    type: String,
+    required: true
+  },
 }, schemaOptions);
 
 attendanceSchema.index({ company_id: 1, createdAt: -1 });
