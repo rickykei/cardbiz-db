@@ -223,19 +223,19 @@ exports.download_summary = async (req, res) => {
             lname: staff.lname || '',
             date: dateStr,
             checkInTime: null,
-            checkOutTime: null
+            checkOutTime: null,
+            location: null, // 加入地點
           };
         }
 
         const timeStr = new Date(rec.createdAt).toTimeString().slice(0, 8);
 
         if (rec.type === 'in') {
-          // 取最早的 checkin
           if (!summaryMap[key].checkInTime || timeStr < summaryMap[key].checkInTime) {
             summaryMap[key].checkInTime = timeStr;
+            summaryMap[key].location = rec.location || '未指定'; // 用簽到地點
           }
         } else if (rec.type === 'out') {
-          // 取最晚的 checkout
           if (!summaryMap[key].checkOutTime || timeStr > summaryMap[key].checkOutTime) {
             summaryMap[key].checkOutTime = timeStr;
           }
@@ -280,6 +280,7 @@ exports.download_summary = async (req, res) => {
       { header: "日期", key: "date", width: 15 },
       { header: "姓氏", key: "lname", width: 15 },
       { header: "名字", key: "fname", width: 15 },
+      { header: "地點", key: "location", width: 20 }, // 新增
       { header: "上班時間", key: "checkInTime", width: 15 },
       { header: "下班時間", key: "checkOutTime", width: 15 },
       { header: "工時", key: "duration", width: 15 }
@@ -290,6 +291,7 @@ exports.download_summary = async (req, res) => {
         date: row.date,
         lname: row.lname,
         fname: row.fname,
+        location: row.location || '未指定',
         checkInTime: row.checkInTime || '-',
         checkOutTime: row.checkOutTime || '-',
         duration: calcDuration(row.checkInTime, row.checkOutTime)
@@ -319,6 +321,7 @@ exports.download_all = async (req, res) => {
     })
       .sort({ createdAt: -1 })
       .populate({ path: 'staff_id', select: 'fname lname' })
+      .populate('location_id', 'name') // 👈 關聯地點取 name
       .lean();
 
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -333,11 +336,12 @@ exports.download_all = async (req, res) => {
     const worksheet = workbook.addWorksheet("Attendance");
 
     worksheet.columns = [
-      { header: "日期", key: "date", width: 15 },
-      { header: "時間", key: "time", width: 15 },
-      { header: "類型", key: "type", width: 12 },
-      { header: "姓氏", key: "lname", width: 15 },
-      { header: "名字", key: "fname", width: 15 }
+      { header: "checkDate", key: "date", width: 15 },
+      { header: "checkTime", key: "time", width: 15 },
+      { header: "In Out", key: "type", width: 12 },
+      { header: "last_name", key: "lname", width: 15 },
+      { header: "first_name", key: "fname", width: 15 },
+      { header: "location", key: "location", width: 25 }
     ];
 
     for (const rec of records) {
@@ -349,12 +353,16 @@ exports.download_all = async (req, res) => {
         const date = dt.toISOString().split('T')[0];
         const time = dt.toTimeString().slice(0, 8);
 
+        // 從關聯取出地點名
+        const locationName = rec.location_id?.name || rec.location || '未指定';
+
         worksheet.addRow({
           date,
           time,
           type: rec.type === 'in' ? 'Check-in' : 'Check-out',
           fname: staff.fname || "",
-          lname: staff.lname || ""
+          lname: staff.lname || "",
+          location: locationName
         }).commit();
       } catch (e) { continue }
     }
@@ -366,4 +374,232 @@ exports.download_all = async (req, res) => {
     console.error("❌ download_all error:", err);
     if (!res.headersSent) res.status(500).send("FAIL");
   }
+};
+
+
+exports.getCheckInCountByStaffId = (req, res) => {
+  console.log("getCheckInCountByStaffId Start");
+
+  const location_id = req.query.location_id;
+  
+
+  // 基础条件：只查当前员工、签到类型
+  const matchCondition = {
+    type: 'in', 
+  };
+
+  // 只有 location_id 有值时，才加上地点筛选
+  if (location_id && location_id.trim() !== '') {
+    matchCondition.location_id = ObjectId(location_id);
+  }
+
+  Attendance.aggregate([
+    {
+      $match: matchCondition
+    },
+    {
+      $group: {
+        _id: {
+          
+          labels: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+              timezone: "Asia/Hong_Kong"
+            }
+          },
+        },
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { "_id": -1 } },
+    { $limit: 7 },
+    { $sort: { "_id": 1 } },
+  ]).then((data) => {
+    const labels = [];
+    const count = [];
+    data.forEach(a => {
+      labels.push(a._id.labels);
+      count.push(a.count);
+    });
+
+    res.send({ labels, count });
+    console.log("getCheckInCountByStaffId success");
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving getCheckInCountByStaffId."
+    });
+  });
+};
+
+
+exports.getCheckInCountMonthlyByStaffId =  (req, res) => {
+   console.log("getCheckInCountByStaffId Start");
+
+  const location_id = req.query.location_id;
+  
+
+  // 基础条件：只查当前员工、签到类型
+  const matchCondition = {
+    type: 'in', 
+  };
+
+  // 只有 location_id 有值时，才加上地点筛选
+  if (location_id && location_id.trim() !== '') {
+    matchCondition.location_id = ObjectId(location_id);
+  }
+
+  Attendance.aggregate([
+    {
+      $match: matchCondition
+    },
+    {
+      $group: {
+        _id: {
+         
+          labels: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: "$createdAt",
+              timezone: "Asia/Hong_Kong"
+            }
+          },
+        },
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { "_id": -1 } },
+    { $limit: 7 },
+    { $sort: { "_id": 1 } },
+  ]).then((data) => {
+    const labels = [];
+    const count = [];
+    data.forEach(a => {
+      labels.push(a._id.labels);
+      count.push(a.count);
+    });
+
+    res.send({ labels, count });
+    console.log("getCheckInCountByStaffId success");
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving getCheckInCountByStaffId."
+    });
+  });
+};
+
+
+exports.getCheckOutCountByStaffId =  (req, res) => {
+  console.log("getCheckInCountByStaffId Start");
+
+  const location_id = req.query.location_id;
+  
+
+  // 基础条件：只查当前员工、签到类型
+  const matchCondition = {
+    type: 'out', 
+  };
+
+  // 只有 location_id 有值时，才加上地点筛选
+  if (location_id && location_id.trim() !== '') {
+    matchCondition.location_id = ObjectId(location_id);
+  }
+
+  Attendance.aggregate([
+    {
+      $match: matchCondition
+    },
+    {
+      $group: {
+        _id: {
+          
+          labels: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+              timezone: "Asia/Hong_Kong"
+            }
+          },
+        },
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { "_id": -1 } },
+    { $limit: 7 },
+    { $sort: { "_id": 1 } },
+  ]).then((data) => {
+    const labels = [];
+    const count = [];
+    data.forEach(a => {
+      labels.push(a._id.labels);
+      count.push(a.count);
+    });
+
+    res.send({ labels, count });
+    console.log("getCheckInCountByStaffId success");
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving getCheckInCountByStaffId."
+    });
+  });
+};
+
+
+exports.getCheckOutCountMonthlyByStaffId =  (req, res) => {
+   console.log("getCheckInCountByStaffId Start");
+
+  const location_id = req.query.location_id;
+  
+
+  // 基础条件：只查当前员工、签到类型
+  const matchCondition = {
+    type: 'out', 
+  };
+
+  // 只有 location_id 有值时，才加上地点筛选
+  if (location_id && location_id.trim() !== '') {
+    matchCondition.location_id = ObjectId(location_id);
+  }
+
+  Attendance.aggregate([
+    {
+      $match: matchCondition
+    },
+    {
+      $group: {
+        _id: {
+         
+          labels: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: "$createdAt",
+              timezone: "Asia/Hong_Kong"
+            }
+          },
+        },
+        count: { $sum: 1 }
+      }
+    },
+    { $sort: { "_id": -1 } },
+    { $limit: 7 },
+    { $sort: { "_id": 1 } },
+  ]).then((data) => {
+    const labels = [];
+    const count = [];
+    data.forEach(a => {
+      labels.push(a._id.labels);
+      count.push(a.count);
+    });
+
+    res.send({ labels, count });
+    console.log("getCheckInCountByStaffId success");
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving getCheckInCountByStaffId."
+    });
+  });
 };
