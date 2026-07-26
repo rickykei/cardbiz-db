@@ -198,6 +198,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 					qrcode_option: obj.qrcode_option,
 					minisite_option: obj.minisite_option,
 					status: obj.status,
+					preloader: obj.preloader,
 				});
 			});
 
@@ -311,6 +312,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 				{ header: "qrcode_option", key: "qrcode_option", width: 25 },
 				{ header: "minisite_option", key: "minisite_option", width: 25 },
 				{ header: "status", key: "status", width: 25 },
+				{ header: "preloader", key: "preloader", width: 25 },
 			];
 
 			// Add Array Rows

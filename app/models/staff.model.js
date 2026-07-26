@@ -116,18 +116,19 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  telegram_url: String,
 	  xiaohongshu_url: String,
 	  note: String,
-	  note_timestamp: Boolean,
+	  note_timestamp: { type: Boolean, default: true },
 	  smartcard_uid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "smartcard" 
       },
 	  bizcard_option: Number,
-	  dig_card_in_vcf: Boolean,
+	  dig_card_in_vcf: { type: Boolean, default: true },
 	  qrcode_option: Number,
 	  minisite_option: Number,
 	  profile_counter: Number,
 	  vcf_counter: Number,	   
-	  status: Boolean, 
+	  status: { type: Boolean, default: true },
+	  preloader: { type: Boolean, default: true },
 	  updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,

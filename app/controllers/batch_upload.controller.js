@@ -142,6 +142,7 @@ exports.uploadStaffExcel = async (req, res) => {
 					qrcode_option: row[y++],
 					minisite_option: row[y++],
 					status: row[y++],
+					preloader: row[y++],
 				};
 
 				staffs.push(staff);
@@ -324,6 +325,7 @@ exports.uploadStaffExcel = async (req, res) => {
 											vcf_counter: data.vcf_counter,
 
 											status: data.status,
+											preloader: data.preloader,
 											updatedBy: ObjectId(uid),
 											createdBy: data.createdBy,
 											createdAt: data.createdAt,
@@ -486,6 +488,7 @@ exports.uploadStaffExcel = async (req, res) => {
 									vcf_counter: data.vcf_counter,
 
 									status: data.status,
+									preloader: data.preloader,
 									updatedBy: ObjectId(uid),
 									createdBy: data.createdBy,
 									createdAt: data.createdAt,
@@ -571,6 +574,7 @@ exports.uploadStaffExcelAddOnly = (req, res) => {
 					wechat_id: row[32],
 					bizcard_option: row[33],
 					status: row[34],
+					preloader: row[35],
 				};
 
 				staffs.push(staff);
@@ -728,7 +732,7 @@ exports.downloadStaffExcel = (req, res) => {
 				bizcard_option: (obj?.bizcard_option != undefined) ? obj.bizcard_option : 1,
 				dig_card_in_vcf: (obj.dig_card_in_vcf != true) && (obj?.dig_card_in_vcf != undefined) ? obj.dig_card_in_vcf : true,
 				status: (obj.status != true) && (obj?.status != undefined) ? obj.status : true,
-
+				preloader: (obj.preloader != true) && (obj?.preloader != undefined) ? obj.preloader : true,
 			});
 		});
 
@@ -836,6 +840,7 @@ exports.downloadStaffExcel = (req, res) => {
 			{ header: "qrcode_option", key: "qrcode_option", width: 25 },
 			{ header: "minisite_option", key: "minisite_option", width: 25 },
 			{ header: "status", key: "status", width: 25 },
+			{ header: "preloader", key: "preloader", width: 25 },
 		];
 
 		// Add Array Rows
@@ -1002,6 +1007,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				vcf_link: vcf_link,
 				wallet_link: wallet_link,
 				mobile_site_link: mobile_site_link,
+				preloader: obj.preloader,					
 			}
 
 			staffs.push(staff);
@@ -1119,6 +1125,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "vcf_link", key: "vcf_link", width: 25 },
 			{ header: "wallet_link", key: "wallet_link", width: 25 },
 			{ header: "mobile_site_link", key: "mobile_site_link", width: 25 },
+			{ header: "preloader", key: "preloader", width: 25 },
 		];
 
 		// Add Array Rows

@@ -740,6 +740,7 @@ exports.update = async (req, res) => {
 							wechat_qr_url: data.wechat_qr_url,
 
 							status: data.status,
+							preloader: data.preloader,
 							updatedBy: ObjectId(uid),
 							createdBy: data.createdBy,
 							createdAt: data.createdAt,
