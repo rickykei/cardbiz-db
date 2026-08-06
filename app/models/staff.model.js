@@ -129,6 +129,7 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  vcf_counter: Number,	   
 	  status: { type: Boolean, default: true },
 	  preloader: { type: Boolean, default: true },
+	  save_contact_button: { type: Boolean, default: true },
 	  updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,

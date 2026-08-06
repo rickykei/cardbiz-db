@@ -138,6 +138,8 @@ exports.create = async (req, res) => {
 		profile_counter: 0,
 		vcf_counter: 0,
 		status: req.body.status ? req.body.status : false,
+		preloader: req.body.preloader ? req.body.preloader : true,
+		save_contact_button: req.body.save_contact_button ? req.body.save_contact_button : true,
 		createdBy: req.body.createdBy,
 		updatedBy: req.body.updatedBy
 	});
@@ -277,6 +279,8 @@ exports.create = async (req, res) => {
 						wechat_qr_url: data.wechat_qr_url,
 
 						status: data.status,
+						preloader: data.preloader,
+						save_contact_button: data.save_contact_button,
 						updatedBy: ObjectId(uid),
 						createdBy: data.createdBy,
 						createdAt: data.createdAt,
@@ -741,6 +745,7 @@ exports.update = async (req, res) => {
 
 							status: data.status,
 							preloader: data.preloader,
+							save_contact_button: data.save_contact_button,
 							updatedBy: ObjectId(uid),
 							createdBy: data.createdBy,
 							createdAt: data.createdAt,
