@@ -126,7 +126,6 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  snapchat_url: String,
 	  telegram_url: String,
 	  xiaohongshu_url: String,
-	  note: String,
 	  note_timestamp: Boolean,
 	  smartcard_uid: {
         type: mongoose.Schema.Types.ObjectId,
@@ -139,7 +138,9 @@ module.exports = (mongoose, mongoosePaginate) => {
 	  profile_counter: Number,
 	  vcf_counter: Number,
 	  note: String,
-	  status: Boolean, 
+	  status: Boolean,
+	  preloader: { type: Boolean, default: true },
+	  save_contact_button: { type: Boolean, default: true }, 
 	  updatedBy: 
       {
         type: mongoose.Schema.Types.ObjectId,

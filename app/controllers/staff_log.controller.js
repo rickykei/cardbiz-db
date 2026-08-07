@@ -199,6 +199,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 					minisite_option: obj.minisite_option,
 					status: obj.status,
 					preloader: obj.preloader,
+					save_contact_button: obj.save_contact_button,
 				});
 			});
 
@@ -313,6 +314,7 @@ exports.downloadStaffLogExcel = (req, res) => {
 				{ header: "minisite_option", key: "minisite_option", width: 25 },
 				{ header: "status", key: "status", width: 25 },
 				{ header: "preloader", key: "preloader", width: 25 },
+				{ header: "save_contact_button", key: "save_contact_button", width: 25 },
 			];
 
 			// Add Array Rows

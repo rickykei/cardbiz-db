@@ -18,504 +18,329 @@ function AES_ENCRYPT(text, secretKey) {
 
 exports.uploadStaffExcel = async (req, res) => {
 	try {
-		let path = __basedir + "/uploads/" + req.file.filename;
-
 		if (req.file == undefined) {
 			return res.status(400).send("Please upload an excel file!");
 		}
-		let company_id = req.body.company_id;
-		let uid = req.body.uid;  //admin staff doc id
-		var staffs = [];
-		var xls_staffs = [];
-		var new_staffs = [];
-		var old_staffs = [];
 
+		const path = __basedir + "/uploads/" + req.file.filename;
+		const company_id = req.body.company_id;
+		const uid = req.body.uid;
 
-		xls_staffs = await readXlsxFile(path).then((rows) => {
+		const rows = await readXlsxFile(path);
+		rows.shift(); // skip header
 
-			// skip header
-			rows.shift();
+		const staffs = [];
+		const new_staffs = [];
+		const old_staffs = [];
 
-			for (row of rows) {
-				for (let i = 0; i < 36; i++) {
-					if (row[i] == null || row[i] == undefined)
-						row[i] = "";
-				}
-				let y = 0;
-				var staff = {
-					company_name_eng: row[y++],
-					company_name_chi: row[y++],
-					fname: row[y++],
-					lname: row[y++],
-					mname: row[y++],
-					pname: row[y++],
-					oname: row[y++],
-					pdname: row[y++],
-					company_id: company_id,
-					work_email_label: row[y++],
-					work_email: row[y++],
-					work_email2_label: row[y++],
-					work_email2: row[y++],
-					work_email3_label: row[y++],
-					work_email3: row[y++],
-					home_email_label: row[y++],
-					home_email: row[y++],
-					other_email_label: row[y++],
-					other_email: row[y++],
-					position: row[y++],
-					position_other_lang: row[y++],
-					work_tel_label: row[y++],
-					work_tel: row[y++],
-					work_tel2_label: row[y++],
-					work_tel2: row[y++],
-					work_tel3_label: row[y++],
-					work_tel3: row[y++],
-					work_tel4_label: row[y++],
-					work_tel4: row[y++],
-					mobile_label: row[y++],
-					mobile: row[y++],
-					mobile2_label: row[y++],
-					mobile2: row[y++],
-					mobile3_label: row[y++],
-					mobile3: row[y++],
-					mobile4_label: row[y++],
-					mobile4: row[y++],
-					home_tel_label: row[y++],
-					home_tel: row[y++],
-					fax_label: row[y++],
-					fax: row[y++],
-					web_link: row[y++],
-					web_link2: row[y++],
-					web_link3: row[y++],
-					web_link4: row[y++],
-					web_link5: row[y++],
-					web_link6: row[y++],
-					web_link_label: row[y++],
-					web_link_label2: row[y++],
-					web_link_label3: row[y++],
-					web_link_label4: row[y++],
-					web_link_label5: row[y++],
-					web_link_label6: row[y++],
-					address_label: row[y++],
-					address: row[y++],
-					address2_label: row[y++],
-					address2: row[y++],
-					address3_label: row[y++],
-					address3: row[y++],
-					address4_label: row[y++],
-					address4: row[y++],
-					staff_no: row[y++],
-					division: row[y++],
-					department: row[y++],
-					country: row[y++],
-					bio: row[y++],
-					awards: row[y++],
-					qualifications: row[y++],
-					additional_address: row[y++],
-					achievements: row[y++],
-					company_website_url: row[y++],
-					more_info_tab_url: row[y++],
-					facebook_url: row[y++],
-					instagram_url: row[y++],
-					whatsapp_url: row[y++],
-					linkedin_url: row[y++],
-					youtube_url: row[y++],
-					twitter_url: row[y++],
-					wechat_id: row[y++],
-					wechatpage_url: row[y++],
-					tiktok_url: row[y++],
-					line_url: row[y++],
-					facebook_messenger_url: row[y++],
-					weibo_url: row[y++],
-					bilibili_url: row[y++],
-					qq_url: row[y++],
-					zhihu_url: row[y++],
-					app_store_url: row[y++],
-					google_play_url: row[y++],
-					snapchat_url: row[y++],
-					telegram_url: row[y++],
-					xiaohongshu_url: row[y++],
-					note: row[y++],
-					note_timestamp: row[y++],
-					bizcard_option: row[y++],
-					dig_card_in_vcf: row[y++],
-					qrcode_option: row[y++],
-					minisite_option: row[y++],
-					status: row[y++],
-					preloader: row[y++],
-				};
+		for (const row of rows) {
+			// 空值補空字串
+			for (let i = 0; i < 36; i++) {
+				if (row[i] == null || row[i] == undefined) row[i] = "";
+			}
 
-				staffs.push(staff);
+			// ==============================
+			// 檢查 save_contact_button 有沒有值
+			// ==============================
+			const saveContactBtn = row[row.length - 1]?.toString().trim() || "";
 
+			// 沒值就跳過這行
+			if (!saveContactBtn) {
+				continue;
+			}
+
+			let y = 0;
+			const staff = {
+				company_name_eng: row[y++],
+				company_name_chi: row[y++],
+				fname: row[y++],
+				lname: row[y++],
+				mname: row[y++],
+				pname: row[y++],
+				oname: row[y++],
+				pdname: row[y++],
+				company_id: company_id,
+				work_email_label: row[y++],
+				work_email: row[y++],
+				work_email2_label: row[y++],
+				work_email2: row[y++],
+				work_email3_label: row[y++],
+				work_email3: row[y++],
+				home_email_label: row[y++],
+				home_email: row[y++],
+				other_email_label: row[y++],
+				other_email: row[y++],
+				position: row[y++],
+				position_other_lang: row[y++],
+				work_tel_label: row[y++],
+				work_tel: row[y++],
+				work_tel2_label: row[y++],
+				work_tel2: row[y++],
+				work_tel3_label: row[y++],
+				work_tel3: row[y++],
+				work_tel4_label: row[y++],
+				work_tel4: row[y++],
+				mobile_label: row[y++],
+				mobile: row[y++],
+				mobile2_label: row[y++],
+				mobile2: row[y++],
+				mobile3_label: row[y++],
+				mobile3: row[y++],
+				mobile4_label: row[y++],
+				mobile4: row[y++],
+				home_tel_label: row[y++],
+				home_tel: row[y++],
+				fax_label: row[y++],
+				fax: row[y++],
+				web_link: row[y++],
+				web_link2: row[y++],
+				web_link3: row[y++],
+				web_link4: row[y++],
+				web_link5: row[y++],
+				web_link6: row[y++],
+				web_link_label: row[y++],
+				web_link_label2: row[y++],
+				web_link_label3: row[y++],
+				web_link_label4: row[y++],
+				web_link_label5: row[y++],
+				web_link_label6: row[y++],
+				address_label: row[y++],
+				address: row[y++],
+				address2_label: row[y++],
+				address2: row[y++],
+				address3_label: row[y++],
+				address3: row[y++],
+				address4_label: row[y++],
+				address4: row[y++],
+				staff_no: row[y++],
+				division: row[y++],
+				department: row[y++],
+				country: row[y++],
+				bio: row[y++],
+				awards: row[y++],
+				qualifications: row[y++],
+				additional_address: row[y++],
+				achievements: row[y++],
+				company_website_url: row[y++],
+				more_info_tab_url: row[y++],
+				facebook_url: row[y++],
+				instagram_url: row[y++],
+				whatsapp_url: row[y++],
+				linkedin_url: row[y++],
+				youtube_url: row[y++],
+				twitter_url: row[y++],
+				wechat_id: row[y++],
+				wechatpage_url: row[y++],
+				tiktok_url: row[y++],
+				line_url: row[y++],
+				facebook_messenger_url: row[y++],
+				weibo_url: row[y++],
+				bilibili_url: row[y++],
+				qq_url: row[y++],
+				zhihu_url: row[y++],
+				app_store_url: row[y++],
+				google_play_url: row[y++],
+				snapchat_url: row[y++],
+				telegram_url: row[y++],
+				xiaohongshu_url: row[y++],
+				note: row[y++],
+				note_timestamp: row[y++],
+				bizcard_option: row[y++],
+				dig_card_in_vcf: row[y++],
+				qrcode_option: row[y++],
+				minisite_option: row[y++],
+				status: row[y++],
+				preloader: row[y++],
+				save_contact_button: row[y++],
 			};
 
+			// ===== 修正 1：status 邏輯 =====
+			// 只有明確是 false / "false" / 0 才是 false，其餘（含空）預設 true
+			staff.status = !(
+				staff.status === false ||
+				staff.status === "false" ||
+				staff.status === 0 ||
+				staff.status === "0"
+			);
 
-			return staffs;
+			// ===== 修正 2：preloader 空值時刪除該欄位，讓 Schema default: true 生效 =====
+			if (staff.preloader === "" || staff.preloader == null) {
+				delete staff.preloader;
+			}
+
+			staffs.push(staff);
 		}
-		);
 
-		for (var s of xls_staffs) {
-			var query = {};
-			query.company_id = ObjectId(company_id);
+		// ===== 輔助函數：統一寫 action_log + staff_log =====
+		const writeLog = async (data, action) => {
+			const actionLog = new Action_log({
+				action,
+				log: data.fname,
+				company_id: data.company_id,
+				staff_id: data.id,
+				updatedBy: ObjectId(uid),
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+				color: "border-theme-1",
+			});
+			const logData = await actionLog.save();
 
-			//20240702 replace unique key from email to staff_id
-			//query.work_email =  s.work_email;
-			query.staff_no = s.staff_no;
+			const staffLog = new Staff_log({
+				action_log_id: ObjectId(logData.id),
+				staff_id: ObjectId(data._id),
+				udid: data.udid,
+				company_id: data.company_id,
+				company_name_eng: data.company_name_eng,
+				company_name_chi: data.company_name_chi,
+				fname: data.fname,
+				lname: data.lname,
+				mname: data.mname,
+				pname: data.pname,
+				oname: data.oname,
+				pdname: data.pdname,
+				headshot: data.headshot,
+				work_email: data.work_email,
+				work_email2: data.work_email2,
+				work_email3: data.work_email3,
+				home_email: data.home_email,
+				other_email: data.other_email,
+				work_email_label: data.work_email_label,
+				work_email2_label: data.work_email2_label,
+				work_email3_label: data.work_email3_label,
+				home_email_label: data.home_email_label,
+				other_email_label: data.other_email_label,
+				position: data.position,
+				position_other_lang: data.position_other_lang,
+				work_tel: data.work_tel,
+				work_tel2: data.work_tel2,
+				work_tel3: data.work_tel3,
+				work_tel4: data.work_tel4,
+				work_tel_label: data.work_tel_label,
+				work_tel2_label: data.work_tel2_label,
+				work_tel3_label: data.work_tel3_label,
+				work_tel4_label: data.work_tel4_label,
+				mobile: data.mobile,
+				mobile2: data.mobile2,
+				mobile3: data.mobile3,
+				mobile4: data.mobile4,
+				home_tel: data.home_tel,
+				fax: data.fax,
+				mobile_label: data.mobile_label,
+				mobile2_label: data.mobile2_label,
+				mobile3_label: data.mobile3_label,
+				mobile4_label: data.mobile4_label,
+				home_tel_label: data.home_tel_label,
+				fax_label: data.fax_label,
+				web_link: data.web_link,
+				web_link2: data.web_link2,
+				web_link3: data.web_link3,
+				web_link4: data.web_link4,
+				web_link5: data.web_link5,
+				web_link6: data.web_link6,
+				web_link_label: data.web_link_label,
+				web_link_label2: data.web_link_label2,
+				web_link_label3: data.web_link_label3,
+				web_link_label4: data.web_link_label4,
+				web_link_label5: data.web_link_label5,
+				web_link_label6: data.web_link_label6,
+				address: data.address,
+				address2: data.address2,
+				address3: data.address3,
+				address4: data.address4,
+				address_label: data.address_label,
+				address2_label: data.address2_label,
+				address3_label: data.address3_label,
+				address4_label: data.address4_label,
+				staff_no: data.staff_no,
+				division: data.division,
+				department: data.department,
+				country: data.country,
+				bio: data.bio,
+				awards: data.awards,
+				qualifications: data.qualifications,
+				additional_address: data.additional_address,
+				achievements: data.achievements,
+				company_website_url: data.company_website_url,
+				more_info_tab_url: data.more_info_tab_url,
+				facebook_url: data.facebook_url,
+				instagram_url: data.instagram_url,
+				whatsapp_url: data.whatsapp_url,
+				linkedin_url: data.linkedin_url,
+				youtube_url: data.youtube_url,
+				twitter_url: data.twitter_url,
+				wechat_id: data.wechat_id,
+				wechatpage_url: data.wechatpage_url,
+				tiktok_url: data.tiktok_url,
+				line_url: data.line_url,
+				facebook_messenger_url: data.facebook_messenger_url,
+				weibo_url: data.weibo_url,
+				bilibili_url: data.bilibili_url,
+				qq_url: data.qq_url,
+				zhihu_url: data.zhihu_url,
+				app_store_url: data.app_store_url,
+				google_play_url: data.google_play_url,
+				snapchat_url: data.snapchat_url,
+				telegram_url: data.telegram_url,
+				xiaohongshu_url: data.xiaohongshu_url,
+				note: data.note,
+				note_timestamp: data.note_timestamp,
+				smartcard_uid: data.smartcard_uid,
+				bizcard_option: data.bizcard_option,
+				dig_card_in_vcf: data.dig_card_in_vcf,
+				qrcode_option: data.qrcode_option,
+				minisite_option: data.minisite_option,
+				profile_counter: data.profile_counter,
+				vcf_counter: data.vcf_counter,
+				status: data.status,
+				preloader: data.preloader,
+				save_contact_button: data.save_contact_button,
+				updatedBy: ObjectId(uid),
+				createdBy: data.createdBy,
+				createdAt: data.createdAt,
+				updatedAt: Date.now(),
+			});
 
-			//if excel status empty fill true 20240803
-			if (s.status != false)
-				s.status = true;
+			await staffLog.save();
+		};
 
-			let mongoDocument = await Staff.findOne(query).exec();
+		// ===== 批量處理員工 =====
+		for (const s of staffs) {
+			const query = {
+				company_id: ObjectId(company_id),
+				staff_no: s.staff_no,
+			};
 
-			if (mongoDocument != undefined) {
-				s.company_id = company_id;
+			const mongoDocument = await Staff.findOne(query).exec();
+
+			if (mongoDocument) {
+				// ===== 舊員工：更新 =====
 				old_staffs.push(s);
-				console.log("old doc id" + mongoDocument.id);
-
-				//batch update excel staff one by one
-				Staff.findByIdAndUpdate(mongoDocument.id, s, { new: true, useFindAndModify: true })
-					.then(data => {
-						if (!data) {
-							res.status(404).send({
-								message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
-							});
-						} else {
-
-							//write action log for those updated staff by batchuploader
-							const actionLog = new Action_log({
-								action: "Batch Update Staff Records",
-								log: data.fname,
-								company_id: data.company_id,
-								staff_id: data.id,
-								updatedBy: ObjectId(uid),
-								createdAt: Date.now(),
-								updatedAt: Date.now(),
-								color: "border-theme-1",
-							});
-
-							actionLog.save(actionLog)
-								.then(data2 => {
-									if (!data2) {
-										res.status(404).send({
-											message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
-										});
-									} else {
-										//backup old staff records to table staff_logs
-										console.log("actionLog save for edit");
-
-										console.log(data);
-										staff_log = new Staff_log({
-											action_log_id: ObjectId(data2.id),
-											staff_id: ObjectId(data._id),
-											udid: data.udid,
-											company_id: data.company_id,
-											company_name_eng: data.company_name_eng,
-											company_name_chi: data.company_name_chi,
-											fname: data.fname,
-											lname: data.lname,
-											mname: data.mname,
-											pname: data.pname,
-											oname: data.oname,
-											pdname: data.pdname,
-											headshot: data.headshot,
-											work_email: data.work_email,
-											work_email2: data.work_email2,
-											work_email3: data.work_email3,
-											home_email: data.home_email,
-											other_email: data.other_email,
-											work_email_label: data.work_email_label,
-											work_email2_label: data.work_email2_label,
-											work_email3_label: data.work_email3_label,
-											home_email_label: data.home_email_label,
-											other_email_label: data.other_email_label,
-											position: data.position,
-											position_other_lang: data.position_other_lang,
-											work_tel: data.work_tel,
-											work_tel2: data.work_tel2,
-											work_tel3: data.work_tel3,
-											work_tel4: data.work_tel4,
-											work_tel_label: data.work_tel_label,
-											work_tel2_label: data.work_tel2_label,
-											work_tel3_label: data.work_tel3_label,
-											work_tel4_label: data.work_tel4_label,
-
-											mobile: data.mobile,
-											mobile2: data.mobile2,
-											mobile3: data.mobile3,
-											mobile4: data.mobile4,
-											home_tel: data.home_tel,
-											fax: data.fax,
-											mobile_label: data.mobile_label,
-											mobile2_label: data.mobile2_label,
-											mobile3_label: data.mobile3_label,
-											mobile4_label: data.mobile4_label,
-											home_tel_label: data.home_tel_label,
-											fax_label: data.fax_label,
-
-											web_link: data.web_link,
-											web_link2: data.web_link2,
-											web_link3: data.web_link3,
-											web_link4: data.web_link4,
-											web_link5: data.web_link5,
-											web_link6: data.web_link6,
-
-											web_link_label: data.web_link_label,
-											web_link_label2: data.web_link_label2,
-											web_link_label3: data.web_link_label3,
-											web_link_label4: data.web_link_label4,
-											web_link_label5: data.web_link_label5,
-											web_link_label6: data.web_link_label6,
-
-											address: data.address,
-											address2: data.address2,
-											address3: data.address3,
-											address4: data.address4,
-
-											address_label: data.address_label,
-											address2_label: data.address2_label,
-											address3_label: data.address3_label,
-											address4_label: data.address4_label,
-
-											staff_no: data.staff_no,
-
-											division: data.division,
-
-											department: data.department,
-
-											country: data.country,
-
-											bio: data.bio,
-											awards: data.awards,
-											qualifications: data.qualifications,
-											additional_address: data.additional_address,
-											achievements: data.achievements,
-
-											company_website_url: data.company_website_url,
-											more_info_tab_url: data.more_info_tab_url,
-											facebook_url: data.facebook_url,
-											instagram_url: data.instagram_url,
-											whatsapp_url: data.whatsapp_url,
-											linkedin_url: data.linkedin_url,
-											youtube_url: data.youtube_url,
-											twitter_url: data.twitter_url,
-											wechat_id: data.wechat_id,
-											wechatpage_url: data.wechatpage_url,
-											tiktok_url: data.tiktok_url,
-											line_url: data.line_url,
-											facebook_messenger_url: data.facebook_messenger_url,
-											weibo_url: data.weibo_url,
-											bilibili_url: data.bilibili_url,
-											qq_url: data.qq_url,
-											zhihu_url: data.zhihu_url,
-											app_store_url: data.app_store_url,
-											google_play_url: data.google_play_url,
-											snapchat_url: data.snapchat_url,
-											telegram_url: data.telegram_url,
-											xiaohongshu_url: data.xiaohongshu_url,
-											note: data.note,
-											note_timestamp: data.note_timestamp,
-
-											smartcard_uid: data.smartcard_uid,
-											bizcard_option: data.bizcard_option,
-											dig_card_in_vcf: data.dig_card_in_vcf,
-											qrcode_option: data.qrcode_option,
-											minisite_option: data.minisite_option,
-											profile_counter: data.profile_counter,
-											vcf_counter: data.vcf_counter,
-
-											status: data.status,
-											preloader: data.preloader,
-											updatedBy: ObjectId(uid),
-											createdBy: data.createdBy,
-											createdAt: data.createdAt,
-											updatedAt: Date.now(),
-										});
-
-										staff_log.save(staff_log);
-										//backup old staff records to table staff_logs
-									}
-								});
-							//white action log before send successful
-						}
-					});
+				const data = await Staff.findByIdAndUpdate(
+					mongoDocument.id,
+					s,
+					{ new: true, useFindAndModify: false }
+				);
+				if (data) {
+					await writeLog(data, "Batch Update Staff Records");
+				}
 			} else {
-				s.company_id = company_id;
+				// ===== 新員工：新增 =====
 				new_staffs.push(s);
-				console.log("new doc id");
-
-				// Save Staff in the database
-				var staff = new Staff(s);
-				staff.save(s)
-					.then(data => {
-						//white action log before send successfully
-						const actionLog = new Action_log({
-							action: "Batch Create Staff",
-							log: data.fname,
-							company_id: data.company_id,
-							staff_id: data.id,
-							createdBy: data.createdBy,
-							color: "border-theme-1",
-						});
-
-						actionLog.save(actionLog).then(data2 => {
-							if (!data2) {
-								res.status(404).send({
-									message: `Cannot update Staff with id=${id}. Maybe Staff was not found!`
-								});
-							} else {
-								//white action log before send successfully
-
-								//backup old staff records to table staff_logs
-								console.log("actionLog save for create");
-
-								console.log(data);
-								staff_log = new Staff_log({
-									action_log_id: ObjectId(data2.id),
-									staff_id: ObjectId(data._id),
-									udid: data.udid,
-									company_id: data.company_id,
-									company_name_eng: data.company_name_eng,
-									company_name_chi: data.company_name_chi,
-									fname: data.fname,
-									lname: data.lname,
-									mname: data.mname,
-									pname: data.pname,
-									oname: data.oname,
-									pdname: data.pdname,
-									headshot: data.headshot,
-									work_email: data.work_email,
-									work_email2: data.work_email2,
-									work_email3: data.work_email3,
-									home_email: data.home_email,
-									other_email: data.other_email,
-									work_email_label: data.work_email_label,
-									work_email2_label: data.work_email2_label,
-									work_email3_label: data.work_email3_label,
-									home_email_label: data.home_email_label,
-									other_email_label: data.other_email_label,
-									position: data.position,
-									position_other_lang: data.position_other_lang,
-									work_tel_label: data.work_tel_label,
-									work_tel2_label: data.work_tel2_label,
-									work_tel3_label: data.work_tel3_label,
-									work_tel4_label: data.work_tel4_label,
-									work_tel_label: data.work_tel_label,
-									work_tel2_label: data.work_tel2_label,
-									work_tel3_label: data.work_tel3_label,
-									work_tel4_label: data.work_tel4_label,
-									mobile: data.mobile,
-									mobile2: data.mobile2,
-									mobile3: data.mobile3,
-									mobile4: data.mobile4,
-									home_tel: data.home_tel,
-									fax: data.fax,
-									mobile_label: data.mobile_label,
-									mobile2_label: data.mobile2_label,
-									mobile3_label: data.mobile3_label,
-									mobile4_label: data.mobile4_label,
-									home_tel_label: data.home_tel_label,
-									fax_label: data.fax_label,
-									web_link: data.web_link,
-									web_link2: data.web_link2,
-									web_link3: data.web_link3,
-									web_link4: data.web_link4,
-									web_link5: data.web_link5,
-									web_link6: data.web_link6,
-
-									web_link_label: data.web_link_label,
-									web_link_label2: data.web_link_label2,
-									web_link_label3: data.web_link_label3,
-									web_link_label4: data.web_link_label4,
-									web_link_label5: data.web_link_label5,
-									web_link_label6: data.web_link_label6,
-
-									address: data.address,
-									address2: data.address2,
-									address3: data.address3,
-									address4: data.address4,
-
-
-									address_label: data.address_label,
-									address2_label: data.address2_label,
-									address3_label: data.address3_label,
-									address4_label: data.address4_label,
-
-									staff_no: data.staff_no,
-
-									division: data.division,
-
-									department: data.department,
-
-									country: data.country,
-
-									bio: data.bio,
-									awards: data.awards,
-									qualifications: data.qualifications,
-									additional_address: data.additional_address,
-									achievements: data.achievements,
-									company_website_url: data.company_website_url,
-									more_info_tab_url: data.more_info_tab_url,
-									facebook_url: data.facebook_url,
-									instagram_url: data.instagram_url,
-									whatsapp_url: data.whatsapp_url,
-									linkedin_url: data.linkedin_url,
-									youtube_url: data.youtube_url,
-									twitter_url: data.twitter_url,
-									wechat_id: data.wechat_id,
-									wechatpage_url: data.wechatpage_url,
-									tiktok_url: data.tiktok_url,
-									line_url: data.line_url,
-									facebook_messenger_url: data.facebook_messenger_url,
-									weibo_url: data.weibo_url,
-									bilibili_url: data.bilibili_url,
-									qq_url: data.qq_url,
-									zhihu_url: data.zhihu_url,
-									app_store_url: data.app_store_url,
-									google_play_url: data.google_play_url,
-									snapchat_url: data.snapchat_url,
-									telegram_url: data.telegram_url,
-									xiaohongshu_url: data.xiaohongshu_url,
-									note: data.note,
-									note_timestamp: data.note_timestamp,
-
-									smartcard_uid: data.smartcard_uid,
-									bizcard_option: data.bizcard_option,
-									dig_card_in_vcf: data.dig_card_in_vcf,
-									qrcode_option: data.qrcode_option,
-									minisite_option: data.minisite_option,
-									profile_counter: data.profile_counter,
-									vcf_counter: data.vcf_counter,
-
-									status: data.status,
-									preloader: data.preloader,
-									updatedBy: ObjectId(uid),
-									createdBy: data.createdBy,
-									createdAt: data.createdAt,
-									updatedAt: Date.now(),
-								});
-								console.log("copy staff_log");
-								console.log(staff_log);
-								staff_log.save(staff_log);
-
-								//backup old staff records to table staff_logs
-							}
-						});
-
-					})
+				const staff = new Staff(s);
+				const data = await staff.save();
+				await writeLog(data, "Batch Create Staff");
 			}
 		}
 
-		console.log("new" + new_staffs.length);
-		console.log("old" + old_staffs.length);
-
+		console.log("new: " + new_staffs.length);
+		console.log("old: " + old_staffs.length);
 
 		res.send({ message: "done", old_staffs, new_staffs });
 
 	} catch (error) {
 		console.log(error);
 		res.status(500).send({
-			message: "Could not upload the file: " + req.file.originalname,
+			message: "Could not upload the file: " + (req.file?.originalname || ""),
 		});
 	}
 };
@@ -688,12 +513,10 @@ exports.downloadStaffExcel = (req, res) => {
 				address2: obj.address2,
 				address3: obj.address3,
 				address4: obj.address4,
-
 				address_label: obj.address_label,
 				address2_label: obj.address2_label,
 				address3_label: obj.address3_label,
 				address4_label: obj.address4_label,
-
 				staff_no: obj.staff_no,
 				division: obj.division,
 				department: obj.department,
@@ -733,6 +556,7 @@ exports.downloadStaffExcel = (req, res) => {
 				dig_card_in_vcf: (obj.dig_card_in_vcf != true) && (obj?.dig_card_in_vcf != undefined) ? obj.dig_card_in_vcf : true,
 				status: (obj.status != true) && (obj?.status != undefined) ? obj.status : true,
 				preloader: (obj.preloader != true) && (obj?.preloader != undefined) ? obj.preloader : true,
+				save_contact_button: (obj.save_contact_button != true) && (obj?.save_contact_button != undefined) ? obj.save_contact_button : true,
 			});
 		});
 
@@ -841,6 +665,7 @@ exports.downloadStaffExcel = (req, res) => {
 			{ header: "minisite_option", key: "minisite_option", width: 25 },
 			{ header: "status", key: "status", width: 25 },
 			{ header: "preloader", key: "preloader", width: 25 },
+			{ header: "save_contact_button", key: "save_contact_button", width: 25 },
 		];
 
 		// Add Array Rows
@@ -1007,7 +832,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				vcf_link: vcf_link,
 				wallet_link: wallet_link,
 				mobile_site_link: mobile_site_link,
-				preloader: obj.preloader,					
+				preloader: obj.preloader,
 			}
 
 			staffs.push(staff);
