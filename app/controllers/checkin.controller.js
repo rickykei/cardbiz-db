@@ -5,8 +5,7 @@ const excel = require('exceljs');
 const Attendance = require('../models/attendance.model');
 const Staff = require('../models/staff.model');
  
-
-// 簽到
+ 
 // 簽到
 exports.checkIn = async (req, res) => {
   try {
@@ -403,45 +402,45 @@ exports.download_all = async (req, res) => {
 };
 
 
-exports.getCheckInCountByStaffId = (req, res) => {
+exports.getCheckInCountByStaffId = async (req, res) => {
   console.log("getCheckInCountByStaffId Start");
 
-  const location_id = req.query.location_id;
-  
+  const { location_id, staff_id, company_id } = req.query;
 
-  // 基础条件：只查当前员工、签到类型
   const matchCondition = {
-    type: 'in', 
+    type: 'in',
+    company_id: new ObjectId(company_id)
   };
 
-  // 只有 location_id 有值时，才加上地点筛选
+ 
+
+  // 地點篩選，有值才加入
   if (location_id && location_id.trim() !== '') {
-    matchCondition.location_id = ObjectId(location_id);
+    matchCondition.location_id = new ObjectId(location_id);
   }
 
-  Attendance.aggregate([
-    {
-      $match: matchCondition
-    },
-    {
-      $group: {
-        _id: {
-          
-          labels: {
-            $dateToString: {
-              format: "%Y-%m-%d",
-              date: "$createdAt",
-              timezone: "Asia/Hong_Kong"
+  try {
+    const data = await Attendance.aggregate([
+      { $match: matchCondition },
+      {
+        $group: {
+          _id: {
+            labels: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$createdAt",
+                timezone: "Asia/Hong_Kong"
+              }
             }
           },
-        },
-        count: { $sum: 1 }
-      }
-    },
-    { $sort: { "_id": -1 } },
-    { $limit: 7 },
-    { $sort: { "_id": 1 } },
-  ]).then((data) => {
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id": -1 } },
+      { $limit: 7 },
+      { $sort: { "_id": 1 } }
+    ]);
+
     const labels = [];
     const count = [];
     data.forEach(a => {
@@ -449,27 +448,27 @@ exports.getCheckInCountByStaffId = (req, res) => {
       count.push(a.count);
     });
 
-    res.send({ labels, count });
     console.log("getCheckInCountByStaffId success");
-  }).catch(err => {
+    res.send({ labels, count });
+  } catch (err) {
     console.error(err);
     res.status(500).send({
       message: err.message || "Some error occurred while retrieving getCheckInCountByStaffId."
     });
-  });
+  }
 };
 
 
 exports.getCheckInCountMonthlyByStaffId =  (req, res) => {
    console.log("getCheckInCountByStaffId Start");
 
-  const location_id = req.query.location_id;
-  
+  const { location_id, staff_id, company_id } = req.query;
 
-  // 基础条件：只查当前员工、签到类型
   const matchCondition = {
-    type: 'in', 
+    type: 'in',
+    company_id: new ObjectId(company_id)
   };
+
 
   // 只有 location_id 有值时，才加上地点筛选
   if (location_id && location_id.trim() !== '') {
@@ -520,13 +519,13 @@ exports.getCheckInCountMonthlyByStaffId =  (req, res) => {
 exports.getCheckOutCountByStaffId =  (req, res) => {
   console.log("getCheckInCountByStaffId Start");
 
-  const location_id = req.query.location_id;
-  
+  const { location_id, staff_id, company_id } = req.query;
 
-  // 基础条件：只查当前员工、签到类型
   const matchCondition = {
-    type: 'out', 
+    type: 'out',
+    company_id: new ObjectId(company_id)
   };
+
 
   // 只有 location_id 有值时，才加上地点筛选
   if (location_id && location_id.trim() !== '') {
@@ -577,18 +576,15 @@ exports.getCheckOutCountByStaffId =  (req, res) => {
 exports.getCheckOutCountMonthlyByStaffId =  (req, res) => {
    console.log("getCheckInCountByStaffId Start");
 
-  const location_id = req.query.location_id;
+  
   
 
-  // 基础条件：只查当前员工、签到类型
-  const matchCondition = {
-    type: 'out', 
-  };
+  const { location_id, staff_id, company_id } = req.query;
 
-  // 只有 location_id 有值时，才加上地点筛选
-  if (location_id && location_id.trim() !== '') {
-    matchCondition.location_id = ObjectId(location_id);
-  }
+  const matchCondition = {
+    type: 'out',
+    company_id: new ObjectId(company_id)
+  };
 
   Attendance.aggregate([
     {
