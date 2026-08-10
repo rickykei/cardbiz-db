@@ -4,7 +4,7 @@ const Vcf_counter = db.vcf_counter;
 const { ObjectId } = require('mongoose').Types;
  const readXlsxFile = require('read-excel-file/node')
 const excel = require("exceljs")
-const Staff = db.staffs;
+const Staff = require('../models/staff.model');
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;

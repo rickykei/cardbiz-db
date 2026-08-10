@@ -3,10 +3,14 @@ const GridFSBucket = require("mongodb").GridFSBucket;
 const db = require("../models");
 const crypto = require('crypto');
 var ObjectId = require('mongodb').ObjectId;
-const Staff = db.staffs;
+const Staff = require('../models/staff.model');
 const Action_log = db.action_log;
 const Staff_log = db.staff_log;
-
+// 測試打印
+console.log("==== Staff debug ====");
+console.log("Staff:", Staff);
+console.log("has paginate?:", typeof Staff.paginate);
+console.log("static keys:", Object.keys(Staff));
 
 const getPagination = (page, size) => {
 	const limit = size ? +size : 5;

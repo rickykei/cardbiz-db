@@ -1,7 +1,7 @@
  
 const db = require("../models");
 const Profile_counter = db.profile_counter;
-const Staff = db.staffs;
+const Staff = require('../models/staff.model');
 
 //var ObjectId = require('mongodb').ObjectId; 
 const { ObjectId } = require('mongoose').Types;

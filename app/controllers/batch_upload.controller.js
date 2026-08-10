@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectId;
 const excel = require("exceljs");
 const Action_log = db.action_log;
 const Staff_log = db.staff_log;
-const Staff = db.staffs;
+const Staff = require('../models/staff.model');
 const profileUrl = db.profileUrl;
 const CryptoJS = require('crypto-js');
 
@@ -40,12 +40,14 @@ exports.uploadStaffExcel = async (req, res) => {
 			}
 
 			// ==============================
-			// 檢查 save_contact_button 有沒有值
+			// 檢查 save_contact_button,staff no 有沒有值
 			// ==============================
-			const saveContactBtn = row[row.length - 1]?.toString().trim() || "";
+			const saveContactBtnEmpty = row[99]?.toString().trim() || "";
+			const staffnoEmpty = row[60]?.toString().trim() || "";
 
 			// 沒值就跳過這行
-			if (!saveContactBtn) {
+			if (!saveContactBtnEmpty || !staffnoEmpty) {
+				console.log("signal: save_contact_button or staff_no is empty, skipping row:", row);
 				continue;
 			}
 

@@ -4,6 +4,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const excel = require('exceljs');
 const Attendance = require('../models/attendance.model');
 const Staff = require('../models/staff.model');
+ 
 
 // 簽到
 // 簽到
@@ -11,21 +12,18 @@ exports.checkIn = async (req, res) => {
   try {
     const { staffId, companyId, scanDate, location, locationId } = req.body;
 
-  // 直接用 populate 校验该员工是否存在 & 属于该公司
-    // 这样就不用单独引入 Staff 模型，避免报错
-    const staffCheck = await Attendance.findOne({
-      staff_id: staffId
-    }).populate({
-      path: 'staff_id',
-      match: { company_id: companyId }
+   // 直接在 staff 表驗證：員工ID存在 且 屬於對應公司
+    const staffDoc = await Staff.findOne({
+      _id: staffId,
+      company_id: companyId
     });
 
-    // 如果找不到 或 匹配不到公司
-    if (!staffCheck || !staffCheck.staff_id) {
+       if (!staffDoc) {
       return res.status(400).json({
         message: '員工不存在或不屬於此公司'
       });
     }
+
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
@@ -54,21 +52,19 @@ exports.checkOut = async (req, res) => {
   try {
     const { staffId, companyId, scanDate, location, locationId } = req.body;
 
-  // 直接用 populate 校验该员工是否存在 & 属于该公司
-    // 这样就不用单独引入 Staff 模型，避免报错
-    const staffCheck = await Attendance.findOne({
-      staff_id: staffId
-    }).populate({
-      path: 'staff_id',
-      match: { company_id: companyId }
+      // 直接在 staff 表驗證：員工ID存在 且 屬於對應公司
+    const staffDoc = await Staff.findOne({
+      _id: staffId,
+      company_id: companyId
     });
 
-    // 如果找不到 或 匹配不到公司
-    if (!staffCheck || !staffCheck.staff_id) {
+       if (!staffDoc) {
       return res.status(400).json({
         message: '員工不存在或不屬於此公司'
       });
     }
+
+  
     const record = new Attendance({
       staff_id: staffId,
       company_id: companyId,
