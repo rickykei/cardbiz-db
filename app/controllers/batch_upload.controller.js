@@ -835,6 +835,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 				wallet_link: wallet_link,
 				mobile_site_link: mobile_site_link,
 				preloader: obj.preloader,
+				save_contact_button: obj.save_contact_button,
 			}
 
 			staffs.push(staff);
@@ -953,6 +954,7 @@ exports.downloadStaffLinkExcel = (req, res) => {
 			{ header: "wallet_link", key: "wallet_link", width: 25 },
 			{ header: "mobile_site_link", key: "mobile_site_link", width: 25 },
 			{ header: "preloader", key: "preloader", width: 25 },
+			{ header: "save_contact_button", key: "save_contact_button", width: 25 },
 		];
 
 		// Add Array Rows
