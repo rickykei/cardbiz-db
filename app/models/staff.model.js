@@ -148,27 +148,45 @@ var schema = mongoose.Schema(
 );
 
 // 刪除員工 pre hook
-schema.pre('findOneAndDelete', async function (next) {
+schema.pre('findByIdAndRemove', async function (next) {
   const staff = await this.model.findOne(this.getFilter());
-  if (staff?.headshot) {
-    const photoId = staff.headshot;
-    await mongoose.model('photos.files').deleteOne({ _id: photoId });
-    await mongoose.model('photos.chunks').deleteMany({ files_id: photoId });
-  }
+  if (!staff?.headshot) return next();
+
+  // headshot 係 filename，搵 photos.files
+  const photoFile = await mongoose.model('photos.files').findOne({
+    filename: staff.headshot
+  });
+  if (!photoFile) return next();
+
+  // 先刪 files，再刪 chunks
+  await mongoose.model('photos.files').deleteOne({ _id: photoFile._id });
+  await mongoose.model('photos.chunks').deleteMany({ files_id: photoFile._id });
+
   next();
 });
 
-// 更新員工 pre hook
+// 更新員工 pre hook：換新 headshot(filename)，刪舊圖
 schema.pre('findOneAndUpdate', async function (next) {
   const oldStaff = await this.model.findOne(this.getFilter());
-  if (oldStaff?.headshot && this._update.headshot) {
-    const oldPhotoId = oldStaff.headshot;
-    const newPhotoId = this._update.headshot;
-    if (oldPhotoId.toString() !== newPhotoId.toString()) {
-      await mongoose.model('photos.files').deleteOne({ _id: oldPhotoId });
-      await mongoose.model('photos.chunks').deleteMany({ files_id: oldPhotoId });
-    }
+  if (!oldStaff?.headshot) return next();
+
+  const update = this.getUpdate();
+  const newHeadshotFilename = update.$set?.headshot ?? update.headshot;
+  // 無更新 headshot，直接跳過
+  if (!newHeadshotFilename) return next();
+
+  // 新舊 filename 一樣，唔使刪
+  if (oldStaff.headshot === newHeadshotFilename) return next();
+
+  // 搵舊嘅 photo file
+  const oldPhotoFile = await mongoose.model('photos.files').findOne({
+    filename: oldStaff.headshot
+  });
+  if (oldPhotoFile) {
+    await mongoose.model('photos.files').deleteOne({ _id: oldPhotoFile._id });
+    await mongoose.model('photos.chunks').deleteMany({ files_id: oldPhotoFile._id });
   }
+
   next();
 });
 
