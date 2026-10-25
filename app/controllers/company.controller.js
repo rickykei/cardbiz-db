@@ -188,12 +188,7 @@ exports.updateByHRAdmin = async (req, res) => {
   //console.log("company Docid");
   //console.log(id);
  
- console.log("req.body");
-  console.log(req.body);
-  console.log("req.files.banner");
-  console.log(req.files.banner);
-
-
+ 
 
   if (!req.body) {
     return res.status(400).send({
@@ -212,6 +207,11 @@ exports.updateByHRAdmin = async (req, res) => {
       req.body.logo = req.files.logo[0].filename;
 
   }
+console.log("req.body");
+  console.log(req.body);
+  console.log("req.files.banner");
+  console.log(req.files.banner);
+
 
   Company.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {

@@ -90,6 +90,14 @@ exports.update = async (req, res) => {
     console.log("req.userId", req.userId, "id", id);
      // 行级授权：仅管理员可改他人；普通用户只能改自己
     const isAdmin = await authJwt.checkAdmin(req.userId);
+     const isSelf = String(id) === String(req.userId);
+
+    if (!isAdmin && !isSelf) {
+      return res.status(403).send({
+        message: "You can only update your own profile."
+      });
+    }
+
     const allowed = isAdmin ? ADMIN_WRITABLE_FIELDS : SELF_WRITABLE_FIELDS;
     const data = {};
     Object.keys(req.body).forEach((k) => {
