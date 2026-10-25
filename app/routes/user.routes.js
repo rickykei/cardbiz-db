@@ -1,4 +1,4 @@
-const { authJwt } = require("../middlewares");
+const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
 
 module.exports = function(app) {
@@ -9,28 +9,15 @@ module.exports = function(app) {
     );
     next();
   });
+ 
 
-  app.get("/api/test/all", controller.allAccess);
-
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
-
-  app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
-  );
-
-  app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
-  );
-
-  app.get("/api/users", controller.findAll);
-  app.get("/api/users/active", controller.findAllActive);
-  app.get("/api/users/:id", controller.findOne);
-  app.put("/api/users/:id", controller.update);
-  app.delete("/api/users/:id", controller.delete);
-  app.delete("/api/users/", controller.deleteAll);
+  // 以下所有用户管理接口都需要登录态
+  app.get("/api/users", [authJwt.verifyToken, authJwt.isModerator], controller.findAll);
+  app.get("/api/users/active", [authJwt.verifyToken, authJwt.isModerator], controller.findAllActive);
+  app.get("/api/users/:id", [authJwt.verifyToken, authJwt.isModerator], controller.findOne);
+  app.put("/api/users/:id", [authJwt.verifyToken, authJwt.isModerator], controller.update);
+  // 删除属于高危操作，仅管理员可执行
+  app.delete("/api/users/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.delete);
+  app.delete("/api/users/", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteAll);
   
 };

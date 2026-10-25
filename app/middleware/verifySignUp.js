@@ -36,7 +36,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   });
 };
 
-checkRolesExisted = (req, res, next) => {
+checkRolesExisted0 = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
 	  Role.findOne({
@@ -54,6 +54,32 @@ checkRolesExisted = (req, res, next) => {
   }
 		 
 };
+
+
+// 校验请求中的 roles 是否都真实存在；只有全部存在才放行
+checkRolesExisted = (req, res, next) => {
+  if (!req.body.roles || req.body.roles.length === 0) {
+    return next();
+  }
+
+  Role.find({ name: { $in: req.body.roles } }).exec((err, roles) => {
+    if (err) {
+      return res.status(500).send({ message: err });
+    }
+
+    const found = roles.map((r) => r.name);
+    const missing = req.body.roles.filter((name) => !found.includes(name));
+
+    if (missing.length > 0) {
+      return res.status(400).send({
+        message: `Failed! Role ${missing.join(", ")} does not exist!`
+      });
+    }
+
+    next();
+  });
+};
+
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
