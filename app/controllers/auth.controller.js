@@ -119,7 +119,8 @@ exports.signin = (req, res) => {
       }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        //expiresIn: 86400 // 24 hours
+        expiresIn: 640
       });
 
       //write gen random six digits token and send email uid
@@ -221,10 +222,10 @@ exports.signinWithToken = (req, res) => {
         }
 
 
-        //add JwtToken
-        //var token = jwt.sign({ id: user.id }, config.secret, {
-          //expiresIn: 86400 // 24 hours
-        //});
+       // add JwtToken
+        var token = jwt.sign({ id: user.id }, config.secret, {
+          expiresIn: 86400 // 24 hours
+        });
 
 
 
@@ -246,7 +247,7 @@ exports.signinWithToken = (req, res) => {
           email: user.email,
           roles: authorities,
           role: role,
-          //accessToken: token
+          accessToken: token
         });
       });
 
